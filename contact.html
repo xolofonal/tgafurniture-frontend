@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us - TGA Furniture</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-container">
+      <a href="index.html" class="logo">
+        <img src="logo.png" alt="TGA Furniture Logo" class="site-logo-img custom-logo-large">
+      </a>
+      <a href="index.html" class="btn btn-secondary"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
+    </div>
+  </header>
+
+  <section class="section-padding">
+    <div class="section-header center">
+      <h2 class="section-title wooden-text-surface">Contact Us</h2>
+      <p>Get in touch with our team or send us a message directly.</p>
+    </div>
+
+    <div class="contact-grid-container">
+      <!-- Phone & Message Form -->
+      <div class="contact-form-box glass-card">
+        <h3>Send Us A Message</h3>
+        <form onsubmit="alert('Message Sent Successfully!'); return false;">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" placeholder="Your Name" required>
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" placeholder="+94 7X XXX XXXX" required>
+          </div>
+          <div class="form-group">
+            <label>Message</label>
+            <textarea rows="4" placeholder="Type your message here..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block wooden-surface-btn">Send Message</button>
+        </form>
+      </div>
+
+      <!-- Showrooms & Social Links -->
+      <div class="contact-info-box glass-card">
+        <h3>Our Showroom Branches</h3>
+        <div class="branch-info-item">
+          <h4><i class="fa-solid fa-location-dot"></i> Galenbidunuwawa Branch</h4>
+          <p><i class="fa-solid fa-phone"></i> +94 11 234 5678</p>
+        </div>
+        <div class="branch-info-item" style="margin-top:15px;">
+          <h4><i class="fa-solid fa-location-dot"></i> Mihinthale Branch</h4>
+          <p><i class="fa-solid fa-phone"></i> +94 81 222 3344</p>
+        </div>
+
+        <h3 style="margin-top: 30px;">Follow Us</h3>
+        <div class="social-links-container">
+          <a href="#" class="social-btn facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" class="social-btn instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" class="social-btn whatsapp"><i class="fa-brands fa-whatsapp"></i></a>
+          <a href="#" class="social-btn youtube"><i class="fa-brands fa-youtube"></i></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>

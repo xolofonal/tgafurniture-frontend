@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TGA Furniture - Luxury Woodworks</title>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="favicon.png"/> 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Announcement Bar -->
+  <div class="announcement-bar" role="region" aria-label="Announcement">
+    <div class="announcement-track" id="announcementTrack"></div>
+  </div>
+
+<header class="header">
+  <div class="header-container">
+    <!-- 1. Logo -->
+    <a href="#" class="logo">
+      <img src="logo.png" alt="TGA Furniture Logo" class="site-logo-img">
+    </a>
+
+    <!-- 2. Nav Links (Hamburger එක ක්ලික් කළ විට විවෘත වන කොටස) -->
+    <nav class="nav-links" id="nav-links">
+      <a href="#hero">Home</a>
+      <a href="#categories">Categories</a>
+      <a href="#branches">Branches</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <!-- 3. Header Action Icons (Search, Login/Account, Cart) -->
+    <div class="header-actions">
+      <button class="search-btn" title="Search" onclick="openDrawerSearch()">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+      <button class="account-btn" onclick="openAuthModal()" title="Login / Register">
+        <i class="fa-solid fa-user"></i>
+      </button>
+      <a href="cart.html" class="cart-btn">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span class="cart-badge">0</span>
+      </a>
+      
+      <!-- 4. Hamburger Button -->
+      <button class="hamburger-btn" id="mobile-menu-btn">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </div>
+</header>
+  
+  <div class="video-hero-outer">
+    <section id="hero" class="hero-video-wrapper">
+      <div class="video-container">
+        <video autoplay loop muted playsinline id="bgVideo">
+          <source src="hero-video.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
+      </div>
+
+      <div class="hero-content-overlay">
+        <div class="tag-badge float-anim">Luxury & Durable Woodworks</div>
+        <h1 class="hero-title">
+          Crafting Timeless <span class="text-gradient">Wooden Elegance</span> For Your Home
+        </h1>
+        <p class="hero-desc">
+          Discover handcrafted wooden furniture made from 100% kiln-dried solid timber. Designed for comfort, durability, and supreme style.
+        </p>
+        <div class="hero-buttons">
+          <a href="#categories" class="btn btn-primary btn-bounce">Explore Products <i class="fa-solid fa-arrow-right"></i></a>
+          <a href="custom-design.html" class="btn btn-secondary">Order Custom Woodwork</a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <section class="quick-categories-bar section-padding">
+    <div class="furniture-item-grid">
+      <div class="furniture-card" onclick="location.href='#living-sec'">
+        <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500&q=80" alt="Sofas">
+        <h4>Sofas</h4>
+      </div>
+      <div class="furniture-card" onclick="location.href='#living-sec'">
+        <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=500&q=80" alt="Chairs">
+        <h4>Chairs</h4>
+      </div>
+      <div class="furniture-card" onclick="location.href='#bedroom-sec'">
+        <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=500&q=80" alt="Beds">
+        <h4>Beds</h4>
+      </div>
+      <div class="furniture-card" onclick="location.href='#dining-sec'">
+        <img src="https://images.unsplash.com/photo-1617806118233-18e1de247200?w=500&q=80" alt="Tables">
+        <h4>Tables</h4>
+      </div>
+      <div class="furniture-card" onclick="location.href='#bedroom-sec'">
+        <img src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=500&q=80" alt="Storage">
+        <h4>Storage</h4>
+      </div>
+      <div class="furniture-card" onclick="location.href='#decor-sec'">
+        <img src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=500&q=80" alt="Decor">
+        <h4>Decor</h4>
+      </div>
+    </div>
+  </section>
+
+  <section id="categories" class="categories section-padding">
+    <div class="section-header center reveal-on-scroll">
+      <span class="section-tag">Explore By Room</span>
+      <h2 class="section-title">Our Wooden <span class="text-gradient">Furniture Collections</span></h2>
+    </div>
+
+    <div class="filter-chips-wrapper" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 2rem; flex-wrap: wrap;">
+      <button class="btn filter-chip active" onclick="filterByCategory('all', this)">All Items</button>
+      <button class="btn filter-chip" onclick="filterByCategory('bedroom', this)">Bedroom</button>
+      <button class="btn filter-chip" onclick="filterByCategory('living', this)">Living Room</button>
+      <button class="btn filter-chip" onclick="filterByCategory('dining', this)">Dining Room</button>
+      <button class="btn filter-chip" onclick="filterByCategory('office', this)">Office</button>
+      <button class="btn filter-chip" onclick="filterByCategory('decor', this)">Decorations</button>
+    </div>
+
+<div id="bedroom-sec" class="room-category-block reveal-on-scroll" data-sec-category="bedroom">
+  <h3 class="room-title"><i class="fa-solid fa-bed"></i> Bedroom Furniture</h3>
+
+  <div id="bedroom-grid" class="furniture-item-grid grid-3-col"></div>
+
+  <div class="category-view-more">
+    <button class="view-more-btn" onclick="toggleCategoryMore(this)">
+      View More Items <i class="fa-solid fa-chevron-down"></i>
+    </button>
+  </div>
+</div>
+
+    <div id="living-sec" class="room-category-block reveal-on-scroll" data-sec-category="living" style="margin-top: 3rem;">
+      <h3 class="room-title"><i class="fa-solid fa-couch"></i> Living Room Furniture</h3>
+      
+      <div class="furniture-item-grid grid-3-col">
+        <!-- Dynamic Products Loaded from Backend -->
+      </div>
+      <div class="category-view-more">
+        <button class="view-more-btn" onclick="toggleCategoryMore(this)">
+          View More Items <i class="fa-solid fa-chevron-down"></i>
+        </button>
+      </div>
+    </div>
+
+   
+    <div id="dining-sec" class="room-category-block reveal-on-scroll" data-sec-category="dining" style="margin-top: 3rem;">
+      <h3 class="room-title"><i class="fa-solid fa-utensils"></i> Dining Room Furniture</h3>
+      
+      <div class="furniture-item-grid grid-3-col">
+        <!-- Dynamic Products Loaded from Backend -->
+      </div>
+      <div class="category-view-more">
+        <button class="view-more-btn" onclick="toggleCategoryMore(this)">
+          View More Items <i class="fa-solid fa-chevron-down"></i>
+        </button>
+      </div>
+    </div>
+
+   
+    <div id="office-sec" class="room-category-block reveal-on-scroll" data-sec-category="office" style="margin-top: 3rem;">
+      <h3 class="room-title"><i class="fa-solid fa-briefcase"></i> Office Furniture</h3>
+      
+      <div class="furniture-item-grid grid-3-col">
+        <!-- Dynamic Products Loaded from Backend -->
+      </div>
+      <div class="category-view-more">
+        <button class="view-more-btn" onclick="toggleCategoryMore(this)">
+          View More Items <i class="fa-solid fa-chevron-down"></i>
+        </button>
+      </div>
+    </div>
+
+    
+    <div id="decor-sec" class="room-category-block reveal-on-scroll" data-sec-category="decor" style="margin-top: 3rem;">
+      <h3 class="room-title"><i class="fa-solid fa-leaf"></i> Decorations</h3>
+      
+      <div class="furniture-item-grid grid-3-col">
+        <!-- Dynamic Products Loaded from Backend -->
+      </div>
+      <div class="category-view-more">
+        <button class="view-more-btn" onclick="toggleCategoryMore(this)">
+          View More Items <i class="fa-solid fa-chevron-down"></i>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="marquee-section">
+    <div class="marquee-content">
+      <span>TEAK WOOD BEDS</span> • <span>DINING TABLES</span> • <span>WOODEN SOFAS</span> • <span>WARDROBES</span> • <span>OFFICE DESKS</span> • <span>TEAK WOOD BEDS</span> • <span>DINING TABLES</span>
+    </div>
+  </section>
+
+  
+  <section id="about-us" class="about-story-banner">
+    <div class="story-overlay">
+      <div class="story-content">
+        <h2 class="story-title">Discover Our Story</h2>
+        <a href="about.html" class="btn-learn-more">Learn More</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="branches" class="branches section-padding reveal-on-scroll">
+    <div class="section-header center">
+      <span class="section-tag">Islandwide Showrooms</span>
+      <h2 class="section-title">Visit Our <span class="text-gradient">Branches</span></h2>
+    </div>
+
+    <div class="branches-grid two-branches">
+      <div class="branch-card reveal-on-scroll">
+        <div class="branch-img">
+          <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80" alt="Galenbidunuwawa Showroom">
+        </div>
+        <div class="branch-info">
+          <h3><i class="fa-solid fa-location-dot"></i> Galenbidunuwawa</h3>
+          <p>Galenbidunuwawa, Anuradhapura</p>
+          <p><i class="fa-solid fa-phone"></i> +94 11 234 5678</p>
+          <p><i class="fa-solid fa-clock"></i> Daily: 9:00 AM - 7:00 PM</p>
+        </div>
+      </div>
+
+      <div class="branch-card reveal-on-scroll">
+        <div class="branch-img">
+          <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=600&q=80" alt="Mihinthale Showroom">
+        </div>
+        <div class="branch-info">
+          <h3><i class="fa-solid fa-location-dot"></i> Mihinthale</h3>
+          <p>Mihinthale, Anuradhapura</p>
+          <p><i class="fa-solid fa-phone"></i> +94 81 222 3344</p>
+          <p><i class="fa-solid fa-clock"></i> Daily: 9:00 AM - 6:30 PM</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <div id="authModal" class="modal-overlay hidden">
+    <div class="modal-content glass-card">
+      <button class="close-modal-btn" onclick="closeAuthModal()">&times;</button>
+      
+      
+      <div class="auth-tabs" id="authTabs">
+        <button id="loginTabBtn" class="tab-btn active" onclick="switchAuthTab('login')">Login</button>
+        <button id="registerTabBtn" class="tab-btn" onclick="switchAuthTab('register')">Register</button>
+      </div>
+
+      
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="input-group">
+          <label for="loginEmail">Email</label>
+          <input type="email" id="loginEmail" required placeholder="Enter your email">
+        </div>
+        <div class="input-group">
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" required placeholder="Enter your password">
+        </div>
+        <div style="text-align: right; margin-bottom: 15px;">
+          <a href="javascript:void(0)" onclick="showForgotPasswordModal()" style="color: #6366f1; font-size: 0.9rem; text-decoration: none;">Forgot Password?</a>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Login</button>
+      </form>
+
+    
+      <form id="registerForm" onsubmit="handleRegister(event)" style="display: none;">
+        <div class="input-group">
+          <label for="regName">Full Name</label>
+          <input type="text" id="regName" required placeholder="Enter your full name">
+        </div>
+        <div class="input-group">
+          <label for="regEmail">Email</label>
+          <input type="email" id="regEmail" required placeholder="Enter your email">
+        </div>
+        <div class="input-group">
+          <label for="regPassword">Password</label>
+          <input type="password" id="regPassword" required placeholder="Create a password">
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Register</button>
+      </form>
+
+   
+      <form id="otpForm" onsubmit="handleVerifyOTP(event)" style="display: none;">
+        <h3>Verify Email OTP</h3>
+        <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 10px;">Enter the code sent to your email</p>
+        <input type="hidden" id="otpEmail">
+        <div class="input-group">
+          <input type="text" id="otpInput" required placeholder="Enter 6-digit OTP">
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Verify & Activate</button>
+      </form>
+    </div>
+  </div>
+
+ 
+  <div id="forgotPasswordModal" class="modal-overlay hidden">
+    <div class="modal-content glass-card">
+      <button class="close-modal-btn" onclick="closeForgotPasswordModal()">&times;</button>
+      
+      <div id="stepSendOtp">
+        <h3>Reset Password</h3>
+        <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 15px;">Enter your registered email address to receive an OTP.</p>
+        <div class="input-group">
+          <label for="resetEmailInput">Email Address</label>
+          <input type="email" id="resetEmailInput" placeholder="name@example.com" required>
+        </div>
+        <button type="button" class="btn btn-primary btn-full" onclick="sendResetOTP()">Send Reset OTP</button>
+      </div>
+
+
+      <div id="stepVerifyOtp" class="hidden">
+        <h3>Enter OTP & New Password</h3>
+        <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 15px;">Check your email inbox for the OTP code.</p>
+        <div class="input-group">
+          <label for="otpCodeInput">OTP Code</label>
+          <input type="text" id="otpCodeInput" placeholder="Enter OTP code" required>
+        </div>
+        <div class="input-group">
+          <label for="resetNewPasswordInput">New Password</label>
+          <input type="password" id="resetNewPasswordInput" placeholder="Enter new password" required>
+        </div>
+        <button type="button" class="btn btn-primary btn-full" onclick="verifyOTPAndResetPassword()">Update Password</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="cartDrawer" class="cart-drawer-overlay">
+    <div class="cart-drawer-content">
+      <div class="cart-drawer-header">
+        <h3>Your Shopping Cart</h3>
+        <button class="close-drawer-btn" onclick="closeCartDrawer()">&times;</button>
+      </div>
+      <div id="cartItemsList" class="cart-items-body"></div>
+      <div class="cart-drawer-footer">
+        <div class="cart-summary-line"><span>Subtotal:</span><span id="cartSubtotal">LKR 0.00</span></div>
+        <div class="cart-summary-line"><span>Discount (10%):</span><span id="cartDiscount">- LKR 0.00</span></div>
+        <div class="cart-summary-line total"><span>Total:</span><span id="cartTotal">LKR 0.00</span></div>
+        <!-- JavaScript function එකට Event එක නොව Product Object එක pass කරන්න -->
+<div class="cart-drawer-actions" style="margin-top: 15px; display: flex; gap: 10px;">
+  <a href="cart.html" class="btn btn-secondary" style="flex: 1; text-align: center;">View Cart</a>
+  <a href="checkout.html" class="btn btn-primary" style="flex: 1; text-align: center;">Checkout</a>
+</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="drawerSearch" class="drawer-search-overlay">
+    <div class="drawer-search-content">
+      <div class="drawer-search-header">
+        <h3>Search Catalog</h3>
+        <button class="drawer-close-btn" onclick="closeDrawerSearch()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <input type="text" id="drawerInput" placeholder="Type category or item..." onkeyup="suggestSearch()">
+      <div id="searchResults"></div>
+    </div>
+  </div>
+<!-- Product Detail Modal (Daraz Style) -->
+<div id="productDetailModal" class="product-modal-overlay hidden">
+  <div class="product-modal-card">
+    <button class="close-modal-btn" onclick="closeProductModal()">&times;</button>
+    
+    <div class="product-modal-body">
+      <!-- Image Gallery Section -->
+      <div class="product-gallery">
+        <div class="main-image-container">
+          <button class="arrow-btn prev-btn" onclick="changeImage(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+          <img id="modalMainImg" src="" alt="Product Image">
+          <button class="arrow-btn next-btn" onclick="changeImage(1)"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+        <div id="modalThumbnails" class="thumbnail-list"></div>
+      </div>
+
+      <!-- Product Details Section -->
+      <div class="product-info-details">
+        <span id="modalCategory" class="product-category-tag">Category</span>
+        <h2 id="modalTitle">Product Title</h2>
+        
+        <div class="price-box">
+          <span id="modalDiscountPrice" class="modal-price">LKR 0.00</span>
+          <span id="modalOriginalPrice" class="modal-old-price">LKR 0.00</span>
+        </div>
+
+        <div class="description-box">
+          <h4>Product Description</h4>
+          <p id="modalDescription">Detailed product description goes here...</p>
+        </div>
+
+        <div class="modal-actions">
+          <div class="qty-selector">
+            <button onclick="updateQty(-1)">-</button>
+            <input type="number" id="modalQty" value="1" min="1" readonly>
+            <button onclick="updateQty(1)">+</button>
+          </div>
+          <button class="btn btn-primary add-to-cart-modal-btn" onclick="addToCartFromModal()">
+            <i class="fa-solid fa-cart-shopping"></i> Add to Cart
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <a href="#" class="logo">
+          <img src="logo.png" alt="TGA Furniture Logo" class="site-logo-img">
+        </a>
+        <p>Premium handcrafted solid wooden furniture engineered for luxury, durability, and natural aesthetic appeal.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Showroom Locations</h4>
+        <ul>
+          <li><a href="#branches">Galenbidunuwawa</a></li>
+          <li><a href="#branches">Mihinthale</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Furniture Types</h4>
+        <ul>
+          <li><a href="#bedroom-sec">Solid Teak Beds</a></li>
+          <li><a href="#living-sec">Wooden Sofa Sets</a></li>
+          <li><a href="#dining-sec">Dining Tables & Chairs</a></li>
+          <li><a href="#office-sec">Office Desks</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Follow Us</h4>
+        <div class="social-links-container">
+          <a href="#" class="social-btn facebook" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" class="social-btn instagram" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" class="social-btn whatsapp" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+          <a href="#" class="social-btn youtube" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+        </div>
+      </div>
+<div class="footer-col">
+      <h4>Our Policies</h4>
+      <ul>
+        <li><a href="terms&conditions.html">Terms & Conditions</a></li>
+        <li><a href="privacypolicy.html">Privacy Policy</a></li>
+        <li><a href="returnpolicy.html">Return & Refund Policy</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2026 TGA Furniture. All Rights Reserved.</p>
+  </div>
+</footer>
+
+
+  <script src="script.js"></script>
+
+</body>
+</html>

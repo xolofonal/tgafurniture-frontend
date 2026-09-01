@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details - TGA Furniture</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-container">
+      <a href="index.html" class="logo">
+        <img src="logo.png" alt="TGA Furniture Logo" class="site-logo-img custom-logo-large">
+      </a>
+      <a href="index.html" class="btn btn-secondary"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
+    </div>
+  </header>
+
+  <section class="section-padding">
+    <div class="product-page-container glass-card">
+      <div class="product-page-grid">
+        <div class="product-img-box">
+          <img id="pPageImg" src="" alt="Product Image" class="main-p-img">
+        </div>
+        
+        <div class="product-details-content">
+          <h1 id="pPageTitle">Product Title</h1>
+          <div class="price-row">
+            <span id="pPageOldPrice" class="old-price"></span>
+            <span id="pPageFinalPrice" class="final-price"></span>
+            <span class="discount-badge">10% OFF on Full Payment</span>
+          </div>
+          <span id="pPageStock" class="stock-badge"></span>
+
+          <p class="p-description">
+            Handcrafted with 100% genuine kiln-dried timber for supreme durability, elegance, and natural finish. Designed to suit modern and classic interior aesthetics.
+          </p>
+
+          <div class="p-option">
+            <label><strong>Wood Type:</strong></label>
+            <select>
+              <option>Solid Teak Wood</option>
+              <option>Kiln-Dried Mahogany</option>
+              <option>Nadun Timber</option>
+            </select>
+          </div>
+
+          <div class="p-option">
+            <label><strong>Dimensions:</strong></label>
+            <select>
+              <option>Standard Size</option>
+              <option>Custom Large</option>
+            </select>
+          </div>
+
+          <div class="p-actions">
+            <button class="btn btn-primary btn-block wooden-surface-btn" onclick="alert('Order Processed!')">Buy Now</button>
+            <button class="btn btn-secondary btn-block" onclick="alert('Added to Cart!')"><i class="fa-solid fa-cart-plus"></i> Add To Cart</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Fetch details from URL Parameters
+      const params = new URLSearchParams(window.location.search);
+      document.getElementById("pPageTitle").innerText = params.get("title") || "Furniture Item";
+      document.getElementById("pPageOldPrice").innerText = params.get("old") || "";
+      document.getElementById("pPageFinalPrice").innerText = params.get("final") || "";
+      document.getElementById("pPageImg").src = params.get("img") || "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=500&q=80";
+      
+      const stock = params.get("stock") || "In Stock";
+      const stockBadge = document.getElementById("pPageStock");
+      stockBadge.innerText = stock;
+      stockBadge.className = "stock-badge " + (stock === "In Stock" ? "in-stock" : "sold-out");
+    });
+  </script>
+</body>
+</html>

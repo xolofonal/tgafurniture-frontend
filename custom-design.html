@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom Furniture Design - TGA Furniture</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-light">
+
+  <header class="header">
+    <div class="header-container">
+        <a href="#" class="logo">
+          <img src="logo.png" alt="TGA Furniture Logo" class="site-logo-img">
+        </a>
+      <a href="index.html" class="btn btn-secondary"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
+    </div>
+  </header>
+
+  <section class="section-padding">
+    <div class="custom-container glass-card" style="margin: 0 auto; max-width: 1000px;">
+      <div class="custom-text">
+        <span class="section-tag">Bespoke Woodworking</span>
+        <h2 class="section-title">Design Your Custom <span class="text-gradient">Furniture</span></h2>
+        <p>Upload a photo, specify dimensions (Height, Width, Depth), and select your preferred wood type. Our master carpenters will craft it precisely to your needs.</p>
+        
+        <ul class="custom-features">
+          <li><i class="fa-solid fa-check"></i> 100% Teak, Mahogany, or Nedun Wood options</li>
+          <li><i class="fa-solid fa-check"></i> Free CAD 3D Drawing preview before production</li>
+          <li><i class="fa-solid fa-check"></i> Custom lacquer, matte, or gloss polish finishes</li>
+        </ul>
+      </div>
+
+      <form class="custom-form">
+        <h3><i class="fa-solid fa-sliders"></i> Request Custom Quote</h3>
+        <div class="form-group">
+          <label>Upload Furniture Photo / Sketch</label>
+          <input type="file" accept="image/*" class="file-input" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Height (Inches / Feet)</label>
+            <input type="text" placeholder="e.g. 6 Feet" required>
+          </div>
+          <div class="form-group">
+            <label>Width (Inches / Feet)</label>
+            <input type="text" placeholder="e.g. 4 Feet" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Wood Type</label>
+            <select required>
+              <option value="">Select Wood</option>
+              <option value="teak">Kiln-Dried Teak Wood</option>
+              <option value="mahogany">Mahogany Wood</option>
+              <option value="nedun">Sri Lankan Nedun</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Phone / WhatsApp</label>
+            <input type="tel" placeholder="+94 77 123 4567" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Additional Specifications</label>
+          <textarea rows="3" placeholder="Mention finish, cushion color, details..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Submit Custom Order Request</button>
+      </form>
+    </div>
+  </section>
+
+</body>
+</html>

@@ -1,0 +1,3003 @@
+/* Global Styles & Wood Theme Variables */
+:root {
+  --primary-color: #8b5cf6;
+  --accent-gold: #d97706;
+  --wood-dark: #2c1810;
+  --wood-medium: #4a2c11;
+  --wood-light: #8b5a2b;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --light-bg: #fdfbf7;
+  --border-color: rgba(226, 232, 240, 0.8);
+  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+}
+
+body {
+  color: var(--text-main);
+  background-color: #ffffff;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: var(--transition);
+}
+
+ul {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #8b5a2b, #d97706);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.section-padding {
+  padding: 5rem 8%;
+}
+
+.section-header.center {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.section-tag {
+  display: inline-block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--wood-light);
+  margin-bottom: 0.5rem;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+/* Announcement Bar */
+.announcement-bar {
+  background: #1f110a;
+  color: #fbbf24;
+  font-size: 0.85rem;
+  font-weight: 600;
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(217, 119, 6, 0.2);
+}
+
+.announcement-track {
+  display: flex;
+  gap: 3rem;
+  animation: marqueeText 25s linear infinite;
+}
+
+@keyframes marqueeText {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Header & Navigation */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 1.2rem 8%;
+}
+
+/* Header Container & Navigation Alignment Fix */
+.header-container {
+  display: flex;
+  align-items: center; /* සියල්ල එක කෙළින්ම (Vertical Align) තැබීමට */
+  justify-content: space-between;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center; /* Links සියල්ල එක සමානව තිරස් අතට තැබීමට */
+  gap: 2rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+/* Desktop එකේදී Hamburger Button එක සම්පූර්ණයෙන්ම Hide කිරීම */
+.hamburger-btn {
+  display: none !important; /* Desktop එකේදී නොපෙනී යයි */
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Mobile Screen (768px හෝඊට අඩු) වලදී පමණක් Hamburger Button එක පෙන්වීම */
+@media (max-width: 768px) {
+  .hamburger-btn {
+    display: block !important; 
+  }
+
+  .nav-links {
+    display: none; /* Mobile එකේදී Click කරන තෙක් Nav එක Hide වේ */
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #ffffff;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.6rem;
+  font-weight: 900;
+}
+
+.logo-tga {
+  background: #3d2314;
+  color: #fff;
+  padding: 2px 10px;
+  border-radius: 8px;
+  transform: rotate(-2deg);
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.nav-links a:hover {
+  color: var(--wood-light);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header-actions button {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #334155;
+  cursor: pointer;
+  position: relative;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  background: var(--accent-gold);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.8rem;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
+}
+
+.btn-primary, .btn-primary-sm {
+  background: linear-gradient(135deg, var(--wood-medium), var(--wood-dark));
+  color: #ffffff;
+  box-shadow: 0 10px 20px rgba(74, 44, 17, 0.3);
+}
+
+.btn-primary-sm {
+  padding: 0.5rem 1.2rem;
+  font-size: 0.85rem;
+}
+
+.btn-secondary {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.btn-block {
+  width: 100%;
+  justify-content: center;
+}
+
+/* Hero Section */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 4rem;
+  padding: 4rem 8% 6rem;
+  background: radial-gradient(circle at top right, rgba(139, 90, 43, 0.1), transparent 50%);
+}
+
+.tag-badge {
+  display: inline-block;
+  background: rgba(139, 90, 43, 0.12);
+  color: var(--wood-light);
+  padding: 6px 16px;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  line-height: 1.15;
+  font-weight: 900;
+  margin-bottom: 1.5rem;
+}
+
+.hero-desc {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.hero-visual {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.hero-img-box {
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+.hero-img-1 {
+  width: 80%;
+  border: 6px solid #fff;
+}
+
+.hero-img-2 {
+  position: absolute;
+  bottom: -30px;
+  left: -20px;
+  width: 50%;
+  border: 6px solid #fff;
+  border-radius: 20px;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  padding: 1.5rem;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+.stat-card {
+  position: absolute;
+  top: 20px;
+  right: -10px;
+}
+
+/* Marquee Text */
+.marquee-section {
+  background-color: #2d1a0e;
+  color: #fef08a;
+  padding: 1.2rem 0;
+  overflow: hidden;
+  font-weight: 800;
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+}
+
+.marquee-content {
+  display: flex;
+  gap: 2rem;
+  white-space: nowrap;
+  animation: scrollMarquee 20s linear infinite;
+}
+
+@keyframes scrollMarquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Detailed Categorized Furniture Items */
+.room-category-block {
+  background: #fff;
+  border-radius: 20px;
+  padding: 2rem;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.room-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--wood-dark);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+/* Dynamic Extra items ආරම්භයේදී සඟවා තැබීමට */
+.furniture-card.extra-item {
+  display: none ;
+}
+
+/* 3 Clumn Grid එක නිවැරදිව පවත්වා ගැනීමට */
+.furniture-item-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 1.8rem;
+}
+
+/* Mobile & Tablet Responsiveness */
+@media (max-width: 992px) {
+  .furniture-item-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .furniture-item-grid {
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
+}
+.furniture-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.furniture-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+.furniture-card img {
+  height: 200px;
+  width: 100%;
+  object-fit: cover;
+}
+
+.furniture-card-info {
+  padding: 1rem;
+}
+
+.furniture-card-info h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.furniture-card-info p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.furniture-card-info .price {
+  display: block;
+  margin-top: 0.5rem;
+  font-weight: 800;
+  color: var(--wood-light);
+}
+
+/* Custom Furniture Section */
+.bg-light {
+  background-color: var(--light-bg);
+}
+
+.custom-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.custom-features {
+  margin-top: 1.5rem;
+}
+
+.custom-features li {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 0.8rem;
+  font-weight: 600;
+}
+
+.custom-features i {
+  color: #10b981;
+}
+
+.custom-form {
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-group input, .form-group select, .form-group textarea {
+  padding: 0.8rem 1rem;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  outline: none;
+  font-family: inherit;
+}
+
+.file-input {
+  background: #ffffff;
+}
+
+/* Showroom Branches Section */
+.branches-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.branch-card {
+  background: #ffffff;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.branch-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+.branch-img img {
+  height: 200px;
+  width: 100%;
+  object-fit: cover;
+}
+
+.branch-info {
+  padding: 1.5rem;
+}
+
+.branch-info h3 {
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin-bottom: 0.8rem;
+  color: var(--wood-dark);
+}
+
+.branch-info p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.branch-map-link {
+  display: inline-block;
+  margin-top: 0.8rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--wood-light);
+}
+
+/* Modal Popup for Login/Register */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  opacity: 0;
+  pointer-events: none;
+  transition: var(--transition);
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal-box {
+  width: 100%;
+  max-width: 450px;
+  position: relative;
+  background: #ffffff;
+}
+
+.close-modal {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 1.8rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.auth-tabs {
+  display: flex;
+  border-bottom: 2px solid #e2e8f0;
+  margin-bottom: 1.5rem;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 0.8rem;
+  border: none;
+  background: none;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+
+.tab-btn.active {
+  color: var(--wood-dark);
+  border-bottom: 3px solid var(--wood-light);
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.auth-form.hidden {
+  display: none;
+}
+
+/* Footer */
+.footer {
+  background: #1f110a;
+  color: #a8a29e;
+  padding: 4rem 8% 2rem;
+}
+
+.footer-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+.footer-col h4 {
+  color: #ffffff;
+  margin-bottom: 1.2rem;
+}
+
+.footer-col ul li {
+  margin-bottom: 0.8rem;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.85rem;
+}
+
+/* Keyframes Animations */
+@keyframes floatAnim {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+}
+
+.float-anim { animation: floatAnim 4s ease-in-out infinite; }
+.float-anim-delayed { animation: floatAnim 5s ease-in-out infinite 1s; }
+.float-slow { animation: floatAnim 6s ease-in-out infinite; }
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .hero, .custom-container {
+    grid-template-columns: 1fr;
+  }
+  .nav-links {
+    display: none;
+  }
+}
+/* Dynamic Floating animations for Hero Elements */
+@keyframes floatAnim {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(1deg); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 10px 25px rgba(139, 90, 43, 0.2); }
+  50% { box-shadow: 0 18px 35px rgba(217, 119, 6, 0.4); }
+}
+
+.float-anim { animation: floatAnim 4s ease-in-out infinite; }
+.float-slow { animation: floatAnim 6s ease-in-out infinite 1s; }
+.scale-pulse { animation: pulseGlow 3s ease-in-out infinite; }
+
+/* Modal Popup Window Styles */
+.custom-modal-card {
+  max-width: 580px !important;
+  padding: 2.2rem;
+  border-radius: 24px;
+  transform: scale(0.8) translateY(30px);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-overlay.active .custom-modal-card {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+
+.custom-modal-header h2 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin-bottom: 0.3rem;
+}
+
+.custom-modal-header p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 1.2rem;
+}
+/* Navigation Hover Dropdown Menu Styles */
+.nav-item.dropdown {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 10px;
+  margin-bottom: -10px;
+}
+
+.nav-arrow {
+  font-size: 0.75rem;
+  margin-left: 4px;
+  transition: transform 0.3s ease;
+}
+
+.nav-item.dropdown:hover .nav-arrow {
+  transform: rotate(180deg);
+}
+
+.megamenu-box {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(15px) scale(0.95);
+  width: 440px;
+  padding: 1.2rem;
+  border-radius: 18px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  z-index: 1100;
+}
+
+/* Show Dropdown Box on Hover */
+.nav-item.dropdown:hover .megamenu-box {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: all;
+  transform: translateX(-50%) translateY(0) scale(1);
+}
+
+.dropdown-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+}
+
+.dropdown-card {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.8rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  transition: var(--transition);
+}
+
+.dropdown-card:hover {
+  background: var(--wood-dark);
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.dropdown-card i {
+  font-size: 1.3rem;
+  color: var(--wood-light);
+  width: 24px;
+  text-align: center;
+}
+
+.dropdown-card:hover i {
+  color: #fbbf24;
+}
+
+.dropdown-card h4 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.dropdown-card p {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.dropdown-card:hover p {
+  color: #cbd5e1;
+}
+/* Clean Hover Dropdown without arrow */
+.nav-item.dropdown {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 12px; /* Smooth mouse tracking gap */
+  margin-bottom: -12px;
+}
+
+.megamenu-box {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px) scale(0.98);
+  width: 420px;
+  padding: 1rem;
+  border-radius: 16px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: all 0.25s ease-out;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+  z-index: 1100;
+}
+
+/* Open on mouse enter */
+.nav-item.dropdown:hover .megamenu-box {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: all;
+  transform: translateX(-50%) translateY(0) scale(1);
+}
+
+.dropdown-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+
+.dropdown-card {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  transition: var(--transition);
+}
+
+.dropdown-card:hover {
+  background: var(--wood-dark);
+  color: #ffffff;
+}
+
+.dropdown-card i {
+  font-size: 1.1rem;
+  color: var(--wood-light);
+}
+
+.dropdown-card:hover i {
+  color: #fbbf24;
+}
+
+.dropdown-card h4 {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.dropdown-card p {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.dropdown-card:hover p {
+  color: #cbd5e1;
+}
+/* Video Hero Fullscreen Banner */
+.hero-video-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: #000;
+}
+
+.video-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  will-change: transform, opacity;
+}
+
+.video-container video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Dark overlay for better text readability */
+.video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.7) 100%);
+}
+
+/* Hero Content Styling over Video */
+.hero-content-overlay {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 900px;
+  padding: 0 20px;
+  color: #ffffff;
+  will-change: transform, opacity;
+}
+
+.hero-content-overlay .hero-title {
+  color: #ffffff;
+  font-size: 3.8rem;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.hero-content-overlay .hero-desc {
+  color: #e2e8f0;
+  font-size: 1.2rem;
+  margin: 1.5rem auto 2.5rem;
+  max-width: 700px;
+}
+
+.hero-content-overlay .btn-secondary {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.hero-content-overlay .btn-secondary:hover {
+  background: #ffffff;
+  color: #0f172a;
+}
+
+
+
+.hero-video-wrapper {
+  position: relative; /* Fixed එක ඉවත් කර ඇත */
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.video-container video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Video එක Stretch නොවී Perfectly Fit වේ */
+  object-position: center;
+}
+
+
+.reveal-on-scroll.active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* 2 Branches Grid Alignment */
+.branches-grid.two-branches {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  max-width: 900px;
+  margin: 0 auto;
+  gap: 2rem;
+}
+
+/* Follow Us / Social Buttons Styling */
+.social-links-container {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 0.8rem;
+}
+
+.social-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 1.1rem;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  backdrop-filter: blur(4px);
+}
+
+.social-btn:hover {
+  transform: translateY(-5px) scale(1.1);
+  color: #ffffff;
+}
+
+.social-btn.facebook:hover {
+  background: #1877f2;
+  box-shadow: 0 8px 20px rgba(24, 119, 242, 0.4);
+}
+
+.social-btn.instagram:hover {
+  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  box-shadow: 0 8px 20px rgba(220, 39, 67, 0.4);
+}
+
+.social-btn.whatsapp:hover {
+  background: #25d366;
+  box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
+}
+
+.social-btn.youtube:hover {
+  background: #ff0000;
+  box-shadow: 0 8px 20px rgba(255, 0, 0, 0.4);
+}
+/* Category View More Button Styling */
+.category-view-more {
+  text-align: center;
+  margin-top: 1.8rem;
+}
+
+.view-more-btn {
+  padding: 0.6rem 1.8rem;
+  font-size: 0.9rem;
+  border-radius: 30px;
+  border: 1px solid rgba(139, 90, 43, 0.3);
+  background: #fdfbf7;
+  color: var(--wood-dark);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.view-more-btn:hover {
+  background: var(--wood-medium);
+  color: #ffffff;
+  box-shadow: 0 6px 15px rgba(74, 44, 17, 0.2);
+}
+
+.view-more-btn i {
+  margin-left: 6px;
+  transition: transform 0.3s ease;
+}
+
+.view-more-btn.expanded i {
+  transform: rotate(180deg);
+}
+/* Logo Image Styling */
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.site-logo-img {
+  height: 45px; /* අවශ්‍ය පරිදි උස වෙනස් කරගන්න */
+  width: auto;
+  object-fit: contain;
+}
+
+/* Hero Video Responsive Fix */
+.hero-video-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100vh; /* Screen එකේ මුළු උසටම Fit වේ */
+  overflow: hidden;
+}
+
+.video-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.video-container video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Video එක Screen එකට කැපෙන්නේ නැතිව සම්පූර්ණයෙන්ම Fit කරයි */
+  object-position: center; /* Video එක මැදට Centered කරයි */
+}
+/* --- Nav Hover Pill Mask Styling --- */
+.nav-links {
+  position: relative;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav-link-item {
+  position: relative;
+  padding: 8px 16px;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.nav-link-item:hover {
+  background: rgba(139, 90, 43, 0.15); /* Dynamic Pill Hover Shape */
+  color: var(--wood-dark) !important;
+}
+
+/* --- Right Side Search Drawer Styling --- */
+.drawer-search-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 3000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.drawer-search-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.drawer-search-content {
+  position: fixed;
+  top: 0;
+  right: -380px;
+  width: 380px;
+  height: 100vh;
+  background: #ffffff;
+  z-index: 3001;
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.15);
+  padding: 2rem 1.5rem;
+  transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.drawer-search-overlay.active .drawer-search-content {
+  right: 0;
+}
+
+.drawer-search-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+#drawerInput {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  outline: none;
+}
+
+#searchResults {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+/* --- Dynamic Rotating Black Fill Close Button --- */
+.drawer-close-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.drawer-close-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #000000;
+  transform: scale(0);
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+  z-index: 1;
+}
+
+.drawer-close-btn:hover::before {
+  transform: scale(1);
+}
+
+.drawer-close-btn i {
+  position: relative;
+  z-index: 2;
+  color: #0f172a;
+  transition: transform 0.4s ease, color 0.3s ease;
+}
+
+.drawer-close-btn:hover i {
+  color: #ffffff;
+  transform: rotate(180deg);
+}
+/* Font එක ඇතුළෙන් Wooden Surface එක පෙනෙන Text Style එක */
+/* Font එක ඇතුළෙන් Wooden Surface එක පෙනෙන Text Style එක */
+.wooden-text-surface {
+  background-image: url('wooden-surface-font.jpg'); /* නිවැරදි Image නම යෙදීම */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  font-weight: 900 !important;
+  font-size: 2.8rem;
+  display: inline-block;
+}
+
+/* Footer Bottom එකට Wooden Surface Image එක යෙදීම */
+.footer-bottom {
+  background-image: url('wooden-surface-footer.jpg'); /* නිවැරදි Image නම යෙදීම */
+  background-size: cover;
+  background-position: center;
+  padding: 20px 0;
+  text-align: center;
+  color: #ffffff;
+}
+/* සියලුම Category Grids එකම මට්ටමට හා ප්‍රමාණයට සකසන CSS */
+.furniture-item-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+.furniture-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.furniture-card img {
+  height: 220px;
+  width: 100%;
+  object-fit: cover;
+}
+/* Enlarge View / Product Detail Layout */
+.product-page-container {
+  max-width: 1200px; /* ලොකු ඉඩක් සහිත Layout එක */
+  margin: 0 auto;
+  padding: 2.5rem;
+}
+
+.discount-badge {
+  background: #e11d48;
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+.contact-form-box textarea {
+  min-height: 180px; /* Message Box එක විශාල ලෙස පෙනීමට */
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+}
+.nav-links a {
+  position: relative;
+  padding: 8px 18px;
+  border-radius: 25px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: #0f172a;
+  font-weight: 600;
+}
+
+/* Mouse එක තැබූ විට Black Pill Shape එක Animation වීම */
+.nav-links a:hover {
+  background-color: #000000;
+  color: #ffffff !important;
+}
+/* Logo එක විශාල කිරීමට */
+.site-logo-img {
+  height: 65px; /* Logo එක විශාල කර සකස් කරන ලදී */
+  width: auto;
+  object-fit: contain;
+}
+/* --- 1. Category Cards එක පේළියට සැකසීම සහ කුඩා කිරීම --- */
+.quick-categories-bar .furniture-item-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); /* කැබලි 6 එකම පේළියට */
+  gap: 10px; /* Cards අතර පරතරය අඩු කිරීම */
+}
+
+.quick-categories-bar .furniture-card {
+  height: auto;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.quick-categories-bar .furniture-card img {
+  height: 90px; /* රූපවල උස කුඩා කිරීම */
+  width: 100%;
+  object-fit: cover;
+  border-radius: 8px 8px 0 0;
+}
+
+.quick-categories-bar .furniture-card h4 {
+  font-size: 0.85rem; /* Text එක කුඩා කිරීම */
+  padding: 6px 2px;
+  margin: 0;
+}
+
+/* Mobile Screens සඳහා Responsive adjustment */
+@media (max-width: 768px) {
+  .quick-categories-bar .furniture-item-grid {
+    grid-template-columns: repeat(3, 1fr); /* ඡංගම දුරකථන වල පේළියට 3 බැගින් */
+    gap: 8px;
+  }
+}
+
+
+/* --- 2. Font Surface Background Image එක නිවැරදි කිරීම --- */
+.wooden-text-surface {
+  background-image: url('wooden-surface-font.jpg'); /* Folder එකේ ඇති Image Name එක ලබා දෙන්න */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  
+  /* Image එක අකුරු ඇතුළෙන් පැහැදිලිව පෙනීමට Font එක ඝන සහ විශාල විය යුතුය */
+  font-weight: 900 !important;
+  font-size: 2.8rem;
+  display: inline-block;
+}
+
+.hero-video-wrapper {
+  position: fixed; /* <--- මෙය නිසා මුළු Video එක Screens පිටුපස Fix වී අනිත් කොටස් වැසී යා හැක */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 1;
+}
+.reveal-on-scroll {
+  opacity: 1 !important;
+  transform: none !important;
+}
+/* 1. Header Text එක ඇතුලෙන් Image එක පෙන්වීමට (.wooden-text-surface සහ .text-gradient සඳහා) */
+.wooden-text-surface, 
+.text-gradient {
+  background-image: url('wooden-surface-font.jpg') !important; /* ඔබේ Image Name එක මෙතනට දෙන්න */
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  color: transparent !important;
+  display: inline-block;
+}
+
+/* 2. Nav Links Hover එකට Image Fill Effect එක */
+.nav-links a {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.nav-links a::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('wooden-surface-font.jpg') !important; /* ඔබේ Image Name එක */
+  background-position: center;
+  background-size: cover;
+  border-radius: 20px;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.3s ease;
+  z-index: -1;
+}
+
+.nav-links a:hover::before {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.nav-links a:hover {
+  color: #ffffff !important;
+  background-color: transparent !important; /* පැරණි Black Background එක ඉවත් කිරීමට */
+}
+
+/* 3. Footer එකට Background Image එක යෙදීම */
+.footer {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('wooden-surface-font.jpg') !important;
+  background-size: cover !important;
+  background-position: center !important;
+}
+/* Custom Design Button සහ Modal Buttons සඳහා Wooden Surface Effect එක */
+.header-actions .btn-primary-sm,
+#loginForm .btn-primary,
+#registerForm .btn-primary {
+  background: url('wooden-surface-font.jpg') center/cover no-repeat !important; /* ඔබේ Image Name එක */
+  color: #ffffff !important;
+  border: none !important;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+/* Hover කළ විට ලස්සන Glow එකක් සහ ටිකක් පිම්බෙන Effect එකක් එකතු කිරීම */
+.header-actions .btn-primary-sm:hover,
+#loginForm .btn-primary:hover,
+#registerForm .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(74, 44, 17, 0.4) !important;
+  opacity: 0.95;
+}
+
+
+.video-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.video-container video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Video එක Stretch නොවී Perfectly Fit වේ */
+  object-position: center;
+}
+/* Search Drawer Default State (Hidden off-screen) */
+.drawer-search-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 3000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.drawer-search-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.drawer-search-content {
+  position: fixed;
+  top: 0;
+  right: -380px; /* දකුණු පසට සඟවා තැබීම */
+  width: 380px;
+  height: 100vh;
+  background: #ffffff;
+  z-index: 3001;
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.15);
+  padding: 2rem 1.5rem;
+  transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.drawer-search-overlay.active .drawer-search-content {
+  right: 0; /* Open වූ විට පෙනීම */
+}
+/* Filter Chips Styling */
+.filter-chip {
+  padding: 0.5rem 1.4rem;
+  border-radius: 25px;
+  background: #f1f5f9;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-chip:hover,
+.filter-chip.active {
+  background: var(--wood-dark, #2c1810);
+  color: #ffffff;
+  border-color: var(--wood-dark, #2c1810);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+/* Video එක උඩ/යට කිසිම තැනකින් නොකැපී Frame එකට Fit කිරීම */
+.video-hero-outer {
+  position: relative;
+  width: 100%;
+  height: auto; /* Fixed Height එක ඉවත් කර ඇත */
+  aspect-ratio: 16 / 9; /* Standard Video Display Format */
+  overflow: hidden;
+  background: #000;
+}
+
+.hero-video-wrapper {
+  position: relative !important;
+  width: 100%;
+  height: 100%;
+}
+
+.video-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Cover වෙනුවට Exact Fill Element එක යෙදීම */
+.video-container video {
+  width: 100%;
+  height: 100%;
+  object-fit: fill; /* Image/Video Scale එක Frame එකට 100% ක් Stretch කර/Fit කර පෙන්වයි */
+}
+/* About Us Banner Styling */
+.about-story-banner {
+  position: relative;
+  width: 100%;
+  height: 450px;
+  background-image: url('about us.jpg'); /* ඔබ සතුව ඇති Craftsmanship Background Image එක ලබාදෙන්න */
+  background-size: cover;
+  background-position: center;
+  margin: 3rem 0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.story-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45); /* Text එක පැහැදිලිව පෙනීමට Dark Overlay එකක් */
+  display: flex;
+  align-items: flex-end;
+  padding: 3rem 4rem;
+}
+
+.story-content {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.story-title {
+  color: #ffffff;
+  font-size: 3.2rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.btn-learn-more {
+  background: #ffffff;
+  color: #000000;
+  padding: 0.9rem 2.2rem;
+  border-radius: 40px;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.btn-learn-more:hover {
+  background: #f1f5f9;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive Handling */
+@media (max-width: 768px) {
+  .story-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+  .story-title {
+    font-size: 2.2rem;
+  }
+}/* About Us Banner Styling */
+.about-story-banner {
+  position: relative;
+  width: 100%;
+  height: 450px;
+  background-image: url('wooden-surface-font.jpg'); /* ඔබ සතුව ඇති Craftsmanship Background Image එක ලබාදෙන්න */
+  background-size: cover;
+  background-position: center;
+  margin: 3rem 0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.story-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45); /* Text එක පැහැදිලිව පෙනීමට Dark Overlay එකක් */
+  display: flex;
+  align-items: flex-end;
+  padding: 3rem 4rem;
+}
+
+.story-content {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.story-title {
+  color: #ffffff;
+  font-size: 3.2rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.btn-learn-more {
+  background: #ffffff;
+  color: #000000;
+  padding: 0.9rem 2.2rem;
+  border-radius: 40px;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.btn-learn-more:hover {
+  background: #f1f5f9;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive Handling */
+@media (max-width: 768px) {
+  .story-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+  .story-title {
+    font-size: 2.2rem;
+  }
+}/* TGA About Us Page Styling */
+.about-hero-section {
+  position: relative;
+  width: 100%;
+  height: 60vh;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('hero-bg.jpg') center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #ffffff;
+}
+
+.about-hero-content h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.hero-tagline {
+  font-size: 1.4rem;
+  color: var(--accent-gold, #d97706);
+  font-weight: 600;
+}
+
+.about-content-container {
+  max-width: 1000px;
+  margin: -4rem auto 4rem auto;
+  padding: 0 1.5rem;
+  position: relative;
+  z-index: 10;
+}
+
+.about-card {
+  background: #ffffff;
+  padding: 3.5rem;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-color, #e2e8f0);
+}
+
+.about-text h2 {
+  font-size: 2.2rem;
+  color: var(--wood-dark, #2c1810);
+  margin-bottom: 1.5rem;
+}
+
+.about-text p {
+  font-size: 1.1rem;
+  color: #475569;
+  line-height: 1.8;
+  margin-bottom: 1.2rem;
+}
+.auth-form.hidden {
+  display: none !important;
+}
+/* Cart Drawer Styles */
+.cart-drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: flex-end;
+  z-index: 9999;
+}
+.cart-drawer-overlay.active {
+  display: flex;
+}
+.cart-drawer-content {
+  width: 380px;
+  max-width: 90%;
+  height: 100%;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -4px 0 15px rgba(0,0,0,0.15);
+  animation: slideIn 0.3s ease;
+}
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+.cart-drawer-header {
+  padding: 18px 20px;
+  background: #0f172a;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.cart-close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+.cart-items-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 15px;
+}
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+.cart-item img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+.cart-item-info {
+  flex: 1;
+}
+.cart-item-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #1e293b;
+}
+.cart-item-price {
+  color: #64748b;
+  font-size: 0.85rem;
+}
+.cart-drawer-footer {
+  padding: 20px;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+}
+.cart-summary-line {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+.discount-line { color: #10b981; }
+.total-line { font-size: 1.1rem; color: #0f172a; }
+.checkout-btn {
+  width: 100%;
+  padding: 12px;
+  background: #0f172a;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  margin-top: 15px;
+  cursor: pointer;
+}
+.checkout-btn:hover { background: #1e293b; }
+/* Full Screen Cart Modal Styles */
+.cart-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(6px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.cart-modal-overlay.active {
+  display: flex;
+  opacity: 1;
+}
+
+.cart-modal-container {
+  width: 90%;
+  max-width: 900px;
+  height: 85vh;
+  background: #ffffff;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  animation: modalPopIn 0.3s ease forwards;
+}
+
+@keyframes modalPopIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.cart-modal-header {
+  padding: 20px 30px;
+  background: #0f172a;
+  color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #1e293b;
+}
+
+.cart-modal-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Animated Close Button */
+.cart-close-animated {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cart-close-animated .close-icon {
+  color: #ffffff;
+  font-size: 24px;
+  line-height: 1;
+  transition: transform 0.3s ease;
+}
+
+.cart-close-animated:hover {
+  background: #ef4444;
+  transform: rotate(90deg) scale(1.1);
+}
+
+.cart-close-animated:active {
+  transform: rotate(180deg) scale(0.95);
+}
+
+.cart-modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 25px 30px;
+  background: #f8fafc;
+}
+
+/* Cart Item Row Structure */
+.cart-item-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+/* Image එක කුඩාවට තැබීම (Thumbnail) */
+.cart-item-details {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cart-item-details img {
+  width: 55px;
+  height: 55px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+}
+
+.cart-item-info h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.cart-item-info p {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 2px 0 0 0;
+}
+
+/* Quantity Control Buttons */
+.cart-item-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.qty-btn-group {
+  display: flex;
+  align-items: center;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.qty-btn-group button {
+  background: #f1f5f9;
+  border: none;
+  width: 28px;
+  height: 28px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.qty-btn-group button:hover {
+  background: #e2e8f0;
+}
+
+.qty-btn-group span {
+  padding: 0 10px;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.cart-remove-btn {
+  background: none;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.cart-remove-btn:hover {
+  transform: scale(1.2);
+}
+
+.cart-modal-footer {
+  padding: 20px 30px;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+}
+
+.cart-summary-box {
+  max-width: 400px;
+  margin-left: auto;
+}
+
+.cart-summary-line {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+  color: #475569;
+}
+
+.discount-line {
+  color: #10b981;
+}
+
+.total-line {
+  font-size: 1.25rem;
+  color: #0f172a;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 2px dashed #e2e8f0;
+}
+
+.checkout-btn {
+  width: 100%;
+  padding: 14px;
+  background: #0f172a;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 15px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.checkout-btn:hover {
+  background: #1e293b;
+}
+/* --- Modal Main Container Fix --- */
+.modal-box {
+  width: 90%;
+  max-width: 480px; /* Modal එක විශාල කිරීම */
+  background: #ffffff !important;
+  padding: 2.5rem 2rem;
+  border-radius: 24px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  position: relative;
+}
+
+/* Close Icon Fix */
+.close-modal {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  font-size: 1.5rem;
+  line-height: 1;
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.close-modal:hover {
+  color: #0f172a;
+}
+
+/* --- Switch Tabs (Login / Register) --- */
+.auth-tabs {
+  display: flex;
+  background: #f1f5f9;
+  padding: 4px;
+  border-radius: 12px;
+  margin-bottom: 1.8rem;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 0.75rem;
+  border: none;
+  background: transparent;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #64748b;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tab-btn.active {
+  background: #4a2c11 !important; /* Brown Active Color */
+  color: #ffffff !important;
+  box-shadow: 0 4px 10px rgba(74, 44, 17, 0.2);
+}
+
+/* --- Form Layout & Input Styling --- */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  width: 100%;
+}
+
+.auth-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  text-align: left;
+}
+
+.auth-form .form-group label {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.auth-form .form-group input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.3s ease;
+  background: #f8fafc;
+}
+
+.auth-form .form-group input:focus {
+  border-color: #8b5a2b;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(139, 90, 43, 0.15);
+}
+
+.forgot-pass-link {
+  align-self: flex-end;
+  font-size: 0.85rem;
+  color: #8b5a2b;
+  font-weight: 600;
+  text-decoration: none;
+  margin-top: -0.4rem;
+}
+
+.forgot-pass-link:hover {
+  text-decoration: underline;
+}
+
+/* --- Full Width Wooden Submit Button --- */
+.btn-wooden-submit {
+  width: 100% !important;
+  padding: 0.9rem !important;
+  border-radius: 12px !important;
+  font-size: 1rem !important;
+  font-weight: 800 !important;
+  background: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)),
+              url('wooden-surface-font.jpg') center/cover no-repeat, #4a2c11 !important;
+  color: #ffffff !important;
+  border: none !important;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(44, 24, 16, 0.3) !important;
+  transition: all 0.3s ease !important;
+  margin-top: 0.5rem;
+}
+
+.btn-wooden-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 22px rgba(44, 24, 16, 0.45) !important;
+  filter: brightness(1.08);
+}
+/* --- Modal Background Overlay --- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  transition: all 0.3s ease;
+}
+
+.modal-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* --- Modal Box Styling (White Background & Larger Size) --- */
+.modal-content.glass-card {
+  width: 90%;
+  max-width: 460px; /* Box එක විශාල කිරීම */
+  background: #ffffff !important; /* Clean White Background */
+  padding: 2.5rem 2rem;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  position: relative;
+  border: 1px solid #e2e8f0;
+}
+
+/* --- Close Button Fix --- */
+.close-modal-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 1.8rem;
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.close-modal-btn:hover {
+  color: #0f172a;
+}
+
+/* --- Login / Register Switch Tabs --- */
+.auth-tabs {
+  display: flex;
+  background: #f1f5f9;
+  padding: 4px;
+  border-radius: 12px;
+  margin-bottom: 1.8rem;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 0.75rem;
+  border: none;
+  background: transparent;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #64748b;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Active Tab එක Brown Color කිරීම */
+.tab-btn.active {
+  background: var(--wood-medium, #4a2c11) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 10px rgba(74, 44, 17, 0.25);
+}
+
+/* --- Input Groups & Fields Styling --- */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1.2rem;
+  text-align: left;
+}
+
+.input-group label {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  font-size: 0.95rem;
+  outline: none;
+  background: #f8fafc;
+  transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+  border-color: var(--wood-light, #8b5a2b);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(139, 90, 43, 0.15);
+}
+
+/* --- Wooden Surface Submit Buttons --- */
+.btn-primary.btn-full,
+.btn-full {
+  width: 100% !important;
+  padding: 0.85rem !important;
+  border-radius: 12px !important;
+  font-size: 1rem !important;
+  font-weight: 800 !important;
+  background: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)),
+              url('wooden-surface-font.jpg') center/cover no-repeat, #4a2c11 !important;
+  color: #ffffff !important;
+  border: none !important;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(44, 24, 16, 0.3) !important;
+  transition: all 0.3s ease !important;
+  margin-top: 0.5rem;
+}
+
+.btn-primary.btn-full:hover,
+.btn-full:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 22px rgba(44, 24, 16, 0.45) !important;
+  filter: brightness(1.08);
+}
+.btn-primary.btn-full,
+.btn-full {
+  display: block;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  text-align: center;
+}
+/* ==========================================
+   CART PAGE LAYOUT (TWO-COLUMN GRID)
+   ========================================== */
+.cart-page-container {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 3rem auto;
+  padding: 0 1.5rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ==========================================
+   LEFT SIDE: CART ITEMS LIST
+   ========================================== */
+.cart-items-section {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 2rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.cart-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f1f5f9;
+}
+
+.cart-items-list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Single Cart Item Layout */
+.cart-item {
+  display: grid;
+  grid-template-columns: 90px 1fr auto;
+  gap: 1.5rem;
+  align-items: center;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.cart-item:last-child {
+  border-bottom: none;
+}
+
+.cart-item-img img {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid #edf2f7;
+}
+
+.cart-item-details h4 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.3rem;
+}
+
+.cart-item-details .brand-name {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-bottom: 0.5rem;
+}
+
+.cart-item-details .current-price {
+  font-weight: 800;
+  color: #0f172a;
+  font-size: 1.1rem;
+}
+
+/* Quantity & Remove Buttons */
+.cart-item-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+}
+
+.quantity-controller {
+  display: flex;
+  align-items: center;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f8fafc;
+}
+
+.quantity-controller .qty-btn {
+  background: #0f172a;
+  color: #ffffff;
+  border: none;
+  width: 30px;
+  height: 30px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.quantity-controller .qty-btn:hover {
+  background: #334155;
+}
+
+.quantity-controller input {
+  width: 38px;
+  text-align: center;
+  border: none;
+  background: transparent;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #0f172a;
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.remove-btn:hover {
+  color: #ef4444;
+}
+
+/* ==========================================
+   RIGHT SIDE: ORDER SUMMARY SIDEBAR
+   ========================================== */
+.cart-summary-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.summary-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+.summary-card h3 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin-bottom: 1.25rem;
+}
+
+/* Coupon Section */
+.coupon-input-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.coupon-input-group input {
+  flex: 1;
+  padding: 0.7rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  outline: none;
+  font-size: 0.9rem;
+}
+
+.coupon-input-group input:focus {
+  border-color: #6366f1;
+}
+
+.btn-apply {
+  background: #0f172a;
+  color: #ffffff;
+  border: none;
+  padding: 0 1.2rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-apply:hover {
+  background: #334155;
+}
+
+/* Order Totals */
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  color: #64748b;
+  margin-bottom: 0.8rem;
+}
+
+.summary-row .amount {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.divider {
+  border: none;
+  border-top: 1px dashed #cbd5e1;
+  margin: 1.2rem 0;
+}
+
+.summary-section {
+  margin-bottom: 1rem;
+}
+
+.section-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #334155;
+  display: block;
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  color: #475569;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+}
+
+.total-row {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.total-amount {
+  font-size: 1.3rem;
+  color: #0f172a;
+}
+
+/* Wood Accent Checkout Button */
+.btn-checkout {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 10px;
+  border: none;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
+              url('wooden-surface-font.jpg') center/cover no-repeat, #4a2c11;
+  box-shadow: 0 6px 16px rgba(74, 44, 17, 0.35);
+  transition: all 0.3s ease;
+}
+
+.btn-checkout:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(74, 44, 17, 0.5);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 900px) {
+  .cart-page-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 500px) {
+  .cart-item {
+    grid-template-columns: 70px 1fr;
+  }
+  
+  .cart-item-actions {
+    grid-column: span 2;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+}
+#forgotPasswordModal.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cart-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+/* Badge එකේ ප්‍රමාණය කුඩා කිරීම */
+.cart-badge {
+  position: absolute;
+  top: -8px;          /* Badge එක Icon එකේ උඩින් තැබීමට */
+  right: -8px;        /* Badge එක Icon එකේ දකුණෙන් තැබීමට */
+  background: #d97706; /* Orange color */
+  color: #ffffff;
+  
+  /* ප්‍රමාණය සහ Font එක සකස් කිරීම */
+  font-size: 11px;    /* Text size එක කුඩා කිරීම */
+  font-weight: 600;
+  min-width: 16px;    /* Width එක 16px කිරීම */
+  height: 16px;       /* Height එක 16px කිරීම */
+  border-radius: 50%;
+  
+  /* Text එක මැදට Alignment කිරීම */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;         /* Default padding ඉවත් කිරීම */
+  line-height: 1;
+}
+/* All Cards Dynamic Equal Height & Alignment Fix */
+#main-products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.8rem;
+  align-items: stretch;
+}
+
+#main-products-grid .furniture-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#main-products-grid .furniture-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+#main-products-grid .furniture-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+#main-products-grid .furniture-card-info {
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: space-between;
+}
+/* Grid Limit Fix */
+.room-category-block .furniture-item-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Grid 3ක් පමණක් පේළියට පෙන්වීමට */
+  gap: 1.5rem;
+}
+
+/* Initially View More click කිරීමට පෙර ඉතිරි items සඟවා තැබීමට */
+.furniture-item-grid .extra-item {
+  display: none;
+}
+/* Furniture Grid එක සහ Card Layout එක සිරස්ව එකම තැන තබා ගැනීමට */
+.room-category-block {
+  position: relative !important;
+  z-index: 1;
+  clear: both;
+}
+
+.furniture-item-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important;
+  gap: 1.5rem !important;
+  position: relative !important;
+}
+
+/* Extra Items ආරම්භයේදී හමු නොවී සැඟවී තිබීමට */
+.furniture-card.extra-item {
+  display: none;
+}
+
+.furniture-card.extra-item.show {
+  display: flex !important;
+}
+
+/* Screen එක උඩට Duplicate වීම වැළැක්වීමට fixed position ඉවත් කිරීම */
+.furniture-card {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  transform: none;
+  z-index: 2;
+}
+/* Mobile Header & Responsive Fixes */
+@media (max-width: 768px) {
+  .header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  /* Navigation Links Mobile Overlay */
+  .nav-links {
+    display: none; /* Mobile එකේදී default hide වේ */
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #ffffff;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.5rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+  }
+
+  /* Toggle active class when hamburger clicked */
+  .nav-links.active {
+    display: flex !important;
+  }
+
+  /* Hamburger Icon display */
+  .hamburger-btn {
+    display: block !important;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--wood-dark, #2c1810);
+    order: 3; 
+  }
+
+  /* Header icon bar horizontal placement */
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  /* Mobile එකේදී Custom Design button සඟවා Icon පමණක් ප්‍රදර්ශනය කිරීම */
+  .header-actions .btn-primary-sm {
+    display: none;
+  }
+}
+/* Product Detail Modal Backdrop */
+.product-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.product-modal-overlay.hidden {
+  display: none !important;
+  opacity: 0;
+}
+
+/* Modal Box Styling */
+.product-modal-card {
+  background: #ffffff;
+  width: 90%;
+  max-width: 900px;
+  border-radius: 20px;
+  padding: 2rem;
+  position: relative;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.close-modal-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 2rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #64748b;
+  z-index: 10;
+}
+
+.product-modal-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+/* Gallery Section */
+.main-image-container {
+  position: relative;
+  width: 100%;
+  height: 320px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f8fafc;
+}
+
+.main-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.arrow-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  transition: background 0.2s;
+}
+
+.arrow-btn:hover {
+  background: #ffffff;
+}
+
+.prev-btn { left: 10px; }
+.next-btn { right: 10px; }
+
+.thumbnail-list {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  overflow-x: auto;
+}
+
+.thumbnail-list img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border 0.2s;
+}
+
+.thumbnail-list img.active-thumb {
+  border-color: var(--wood-light, #8b5a2b);
+}
+
+/* Info Section */
+.product-category-tag {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--wood-light, #8b5a2b);
+}
+
+.product-info-details h2 {
+  font-size: 1.8rem;
+  margin: 5px 0 15px;
+  color: #0f172a;
+}
+
+.price-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.modal-price {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.modal-old-price {
+  text-decoration: line-through;
+  color: #94a3b8;
+  font-size: 1rem;
+}
+
+.description-box {
+  background: #f8fafc;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  border: 1px solid #e2e8f0;
+}
+
+.description-box h4 {
+  font-size: 0.95rem;
+  margin-bottom: 6px;
+  color: #334155;
+}
+
+.description-box p {
+  font-size: 0.9rem;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.qty-selector {
+  display: flex;
+  align-items: center;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.qty-selector button {
+  width: 35px;
+  height: 38px;
+  border: none;
+  background: #f1f5f9;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.qty-selector input {
+  width: 45px;
+  height: 38px;
+  border: none;
+  text-align: center;
+  font-weight: bold;
+}
+
+.add-to-cart-modal-btn {
+  flex: 1;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .product-modal-body {
+    grid-template-columns: 1fr;
+  }
+}

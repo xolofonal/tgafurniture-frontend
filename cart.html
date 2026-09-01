@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TGA Furniture - Shopping Cart</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <div class="cart-page-container">
+    <!-- Left Side: Cart Items List -->
+    <div class="cart-items-section">
+      <div class="cart-header-row" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid #f1f5f9;">
+        <a href="index.html" class="back-home-btn" style="text-decoration: none; color: #0f172a; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; background: #f1f5f9; padding: 0.5rem 1.2rem; border-radius: 20px; transition: all 0.2s ease;">
+          <i class="fa-solid fa-arrow-left"></i> Back to Shop
+        </a>
+        <h2 class="cart-title" style="margin: 0; border: none; padding: 0;">My Cart (<span id="cart-total-count">0</span>)</h2>
+      </div>
+      
+      <div id="cart-items-list" class="cart-items-list"></div>
+    </div>
+
+<div class="cart-summary-sidebar">
+  <div class="summary-card coupon-box">
+    <h3>Coupons</h3>
+    <div class="coupon-input-group">
+      <input type="text" id="couponCode" placeholder="Coupon code">
+      <button class="btn-apply" onclick="applyCoupon()">APPLY NOW</button>
+    </div>
+  </div>
+
+  <div class="summary-card order-summary">
+    <h3>Your Order</h3>
+    
+    <div class="summary-row">
+      <span>Subtotal (<span id="summary-qty">0</span> items)</span>
+      <span class="amount" id="subtotal-amount">LKR 0.00</span>
+    </div>
+
+    <div class="summary-row total-row" style="margin-top: 15px; font-weight: bold;">
+      <span>Total Payable</span>
+      <span class="amount total-amount" id="total-amount">LKR 0.00</span>
+    </div>
+
+    <button class="btn-checkout" onclick="proceedToCheckout()" style="margin-top: 20px; width: 100%;">PROCEED TO CHECKOUT</button>
+  </div>
+</div>
+
+
+<script>
+function updateItemQuantity(index, delta) {
+  let cart = fetchCartData();
+  if (cart[index]) {
+    const currentQty = Number(cart[index].quantity || cart[index].qty || 1);
+    const newQty = currentQty + delta;
+
+    if (newQty <= 0) {
+      removeItem(index);
+    } else {
+      cart[index].quantity = newQty;
+      cart[index].qty = newQty;
+      syncCartStorage(cart);
+      renderCartPage();
+    }
+  }
+}
+
+function removeItem(index) {
+  let cart = fetchCartData();
+  cart.splice(index, 1);
+  syncCartStorage(cart);
+  renderCartPage();
+}
+
+function updateCartTotals(cartData) {
+  const cart = cartData || fetchCartData();
+  let subtotal = 0;
+  let totalQty = 0;
+
+  cart.forEach(item => {
+    const rawPrice = item.price !== undefined ? item.price : item.unitPrice;
+    const price = typeof rawPrice === 'number' 
+                  ? rawPrice 
+                  : parseFloat(String(rawPrice || 0).replace(/[^0-9.]/g, "")) || 0;
+    const qty = Number(item.quantity || item.qty || 1);
+    
+    subtotal += price * qty;
+    totalQty += qty;
+  });
+
+  // Radio selection එක පරීක්ෂා කිරීම
+  const deliveryRadio = document.getElementById('opt-delivery');
+  const isDelivery = deliveryRadio ? deliveryRadio.checked : true;
+  
+  // LocalStorage එකේ Save කිරීම
+  localStorage.setItem('isDeliveryChecked', JSON.stringify(isDelivery));
+
+  const deliveryFee = (cart.length > 0 && isDelivery) ? 2500 : 0;
+  const totalPayable = subtotal + deliveryFee;
+
+  const summaryQty = document.getElementById('summary-qty');
+  const subtotalEl = document.getElementById('subtotal-amount');
+  const totalEl = document.getElementById('total-amount');
+
+  if (summaryQty) summaryQty.innerText = totalQty;
+  if (subtotalEl) subtotalEl.innerText = `LKR ${subtotal.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+  if (totalEl) totalEl.innerText = `LKR ${totalPayable.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+}
+
+function applyCoupon() {
+  const codeInput = document.getElementById('couponCode');
+  if (codeInput && codeInput.value.trim() !== "") {
+    alert("Coupon Applied Successfully!");
+  } else {
+    alert("Please enter a valid coupon code.");
+  }
+}
+
+function proceedToCheckout() {
+  const cart = getCart(); // cartItems නිවැරදිව ලබා ගනී
+  if (!cart || cart.length === 0) {
+    alert("ඔබගේ Cart එක හිස්ව පවතී!");
+    return;
+  }
+  window.location.href = 'checkout.html';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof renderCartPage === 'function') {
+    renderCartPage();
+  }
+  
+  // Page එක load වෙද්දීම Totals සහ LocalStorage update කිරීම
+  updateCartTotals();
+
+  // Radio Buttons දෙකටම event listener එක එකතු කිරීම
+  const optDelivery = document.getElementById('opt-delivery');
+  const optPickup = document.getElementById('opt-pickup');
+
+  if (optDelivery) optDelivery.addEventListener('change', () => updateCartTotals());
+  if (optPickup) optPickup.addEventListener('change', () => updateCartTotals());
+});
+</script>
+<script src="script.js"></script>
+</body>
+</html>
