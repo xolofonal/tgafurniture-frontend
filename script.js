@@ -1,5 +1,4 @@
-const API_URL = 'https://tgafurniture-backend.vercel.app';
-
+const API_URL = 'https://tgafurniture-backend.vercel.app/api';
 // Cart වෙත පිවිසීමේදී හෝ Cart Drawer එක විවෘත කිරීමේදී Login වී ඇත්දැයි බැලීම
 function checkAuthAndOpenCart(event) {
   if (event) event.preventDefault();
