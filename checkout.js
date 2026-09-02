@@ -1,4 +1,4 @@
-const API_URL = 'https://tgafurniture-backend.vercel.app/api';
+const API_URL = 'https://tgafurniture-backend.vercel.app';
 
 function getCartData() {
   try {
