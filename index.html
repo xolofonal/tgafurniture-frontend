@@ -23,14 +23,14 @@
       <img src="logo.png" alt="TGA Furniture Logo" class="site-logo-img">
     </a>
 
-    <!-- 2. Nav Links (Hamburger එක ක්ලික් කළ විට විවෘත වන කොටස) -->
-    <nav class="nav-links" id="nav-links">
-      <a href="#hero">Home</a>
-      <a href="#categories">Categories</a>
-      <a href="#branches">Branches</a>
-      <a href="#reviews">Reviews</a>
-      <a href="#contact">Contact</a>
-    </nav>
+<!-- index.html හි <nav class="nav-links"> ඇතුළත Contact එක direct link කරන්න -->
+<nav class="nav-links" id="nav-links">
+  <a href="#hero">Home</a>
+  <a href="#categories">Categories</a>
+  <a href="#branches">Branches</a>
+  <a href="#reviews">Reviews</a>
+  <a href="contact.html">Contact</a> <!-- contact.html ලෙස link කරන ලදී -->
+</nav>
 
     <!-- 3. Header Action Icons (Search, Login/Account, Cart) -->
     <div class="header-actions">
@@ -78,6 +78,31 @@
     </section>
   </div>
 
+<!-- Mobile View Hero Section (Video / Banner එකට උඩින් Title එක නොපෙන්වයි) -->
+<section class="mobile-hero mobile-only">
+  <div class="mobile-hero-bg">
+    <!-- Mobile එකට අවශ්‍ය Video හෝ High-Quality Image එක -->
+  </div>
+  <div class="mobile-hero-content">
+    <div class="mobile-btn-group">
+      <a href="#categories" class="m-btn m-btn-primary">Explore Products</a>
+    </div>
+  </div>
+</section>
+
+<!-- Mobile එකට වීඩියෝ එක යටින් ලස්සනට නිර්මාණය කළ Custom Work Section එක -->
+<section class="mobile-custom-work-section mobile-only">
+  <div class="custom-work-card">
+    <span class="custom-badge"><i class="fa-solid fa-wand-magic-sparkles"></i> Handcrafted Perfection</span>
+    <h2 class="custom-title">Crafting Timeless <span class="text-gradient">Wooden Elegance</span> For Your Home</h2>
+    <p class="custom-desc">
+      Have a specific design in mind? We customize 100% kiln-dried solid timber furniture tailored perfectly to your space and interior style.
+    </p>
+    <a href="custom-design.html" class="m-btn m-btn-custom">
+      <i class="fa-solid fa-hammer"></i> Order Custom Woodwork
+    </a>
+  </div>
+</section>
   <section class="quick-categories-bar section-padding">
     <div class="furniture-item-grid">
       <div class="furniture-card" onclick="location.href='#living-sec'">

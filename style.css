@@ -881,17 +881,7 @@ img {
 .dropdown-card:hover p {
   color: #cbd5e1;
 }
-/* Video Hero Fullscreen Banner */
-.hero-video-wrapper {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  background-color: #000;
-}
+
 
 .video-container {
   position: absolute;
@@ -1088,13 +1078,7 @@ img {
   object-fit: contain;
 }
 
-/* Hero Video Responsive Fix */
-.hero-video-wrapper {
-  position: relative;
-  width: 100%;
-  height: 100vh; /* Screen එකේ මුළු උසටම Fit වේ */
-  overflow: hidden;
-}
+
 
 .video-container {
   position: absolute;
@@ -1366,14 +1350,6 @@ img {
   display: inline-block;
 }
 
-.hero-video-wrapper {
-  position: fixed; /* <--- මෙය නිසා මුළු Video එක Screens පිටුපස Fix වී අනිත් කොටස් වැසී යා හැක */
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  z-index: 1;
-}
 .reveal-on-scroll {
   opacity: 1 !important;
   transform: none !important;
@@ -1532,11 +1508,6 @@ img {
   background: #000;
 }
 
-.hero-video-wrapper {
-  position: relative !important;
-  width: 100%;
-  height: 100%;
-}
 
 .video-container {
   position: absolute;
@@ -2999,5 +2970,151 @@ img {
 @media (max-width: 768px) {
   .product-modal-body {
     grid-template-columns: 1fr;
+  }
+}
+/* Default Display Rules */
+.mobile-only {
+  display: none !important; /* PC/Desktop එකේදී Mobile Section එක හංගයි */
+}
+
+/* Mobile Screen එකට එද්දී විතරක් Active වෙන වෙනම Style Rules */
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none !important; /* Mobile එකේදී Desktop කොටස් සියල්ල හංගයි */
+  }
+  
+  .mobile-only {
+    display: block !important; /* Mobile කොටස විතරක් පෙන්වයි */
+  }
+
+  /* Mobile එකට විතරක් වෙනම Styling */
+  .mobile-hero {
+    position: relative;
+    padding: 3rem 1.2rem;
+    background: linear-gradient(180deg, #1f110a 0%, #2c1810 100%);
+    color: #ffffff;
+    text-align: center;
+    border-radius: 0 0 24px 24px;
+  }
+
+  .mobile-btn-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 1.5rem;
+  }
+
+  .m-btn {
+    display: block;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .m-btn-primary {
+    background: #d97706;
+    color: #fff;
+  }
+
+  .m-btn-secondary {
+    border: 1.5px solid #d97706;
+    color: #fbbf24;
+  }
+}
+/* Custom Work & Mobile View Responsive Rules */
+.mobile-only {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  /* Phone view එකේදී වීඩියෝ එක උඩ ඇති Text overlay එක Hide කිරීම */
+  .hero-content-overlay .hero-title,
+  .hero-content-overlay .hero-desc {
+    display: none !important;
+  }
+
+  /* Mobile Display Active කිරීම */
+  .mobile-only {
+    display: block;
+  }
+
+  /* Video එක යටින් පිහිටන Custom Work Section Styling */
+  .mobile-custom-work-section {
+    padding: 2rem 1.2rem;
+    background: #fdfbf7;
+  }
+
+  .custom-work-card {
+    background: #ffffff;
+    border: 1px solid rgba(139, 90, 43, 0.15);
+    border-radius: 20px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .custom-badge {
+    display: inline-block;
+    background: rgba(139, 90, 43, 0.1);
+    color: var(--wood-light, #8b5a2b);
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .custom-title {
+    font-size: 1.65rem;
+    font-weight: 800;
+    line-height: 1.3;
+    color: #0f172a;
+    margin-bottom: 0.8rem;
+  }
+
+  .custom-desc {
+    font-size: 0.9rem;
+    color: #64748b;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .m-btn-custom {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    width: 100%;
+    padding: 0.9rem 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #ffffff;
+    border-radius: 50px;
+    background: linear-gradient(135deg, var(--wood-medium, #4a2c11), var(--wood-dark, #2c1810));
+    box-shadow: 0 8px 20px rgba(74, 44, 17, 0.25);
+    transition: transform 0.2s ease;
+  }
+
+  .m-btn-custom:active {
+    transform: scale(0.98);
+  }
+}
+/* Mobile View Adjustment (768px හෝ ඊට අඩු තිර සඳහා) */
+@media (max-width: 768px) {
+  /* 1. Video Hero එක උඩ ඇති සියලුම Elements (Title, Description, Tag Badge, Buttons) hide කිරීම */
+  .hero-content-overlay {
+    display: none !important;
+  }
+
+  /* 2. Mobile Hero Custom Section එක තුළ ඇති "Explore Products" button එක සම්පූර්ණයෙන්ම hide කිරීම */
+  .mobile-hero-content,
+  .mobile-btn-group,
+  .mobile-hero .m-btn-primary {
+    display: none !important;
   }
 }
