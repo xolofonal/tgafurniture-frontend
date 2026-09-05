@@ -6,24 +6,70 @@
   <title>Custom Furniture Design - TGA Furniture</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    /* Mobile Responsive Fixes */
+    .custom-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      padding: 30px;
+      box-sizing: border-box;
+      width: 100%;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .info-box {
+      background: rgba(37, 211, 102, 0.1);
+      border: 1px solid #25D366;
+      border-radius: 8px;
+      padding: 12px 15px;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+      color: #128C7E;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .custom-container {
+        grid-template-columns: 1fr;
+        padding: 15px;
+      }
+      .form-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      .section-title {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
 </head>
 <body class="bg-light">
 
   <header class="header">
     <div class="header-container">
-        <a href="#" class="logo">
+        <a href="index.html" class="logo">
           <img src="logo.png" alt="TGA Furniture Logo" class="site-logo-img">
         </a>
       <a href="index.html" class="btn btn-secondary"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
     </div>
   </header>
 
-  <section class="section-padding">
+  <section class="section-padding" style="padding: 20px 10px;">
     <div class="custom-container glass-card" style="margin: 0 auto; max-width: 1000px;">
+      
       <div class="custom-text">
         <span class="section-tag">Bespoke Woodworking</span>
         <h2 class="section-title">Design Your Custom <span class="text-gradient">Furniture</span></h2>
-        <p>Upload a photo, specify dimensions (Height, Width), and select your preferred wood type. Our master carpenters will craft it precisely to your needs.</p>
+        <p>Specify dimensions (Height, Width) and select your preferred wood type. Our master carpenters will craft it precisely to your needs.</p>
         
         <ul class="custom-features">
           <li><i class="fa-solid fa-check"></i> 100% Teak, Mahogany, or Nedun Wood options</li>
@@ -35,9 +81,10 @@
       <form id="customOrderForm" class="custom-form">
         <h3><i class="fa-solid fa-sliders"></i> Request Custom Quote</h3>
         
-        <div class="form-group">
-          <label>Upload Furniture Photo / Sketch</label>
-          <input type="file" id="photo_input" accept="image/*" class="file-input" required>
+        <!-- WhatsApp Photo Attachment Notice -->
+        <div class="info-box">
+          <i class="fa-brands fa-whatsapp" style="font-size: 1.5rem;"></i>
+          <span><strong>Note:</strong> After clicking the Send Request button, attach your design photos/notes and send them to us via WhatsApp.</span>
         </div>
 
         <div class="form-row">
@@ -72,7 +119,7 @@
           <textarea id="notes_input" rows="3" placeholder="Mention finish, cushion color, details..."></textarea>
         </div>
 
-        <button type="submit" id="submitBtn" class="btn btn-primary btn-block" style="background-color: #25D366; border: none;">
+        <button type="submit" id="submitBtn" class="btn btn-primary btn-block" style="background-color: #25D366; border: none; width: 100%;">
           <i class="fa-brands fa-whatsapp"></i> Send Custom Request via WhatsApp
         </button>
       </form>
