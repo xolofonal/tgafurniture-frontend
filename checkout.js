@@ -1,5 +1,8 @@
 const API_URL = 'https://tgafurniture-backend.vercel.app/api';
 
+// Owner ගේ WhatsApp අංකය (Country code එක සහිතව, '+' නැතිව)
+const OWNER_WHATSAPP_NUMBER = "94771234567";
+
 function getCartData() {
   try {
     const cartData = localStorage.getItem("cartItems");
@@ -74,7 +77,7 @@ function renderCheckoutSummary() {
   if (totalElem) totalElem.textContent = `LKR ${total.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
 }
 
-async function startPayHerePayment(e) {
+async function sendWhatsAppOrder(e) {
   if (e) {
     e.preventDefault();
     e.stopPropagation();
@@ -88,50 +91,13 @@ async function startPayHerePayment(e) {
     return false;
   }
 
-  if (submitBtn) submitBtn.disabled = true;
-
-  if (typeof payhere === 'undefined') {
-    alert("PayHere SDK library link is not loaded correctly.");
-    if (submitBtn) submitBtn.disabled = false;
-    return false;
-  }
-
   const cart = getCartData();
   if (!cart || cart.length === 0) {
-    alert("Your cart is empty!");
-    if (submitBtn) submitBtn.disabled = false;
+    alert("ඔබගේ Cart එක හිස්ව පවතී!");
     return false;
   }
 
-  // PayHere Event Handlers මුලින්ම Bind කිරීම
-  payhere.onCompleted = function (orderId) {
-    alert("Payment completed successfully! Order ID: " + orderId);
-    localStorage.removeItem("cartItems");
-    localStorage.removeItem("isDeliveryChecked");
-    window.location.href = "index.html";
-  };
-
-  payhere.onDismissed = function () {
-    if (submitBtn) submitBtn.disabled = false;
-  };
-
-  payhere.onError = function (error) {
-    if (submitBtn) submitBtn.disabled = false;
-    alert("PayHere Error: " + error);
-  };
-
-  const subtotal = cart.reduce((sum, item) => {
-    const rawPrice = item.price !== undefined ? item.price : item.unitPrice;
-    const price = typeof rawPrice === 'number' ? rawPrice : parseFloat(String(rawPrice || 0).replace(/[^0-9.]/g, "")) || 0;
-    const qty = Number(item.quantity || item.qty || 1);
-    return sum + (price * qty);
-  }, 0);
-
-  const isDeliveryChecked = JSON.parse(localStorage.getItem('isDeliveryChecked'));
-  const isDelivery = isDeliveryChecked !== null ? isDeliveryChecked : true;
-  const deliveryFee = isDelivery ? 2500 : 0;
-  const totalAmount = subtotal + deliveryFee;
-  const orderId = "ORD-" + Date.now();
+  if (submitBtn) submitBtn.disabled = true;
 
   const firstName = document.getElementById("first_name")?.value.trim() || "";
   const lastName = document.getElementById("last_name")?.value.trim() || "";
@@ -140,48 +106,81 @@ async function startPayHerePayment(e) {
   const addressElem = document.getElementById("address");
   const cityElem = document.getElementById("city");
 
+  const isDeliveryChecked = JSON.parse(localStorage.getItem('isDeliveryChecked'));
+  const isDelivery = isDeliveryChecked !== null ? isDeliveryChecked : true;
+  const orderType = isDelivery ? "Delivery" : "Store Pickup";
+
   const addressVal = (isDelivery && addressElem && addressElem.value.trim() !== "") ? addressElem.value.trim() : "Store Pickup";
   const cityVal = (isDelivery && cityElem && cityElem.value.trim() !== "") ? cityElem.value.trim() : "Store Pickup";
 
+  // Subtotal සහ Items පෙළ සකස් කිරීම
+  let subtotal = 0;
+  let itemsText = "";
+
+  cart.forEach((item, index) => {
+    const rawPrice = item.price !== undefined ? item.price : item.unitPrice;
+    const price = typeof rawPrice === 'number' ? rawPrice : parseFloat(String(rawPrice || 0).replace(/[^0-9.]/g, "")) || 0;
+    const qty = Number(item.quantity || item.qty || 1);
+    const itemTotal = price * qty;
+    subtotal += itemTotal;
+
+    itemsText += `${index + 1}. *${item.name || item.title}*\n   - Qty: ${qty}\n   - Price: LKR ${itemTotal.toLocaleString('en-US')}\n`;
+  });
+
+  const deliveryFee = isDelivery ? 2500 : 0;
+  const totalAmount = subtotal + deliveryFee;
+  const orderId = "ORD-" + Date.now();
+
+  // 1. Back-end එකට Order Details Save කිරීම (Optionally)
   try {
-    const res = await fetch(`${API_URL}/payments/payhere-hash`, {
+    await fetch(`${API_URL}/orders`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ order_id: orderId, amount: totalAmount, currency: "LKR" })
+      body: JSON.stringify({
+        order_id: orderId,
+        customer: { firstName, lastName, email, phone, address: addressVal, city: cityVal },
+        items: cart,
+        orderType: orderType,
+        subtotal: subtotal,
+        deliveryFee: deliveryFee,
+        totalAmount: totalAmount,
+        paymentMethod: "WhatsApp Inquiry",
+        status: "Pending"
+      })
     });
-
-    if (!res.ok) throw new Error("Failed to fetch hash from backend server.");
-
-    const hashData = await res.json();
-
-// checkout.js ඇතුළත
-const paymentObject = {
-  "sandbox": true,
-  "merchant_id": hashData.merchant_id,
-  "return_url": window.location.origin + "/index.html",
-  "cancel_url": window.location.href,
-  "notify_url": `${API_URL}/payments/notify`,
-  "order_id": orderId,
-  "items": "Test", // Items නම කෙටියෙන් තබන්න
-  "amount": hashData.amount, // ⚠️ Backend එකෙන් Hash එක හදන්න භාවිතා කල String Amount එකම යවන්න (e.g. "100.00")
-  "currency": hashData.currency,
-  "hash": hashData.hash,
-  "first_name": firstName || "Customer",
-  "last_name": lastName || "Name",
-  "email": email || "test@example.com",
-  "phone": phone || "0771234567",
-  "address": addressVal || "No 1",
-  "city": cityVal || "Colombo",
-  "country": "Sri Lanka"
-};
-
-    payhere.startPayment(paymentObject);
-
   } catch (err) {
-    if (submitBtn) submitBtn.disabled = false;
-    console.error("Payment initiation error:", err);
-    alert("Backend Server එක ක්‍රියාත්මක නොවේ, නැතහොත් Request එක අඩාල විය.");
+    console.warn("Backend order save failed or skipped:", err);
   }
+
+  // 2. WhatsApp Message Text එක සැකසීම
+  let message = `🛒 *NEW ORDER INQUIRY - TGA FURNITURE*\n\n`;
+  message += `🔖 *Order ID:* ${orderId}\n`;
+  message += `👤 *Customer Name:* ${firstName} ${lastName}\n`;
+  message += `📞 *Phone Number:* ${phone}\n`;
+  if (email) message += `📧 *Email:* ${email}\n`;
+  message += `🚚 *Order Type:* ${orderType}\n`;
+
+  if (isDelivery) {
+    message += `📍 *Delivery Address:* ${addressVal}, ${cityVal}\n`;
+  }
+
+  message += `\n📦 *ORDER ITEMS:*\n${itemsText}\n`;
+  message += `💰 *Subtotal:* LKR ${subtotal.toLocaleString('en-US', {minimumFractionDigits: 2})}\n`;
+  message += `🚚 *Delivery Fee:* ${isDelivery ? 'LKR ' + deliveryFee.toLocaleString('en-US', {minimumFractionDigits: 2}) : 'Free'}\n`;
+  message += `💵 *TOTAL PRICE:* LKR ${totalAmount.toLocaleString('en-US', {minimumFractionDigits: 2})}\n\n`;
+  message += `Please confirm my order. Thank you!`;
+
+  // 3. Encoded WhatsApp URL එක සාදා redirect කිරීම
+  const encodedMessage = encodeURIComponent(message);
+  const whatsappUrl = `https://wa.me/${94775670819}?text=${encodedMessage}`;
+
+  // 4. Cart එක Clear කර WhatsApp එකට යැවීම
+  localStorage.removeItem("cartItems");
+  localStorage.removeItem("isDeliveryChecked");
+  
+  if (submitBtn) submitBtn.disabled = false;
+  
+  window.open(whatsappUrl, '_blank');
 }
 
 window.toggleCheckoutDelivery = toggleCheckoutDelivery;
@@ -190,6 +189,6 @@ document.addEventListener("DOMContentLoaded", () => {
   renderCheckoutSummary();
   const checkoutForm = document.getElementById("checkoutForm");
   if (checkoutForm) {
-    checkoutForm.addEventListener("submit", startPayHerePayment);
+    checkoutForm.addEventListener("submit", sendWhatsAppOrder);
   }
 });
