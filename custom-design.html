@@ -23,7 +23,7 @@
       <div class="custom-text">
         <span class="section-tag">Bespoke Woodworking</span>
         <h2 class="section-title">Design Your Custom <span class="text-gradient">Furniture</span></h2>
-        <p>Upload a photo, specify dimensions (Height, Width, Depth), and select your preferred wood type. Our master carpenters will craft it precisely to your needs.</p>
+        <p>Upload a photo, specify dimensions (Height, Width), and select your preferred wood type. Our master carpenters will craft it precisely to your needs.</p>
         
         <ul class="custom-features">
           <li><i class="fa-solid fa-check"></i> 100% Teak, Mahogany, or Nedun Wood options</li>
@@ -32,45 +32,53 @@
         </ul>
       </div>
 
-      <form class="custom-form">
+      <form id="customOrderForm" class="custom-form">
         <h3><i class="fa-solid fa-sliders"></i> Request Custom Quote</h3>
+        
         <div class="form-group">
           <label>Upload Furniture Photo / Sketch</label>
-          <input type="file" accept="image/*" class="file-input" required>
+          <input type="file" id="photo_input" accept="image/*" class="file-input" required>
         </div>
+
         <div class="form-row">
           <div class="form-group">
             <label>Height (Inches / Feet)</label>
-            <input type="text" placeholder="e.g. 6 Feet" required>
+            <input type="text" id="height_input" placeholder="e.g. 6 Feet" required>
           </div>
           <div class="form-group">
             <label>Width (Inches / Feet)</label>
-            <input type="text" placeholder="e.g. 4 Feet" required>
+            <input type="text" id="width_input" placeholder="e.g. 4 Feet" required>
           </div>
         </div>
+
         <div class="form-row">
           <div class="form-group">
             <label>Wood Type</label>
-            <select required>
+            <select id="wood_input" required>
               <option value="">Select Wood</option>
-              <option value="teak">Kiln-Dried Teak Wood</option>
-              <option value="mahogany">Mahogany Wood</option>
-              <option value="nedun">Sri Lankan Nedun</option>
+              <option value="Kiln-Dried Teak Wood">Kiln-Dried Teak Wood</option>
+              <option value="Mahogany Wood">Mahogany Wood</option>
+              <option value="Sri Lankan Nedun">Sri Lankan Nedun</option>
             </select>
           </div>
           <div class="form-group">
             <label>Phone / WhatsApp</label>
-            <input type="tel" placeholder="+94 77 123 4567" required>
+            <input type="tel" id="phone_input" placeholder="0771234567" required>
           </div>
         </div>
+
         <div class="form-group">
           <label>Additional Specifications</label>
-          <textarea rows="3" placeholder="Mention finish, cushion color, details..."></textarea>
+          <textarea id="notes_input" rows="3" placeholder="Mention finish, cushion color, details..."></textarea>
         </div>
-        <button type="submit" class="btn btn-primary btn-block">Submit Custom Order Request</button>
+
+        <button type="submit" id="submitBtn" class="btn btn-primary btn-block" style="background-color: #25D366; border: none;">
+          <i class="fa-brands fa-whatsapp"></i> Send Custom Request via WhatsApp
+        </button>
       </form>
     </div>
   </section>
 
+  <script src="custom-design.js"></script>
 </body>
 </html>
