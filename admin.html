@@ -208,7 +208,6 @@
 <script>
 const API_URL = 'https://tgafurniture-backend.vercel.app/api';
 
-
 // API Helper
 async function apiRequest(endpoint, method = 'GET', body = null) {
   const token = localStorage.getItem('adminToken');
@@ -349,8 +348,10 @@ async function loadProducts() {
 
     products.forEach(item => {
       const tr = document.createElement('tr');
+      const mainImg = item.imageUrl || (item.images && item.images[0]) || (item.imageUrls && item.imageUrls[0]) || 'https://via.placeholder.com/150';
+      
       tr.innerHTML = `
-        <td><img src="${item.imageUrl || 'https://via.placeholder.com/150'}" class="product-img" alt=""></td>
+        <td><img src="${mainImg}" class="product-img" alt=""></td>
         <td>${item.name}</td>
         <td>${item.category}</td>
         <td>LKR ${Number(item.discountPrice || item.price).toLocaleString()}</td>
@@ -367,11 +368,10 @@ async function loadProducts() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', loadProducts);
-
 // Add extra image URL input line when '+' clicked
 function addImageUrlInput() {
   const container = document.getElementById('imageUrlsContainer');
+  if (!container) return;
   const div = document.createElement('div');
   div.className = 'image-input-row';
   div.style.cssText = 'display: flex; gap: 8px; margin-bottom: 8px;';
@@ -382,84 +382,13 @@ function addImageUrlInput() {
   container.appendChild(div);
 }
 
-document.getElementById('addProductForm')?.addEventListener('submit', async (e) => {
-  e.preventDefault();
-
-  const origPrice = Number(document.getElementById('originalPrice').value);
-  const discPriceInput = document.getElementById('discountPrice').value.trim();
-  let discPrice = discPriceInput !== '' ? Number(discPriceInput) : null;
-
-  // Collect all image URLs into an array
-  const imageUrlElements = document.querySelectorAll('.imageUrlInput');
-  const images = Array.from(imageUrlElements)
-                      .map(el => el.value.trim())
-                      .filter(url => url !== '');
-
-  const productData = {
-    name: document.getElementById('name').value.trim(),
-    category: document.getElementById('category').value,
-    price: origPrice,
-    discountPrice: discPrice,
-    description: document.getElementById('description').value.trim(),
-    imageUrl: images[0] || '', // First image as main image
-    imageUrls: images          // Array of all images
-  };
-
-  try {
-    const res = await apiRequest('/products', 'POST', productData);
-    alert(res.message || 'Product added successfully!');
-    document.getElementById('addProductForm').reset();
-    loadProducts();
-  } catch (err) {
-    alert("Error saving product: " + err.message);
-  }
-});
-
-// Modify Add Product Form Submit Event
-document.getElementById('addProductForm')?.addEventListener('submit', async (e) => {
-  e.preventDefault();
-
-  const origPrice = Number(document.getElementById('originalPrice').value);
-  const discPriceInput = document.getElementById('discountPrice').value.trim();
-  let discPrice = discPriceInput !== '' ? Number(discPriceInput) : null;
-
-  // Collect all image URLs into an array
-  const imageUrlElements = document.querySelectorAll('.imageUrlInput');
-  const images = Array.from(imageUrlElements).map(el => el.value.trim()).filter(url => url !== '');
-
-  const newProduct = {
-    name: document.getElementById('name').value.trim(),
-    category: document.getElementById('category').value,
-    price: origPrice,
-    discountPrice: discPrice,
-    description: document.getElementById('description').value.trim(),
-    images: images,
-    imageUrl: images[0] || 'https://via.placeholder.com/150' // Fallback
-  };
-
-  try {
-    const res = await apiRequest('/products', 'POST', newProduct);
-    alert(res.message || 'Product created successfully!');
-    document.getElementById('addProductForm').reset();
-    document.getElementById('imageUrlsContainer').innerHTML = `
-      <div class="image-input-row" style="display: flex; gap: 8px; margin-bottom: 8px;">
-        <input type="url" class="imageUrlInput" placeholder="Paste image web link" required>
-        <button type="button" class="btn" onclick="addImageUrlInput()" style="background:#3498db;"><i class="fa-solid fa-plus"></i></button>
-      </div>`;
-    loadProducts();
-  } catch (err) {
-    alert("Error: " + err.message);
-  }
-});
-
-
+// SINGLE Add Product Form Submit Handler (Fixed Duplicate Event Issue)
 document.getElementById('addProductForm')?.addEventListener('submit', async (e) => {
   e.preventDefault();
 
   const origPrice = Number(document.getElementById('originalPrice').value);
   const discPriceInput = document.getElementById('discountPrice').value.trim();
   
-  // FIX: If user didn't enter discount, set it to NULL instead of original price
   let discPrice = null;
   if (discPriceInput !== '') {
     discPrice = Number(discPriceInput);
@@ -469,18 +398,39 @@ document.getElementById('addProductForm')?.addEventListener('submit', async (e) 
     }
   }
 
+  // Collect all image URLs from input fields
+  const imageUrlElements = document.querySelectorAll('.imageUrlInput');
+  const images = Array.from(imageUrlElements)
+                      .map(el => el.value.trim())
+                      .filter(url => url !== '');
+
   const newProduct = {
     name: document.getElementById('name').value.trim(),
     category: document.getElementById('category').value,
     price: origPrice,
-    discountPrice: discPrice, 
-    imageUrl: document.getElementById('imageUrl').value.trim() || 'https://via.placeholder.com/150'
+    discountPrice: discPrice,
+    description: document.getElementById('description') ? document.getElementById('description').value.trim() : '',
+    imageUrl: images[0] || 'https://via.placeholder.com/150', // Main Image
+    images: images,                                             // Array 1
+    imageUrls: images                                          // Array 2 (for backend compatibility)
   };
 
   try {
     const res = await apiRequest('/products', 'POST', newProduct);
     alert(res.message || 'Product created successfully!');
+    
     document.getElementById('addProductForm').reset();
+    
+    // Reset image inputs container back to 1 field
+    const container = document.getElementById('imageUrlsContainer');
+    if (container) {
+      container.innerHTML = `
+        <div class="image-input-row" style="display: flex; gap: 8px; margin-bottom: 8px;">
+          <input type="url" class="imageUrlInput" placeholder="Paste image web link" required style="flex:1; padding:8px; border:1px solid #ccc; border-radius:6px;">
+          <button type="button" class="btn" onclick="addImageUrlInput()" style="background:#3498db; padding: 8px 14px;"><i class="fa-solid fa-plus"></i></button>
+        </div>`;
+    }
+
     loadProducts();
   } catch (err) {
     alert("Error: " + err.message);
