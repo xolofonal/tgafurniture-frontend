@@ -158,18 +158,29 @@ async function fetchAndRenderProducts() {
           // --- Image URL Resolution Fix ---
           let displayImage = 'https://via.placeholder.com/150';
           
-          // 1. Multi-image array එක තියෙනවා නම් ඒකේ පළමු Image එකට මුල් තැන දීම
-          if (Array.isArray(product.images) && product.images.length > 0 && product.images[0]) {
-            displayImage = product.images[0];
-          } else if (product.imageUrl && typeof product.imageUrl === 'string' && product.imageUrl.trim() !== '') {
-            displayImage = product.imageUrl;
+          // 1. Image Path එක ලබා ගැනීම (String එකක්දැයි පරීක්ෂා කිරීම)
+          if (product.imageUrl && typeof product.imageUrl === 'string' && product.imageUrl.trim() !== '') {
+            displayImage = product.imageUrl.trim();
+          } else if (Array.isArray(product.images) && product.images.length > 0 && product.images[0]) {
+            displayImage = product.images[0].trim();
           }
 
-          // 2. Relative path (Uploads folder) එකක් ආවොත් backend URL එක නිවැරදිව එකතු කිරීම
+          // 2. Windows Backslashes (\) Forward Slashes (/) බවට පත්කිරීම
+          if (typeof displayImage === 'string') {
+            displayImage = displayImage.replace(/\\/g, '/');
+          }
+
+          // 3. Relative path එකක් ආවොත් පමණක් Base URL එක එකතු කිරීම
           if (displayImage && !displayImage.startsWith('http://') && !displayImage.startsWith('https://') && !displayImage.startsWith('data:image')) {
-            const baseUrl = API_URL.replace(/\/api\/?$/, ''); 
-            const cleanPath = displayImage.startsWith('/') ? displayImage : `/${displayImage}`;
-            displayImage = `${baseUrl}${cleanPath}`;
+            try {
+              const baseUrl = (typeof API_URL !== 'undefined' && API_URL && API_URL.startsWith('http')) 
+                ? new URL(API_URL).origin 
+                : window.location.origin;
+              displayImage = new URL(displayImage, baseUrl).href;
+            } catch (err) {
+              console.error("Error constructing image URL:", err);
+              displayImage = 'https://via.placeholder.com/150';
+            }
           }
 
           const card = document.createElement('div');
