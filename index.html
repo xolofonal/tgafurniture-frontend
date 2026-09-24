@@ -384,6 +384,51 @@
       <div id="searchResults"></div>
     </div>
   </div>
+<!-- Product Detail Modal (Daraz Style) -->
+<div id="productDetailModal" class="product-modal-overlay hidden">
+  <div class="product-modal-card">
+    <button class="close-modal-btn" onclick="closeProductModal()">&times;</button>
+    
+    <div class="product-modal-body">
+      <!-- Image Gallery Section -->
+      <div class="product-gallery">
+        <div class="main-image-container">
+          <button class="arrow-btn prev-btn" onclick="changeImage(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+          <img id="modalMainImg" src="" alt="Product Image">
+          <button class="arrow-btn next-btn" onclick="changeImage(1)"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+        <div id="modalThumbnails" class="thumbnail-list"></div>
+      </div>
+
+      <!-- Product Details Section -->
+      <div class="product-info-details">
+        <span id="modalCategory" class="product-category-tag">Category</span>
+        <h2 id="modalTitle">Product Title</h2>
+        
+        <div class="price-box">
+          <span id="modalDiscountPrice" class="modal-price">LKR 0.00</span>
+          <span id="modalOriginalPrice" class="modal-old-price">LKR 0.00</span>
+        </div>
+
+        <div class="description-box">
+          <h4>Product Description</h4>
+          <p id="modalDescription">Detailed product description goes here...</p>
+        </div>
+
+        <div class="modal-actions">
+          <div class="qty-selector">
+            <button onclick="updateQty(-1)">-</button>
+            <input type="number" id="modalQty" value="1" min="1" readonly>
+            <button onclick="updateQty(1)">+</button>
+          </div>
+          <button class="btn btn-primary add-to-cart-modal-btn" onclick="addToCartFromModal()">
+            <i class="fa-solid fa-cart-shopping"></i> Add to Cart
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
   <footer class="footer">
     <div class="footer-container">
       <div class="footer-col">
