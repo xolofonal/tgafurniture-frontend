@@ -73,7 +73,7 @@ function renderCheckoutSummary() {
   const total = subtotal + deliveryFee;
 
   if (subtotalElem) subtotalElem.textContent = `LKR ${subtotal.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
-  if (deliveryElem) deliveryElem.textContent = isDelivery ? `LKR ${deliveryFee.toLocaleString('en-US', {minimumFractionDigits: 2})}` : "Free";
+  if (deliveryElem) deliveryElem.textContent = isDelivery ? `LKR ${deliveryFee.toLocaleString('en-US', {minimumFractionDigits: 2})}` : "0";
   if (totalElem) totalElem.textContent = `LKR ${total.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
 }
 
@@ -166,7 +166,7 @@ async function sendWhatsAppOrder(e) {
 
   message += `\n📦 *ORDER ITEMS:*\n${itemsText}\n`;
   message += `💰 *Subtotal:* LKR ${subtotal.toLocaleString('en-US', {minimumFractionDigits: 2})}\n`;
-  message += `🚚 *Delivery Fee:* ${isDelivery ? 'LKR ' + deliveryFee.toLocaleString('en-US', {minimumFractionDigits: 2}) : 'Free'}\n`;
+  message += `🚚 *Delivery Fee:* ${isDelivery ? 'LKR ' + deliveryFee.toLocaleString('en-US', {minimumFractionDigits: 2}) : '0'}\n`;
   message += `💵 *TOTAL PRICE:* LKR ${totalAmount.toLocaleString('en-US', {minimumFractionDigits: 2})}\n\n`;
   message += `Please confirm my order. Thank you!`;
 
