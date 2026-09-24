@@ -45,9 +45,133 @@
     .product-img { width: 45px; height: 45px; object-fit: cover; border-radius: 4px; }
     .price-strike { text-decoration: line-through; color: #888; font-size: 0.85rem; margin-right: 5px; }
     .discount-badge { background: #e74c3c; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
+
+    /* ==================== CUSTOM ALERTS & MODAL CSS ==================== */
+    #toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toast {
+      min-width: 280px;
+      padding: 14px 20px;
+      border-radius: 8px;
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      animation: slideIn 0.3s ease-out forwards;
+    }
+
+    .toast.success { background-color: #2ecc71; }
+    .toast.error { background-color: #e74c3c; }
+    .toast.warning { background-color: #f39c12; }
+    .toast.info { background-color: #3498db; }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes fadeOut {
+      from { opacity: 1; transform: translateX(0); }
+      to { opacity: 0; transform: translateX(100%); }
+    }
+
+    /* Custom Confirmation Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9998;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      transform: scale(0.8);
+      transition: transform 0.2s ease;
+    }
+
+    .modal-overlay.active .modal-card {
+      transform: scale(1);
+    }
+
+    .modal-icon {
+      font-size: 2.5rem;
+      color: #e74c3c;
+      margin-bottom: 12px;
+    }
+
+    .modal-card h3 {
+      margin-bottom: 10px;
+      color: #2c3e50;
+    }
+
+    .modal-card p {
+      font-size: 0.95rem;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .btn-secondary {
+      background: #95a5a6;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
+
+<!-- Toast Notification Container -->
+<div id="toast-container"></div>
+
+<!-- Custom Confirmation Modal -->
+<div id="confirmModal" class="modal-overlay">
+  <div class="modal-card">
+    <i class="fa-solid fa-triangle-exclamation modal-icon"></i>
+    <h3 id="modalTitle">Konfirmasi</h3>
+    <p id="modalMessage">Apakah Anda yakin?</p>
+    <div class="modal-actions">
+      <button class="btn-secondary" id="modalCancelBtn">Batal</button>
+      <button class="btn btn-danger" id="modalConfirmBtn">Ya, Hapus</button>
+    </div>
+  </div>
+</div>
 
 <!-- Login Section -->
 <div id="loginSection" class="login-wrapper">
@@ -166,7 +290,9 @@
             <label>Announcement Text</label>
             <input type="text" id="announcementText" required placeholder="e.g. ✨ Special seasonal discounts available ✨">
           </div>
-          <button type="submit" class="btn btn-warning"><i class="fa-solid fa-plus"></i> Add Announcement</button>
+          <button type="submit" class="btn btn-warning"><style>
+    
+</style><i class="fa-solid fa-plus"></i> Add Announcement</button>
         </form>
       </div>
 
@@ -207,6 +333,60 @@
 
 <script>
 const API_URL = 'https://tgafurniture-backend.vercel.app/api';
+
+/* ==================== CUSTOM ALERT & CONFIRM SYSTEM ==================== */
+function showToast(message, type = 'info') {
+  const container = document.getElementById('toast-container');
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  
+  let iconClass = 'fa-circle-info';
+  if (type === 'success') iconClass = 'fa-circle-check';
+  if (type === 'error') iconClass = 'fa-circle-xmark';
+  if (type === 'warning') iconClass = 'fa-triangle-exclamation';
+
+  toast.innerHTML = `<i class="fa-solid ${iconClass}"></i> <span>${message}</span>`;
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.animation = 'fadeOut 0.3s ease-out forwards';
+    setTimeout(() => toast.remove(), 300);
+  }, 3500);
+}
+
+function showConfirm(message, title = "Confirmation") {
+  return new Promise((resolve) => {
+    const modal = document.getElementById('confirmModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalMessage = document.getElementById('modalMessage');
+    const confirmBtn = document.getElementById('modalConfirmBtn');
+    const cancelBtn = document.getElementById('modalCancelBtn');
+
+    modalTitle.textContent = title;
+    modalMessage.textContent = message;
+    modal.classList.add('active');
+
+    const handleConfirm = () => {
+      cleanup();
+      resolve(true);
+    };
+
+    const handleCancel = () => {
+      cleanup();
+      resolve(false);
+    };
+
+    const cleanup = () => {
+      modal.classList.remove('active');
+      confirmBtn.removeEventListener('click', handleConfirm);
+      cancelBtn.removeEventListener('click', handleCancel);
+    };
+
+    confirmBtn.addEventListener('click', handleConfirm);
+    cancelBtn.addEventListener('click', handleCancel);
+  });
+}
+/* ====================================================================== */
 
 async function apiRequest(endpoint, method = 'GET', body = null) {
   const token = localStorage.getItem('adminToken');
@@ -255,11 +435,12 @@ document.getElementById('adminLoginForm').addEventListener('submit', async (e) =
     if (token) {
       localStorage.setItem('adminToken', token);
       showDashboard();
+      showToast('Logged in successfully!', 'success');
     } else {
-      alert("Login failed. No token received from server.");
+      showToast("Login failed. No token received from server.", 'error');
     }
   } catch (err) {
-    alert("Login Error: " + err.message);
+    showToast("Login Error: " + err.message, 'error');
   }
 });
 
@@ -273,6 +454,7 @@ function logout() {
   localStorage.removeItem('adminToken');
   document.getElementById('adminDashboard').classList.add('hidden');
   document.getElementById('loginSection').classList.remove('hidden');
+  showToast('Logged out successfully', 'info');
 }
 
 function switchTab(tab) {
@@ -321,23 +503,24 @@ document.getElementById('announcementForm')?.addEventListener('submit', async (e
 
   try {
     const res = await apiRequest('/announcements', 'POST', { text: textVal });
-    alert(res.message || 'Announcement added successfully!');
+    showToast(res.message || 'Announcement added successfully!', 'success');
     document.getElementById('announcementForm').reset();
     loadAnnouncements();
   } catch (err) {
-    alert("Error: " + err.message);
+    showToast("Error: " + err.message, 'error');
   }
 });
 
 async function deleteAnnouncement(id) {
-  if (!confirm('Are you sure you want to remove this announcement?')) return;
+  const confirmed = await showConfirm('Are you sure you want to remove this announcement?', 'Delete Announcement');
+  if (!confirmed) return;
 
   try {
     const res = await apiRequest(`/announcements/${id}`, 'DELETE');
-    alert(res.message || 'Announcement deleted!');
+    showToast(res.message || 'Announcement deleted!', 'success');
     loadAnnouncements();
   } catch (err) {
-    alert(err.message);
+    showToast(err.message, 'error');
   }
 }
 
@@ -393,7 +576,7 @@ document.getElementById('addProductForm')?.addEventListener('submit', async (e) 
   if (discPriceInput !== '') {
     discPrice = Number(discPriceInput);
     if (discPrice >= origPrice) {
-      alert('Discount price must be less than the original price!');
+      showToast('Discount price must be less than the original price!', 'warning');
       return;
     }
   }
@@ -404,7 +587,7 @@ document.getElementById('addProductForm')?.addEventListener('submit', async (e) 
                       .filter(url => url !== '');
 
   if (images.length === 0) {
-    alert('Please enter at least one image URL!');
+    showToast('Please enter at least one image URL!', 'warning');
     return;
   }
 
@@ -421,7 +604,7 @@ document.getElementById('addProductForm')?.addEventListener('submit', async (e) 
 
   try {
     const res = await apiRequest('/products', 'POST', newProduct);
-    alert(res.message || 'Product created successfully!');
+    showToast(res.message || 'Product created successfully!', 'success');
     
     document.getElementById('addProductForm').reset();
     
@@ -438,19 +621,20 @@ document.getElementById('addProductForm')?.addEventListener('submit', async (e) 
 
     loadProducts();
   } catch (err) {
-    alert("Error: " + err.message);
+    showToast("Error: " + err.message, 'error');
   }
 });
 
 async function deleteProduct(id) {
-  if (!confirm('Are you sure you want to delete this product?')) return;
+  const confirmed = await showConfirm('Are you sure you want to delete this product?', 'Delete Product');
+  if (!confirmed) return;
 
   try {
     const res = await apiRequest(`/products/${id}`, 'DELETE');
-    alert(res.message || 'Product deleted!');
+    showToast(res.message || 'Product deleted!', 'success');
     loadProducts();
   } catch (err) {
-    alert(err.message);
+    showToast(err.message, 'error');
   }
 }
 
@@ -461,10 +645,10 @@ document.getElementById('changePasswordForm')?.addEventListener('submit', async 
 
   try {
     const res = await apiRequest('/users/change-password', 'PUT', { oldPassword, newPassword });
-    alert(res.message || 'Password updated successfully!');
+    showToast(res.message || 'Password updated successfully!', 'success');
     document.getElementById('changePasswordForm').reset();
   } catch (err) {
-    alert("Error: " + err.message);
+    showToast("Error: " + err.message, 'error');
   }
 });
 </script>
