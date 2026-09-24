@@ -1,5 +1,44 @@
 const API_URL = 'https://tgafurniture-backend.vercel.app/api';
 
+// Universal Custom Toast Alert Function
+function showToast(message, type = "info") {
+  let container = document.getElementById("toast-container");
+  
+  // Container එක නැත්නම් dynamically create කිරීම
+  if (!container) {
+    container = document.createElement("div");
+    container.id = "toast-container";
+    container.className = "toast-container";
+    document.body.appendChild(container);
+  }
+
+  // Icons configuration
+  let icon = '<i class="fa-solid fa-circle-info" style="color: #3b82f6;"></i>';
+  if (type === "success") icon = '<i class="fa-solid fa-circle-check" style="color: #10b981;"></i>';
+  if (type === "error") icon = '<i class="fa-solid fa-circle-exclamation" style="color: #ef4444;"></i>';
+
+  const toast = document.createElement("div");
+  toast.className = `toast toast-${type}`;
+  toast.innerHTML = `
+    <div class="toast-content">
+      ${icon}
+      <span>${message}</span>
+    </div>
+    <button class="toast-close-btn" onclick="this.parentElement.remove()">&times;</button>
+  `;
+
+  container.appendChild(toast);
+
+  // Trigger animation
+  setTimeout(() => toast.classList.add("show"), 10);
+
+  // Auto disappear after 4 seconds
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => toast.remove(), 350);
+  }, 4000);
+}
+
 function checkAuthAndOpenCart(event) {
   if (event) event.preventDefault();
   
@@ -7,7 +46,7 @@ function checkAuthAndOpenCart(event) {
   const user = JSON.parse(localStorage.getItem("user"));
 
   if (!token || !user) {
-    alert("Please Log/Register first!");
+    showToast("Please Log/Register first!", "error");
     if (typeof openAuthModal === 'function') {
       openAuthModal();
     }
@@ -75,6 +114,7 @@ function addToCart(product) {
   }
 
   saveCart(cart);
+  showToast(`${itemTitle} added to cart!`, "success");
 }
 
 window.addToCart = addToCart;
@@ -110,7 +150,8 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      window.location.reload();
+      showToast("Logged out successfully!", "info");
+      setTimeout(() => window.location.reload(), 1000);
     });
   }
 });
@@ -339,7 +380,7 @@ function openProductModal(product) {
   const oldPriceEl = document.getElementById('modalOriginalPrice');
   if (product.discountPrice) {
     oldPriceEl.textContent = `LKR ${Number(product.price).toLocaleString()}`;
- OldPriceEl.style.display = 'inline';
+    oldPriceEl.style.display = 'inline';
   } else {
     oldPriceEl.style.display = 'none';
   }
@@ -435,12 +476,14 @@ function addToCartFromModal() {
       if (typeof saveCart === 'function') {
         saveCart(cart);
       }
+      showToast(`${qty} item(s) added to cart!`, "success");
       if (typeof closeProductModal === 'function') {
         closeProductModal();
       }
     }
   } catch (error) {
     console.error("Cart error:", error);
+    showToast("Error adding item to cart", "error");
   }
 }
 
@@ -451,11 +494,10 @@ if (userIcon) {
     e.preventDefault();
     const user = JSON.parse(localStorage.getItem("user"));
     if (user) {
-      if (confirm(`Logged in as ${user.name || 'User'}. Do you want to logout?`)) {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        location.reload();
-      }
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      showToast("Logged out successfully!", "info");
+      setTimeout(() => location.reload(), 1000);
     } else {
       openAuthModal();
     }
@@ -575,7 +617,7 @@ async function sendResetOTP() {
   const email = emailInput?.value.trim().toLowerCase();
   
   if (!email) {
-    alert("Please enter your registered email address!");
+    showToast("Please enter your registered email address!", "error");
     return;
   }
 
@@ -589,14 +631,14 @@ async function sendResetOTP() {
     const data = await res.json();
     
     if (res.ok) {
-      alert(data.message || "OTP code sent to your email!");
+      showToast(data.message || "OTP code sent to your email!", "success");
       document.getElementById('stepSendOtp')?.classList.add('hidden');
       document.getElementById('stepVerifyOtp')?.classList.remove('hidden');
     } else {
-      alert("Error: " + (data.message || "Failed to send OTP"));
+      showToast(data.message || "Failed to send OTP", "error");
     }
   } catch (err) {
-    alert("Connection Error: " + err.message);
+    showToast("Connection Error: " + err.message, "error");
   }
 }
 
@@ -606,7 +648,7 @@ async function verifyOTPAndResetPassword() {
   const newPassword = document.getElementById('resetNewPasswordInput')?.value.trim();
 
   if (!otp || !newPassword) {
-    alert("Please enter both the OTP code and your new password!");
+    showToast("Please enter both the OTP code and your new password!", "error");
     return;
   }
 
@@ -620,15 +662,15 @@ async function verifyOTPAndResetPassword() {
     const data = await res.json();
 
     if (res.ok) {
-      alert(data.message || "Password updated successfully!");
+      showToast(data.message || "Password updated successfully!", "success");
       closeForgotPasswordModal();
       openAuthModal();
       switchAuthTab("login");
     } else {
-      alert("Error: " + (data.message || "Invalid OTP code"));
+      showToast(data.message || "Invalid OTP code", "error");
     }
   } catch (err) {
-    alert("Connection Error: " + err.message);
+    showToast("Connection Error: " + err.message, "error");
   }
 }
 
@@ -639,7 +681,7 @@ async function handleLogin(event) {
   const password = document.getElementById("loginPassword")?.value.trim();
 
   if (!email || !password) {
-    alert("Please enter both email and password!");
+    showToast("Please enter both email and password!", "error");
     return;
   }
 
@@ -653,17 +695,17 @@ async function handleLogin(event) {
     const data = await response.json();
 
     if (response.ok) {
-      alert(data.message || "Login Successful!");
+      showToast(data.message || "Login Successful!", "success");
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
       closeAuthModal();
-      location.reload();
+      setTimeout(() => location.reload(), 1000);
     } else {
-      alert(data.message || "Invalid credentials");
+      showToast(data.message || "Invalid credentials", "error");
     }
   } catch (error) {
     console.error("Login failed:", error);
-    alert("Connection Error. Please check if backend server is running.");
+    showToast("Connection Error. Please check if backend server is running.", "error");
   }
 }
 
@@ -684,7 +726,7 @@ async function handleRegister(event) {
     const data = await response.json();
 
     if (response.ok) {
-      alert(data.message || "Registration successful!");
+      showToast(data.message || "Registration successful!", "success");
 
       const regForm = document.getElementById("registerForm");
       const otpForm = document.getElementById("otpForm");
@@ -697,11 +739,11 @@ async function handleRegister(event) {
       const otpEmailInput = document.getElementById("otpEmail");
       if (otpEmailInput) otpEmailInput.value = email;
     } else {
-      alert("Error: " + (data.message || "Registration failed"));
+      showToast(data.message || "Registration failed", "error");
     }
   } catch (error) {
     console.error("Registration failed:", error);
-    alert("Connection Error. Please check if backend server is running.");
+    showToast("Connection Error. Please check if backend server is running.", "error");
   }
 }
 
@@ -721,14 +763,14 @@ async function handleVerifyOTP(event) {
     const data = await response.json();
 
     if (response.ok) {
-      alert(data.message || "Verification successful!");
+      showToast(data.message || "Verification successful!", "success");
       switchAuthTab("login");
     } else {
-      alert("Error: " + (data.message || "Verification failed"));
+      showToast(data.message || "Verification failed", "error");
     }
   } catch (error) {
     console.error("OTP Verification failed:", error);
-    alert("Connection Error. Please check if backend server is running.");
+    showToast("Connection Error. Please check if backend server is running.", "error");
   }
 }
 
@@ -836,6 +878,7 @@ function updateItemQuantity(index, delta) {
 
     if (newQty <= 0) {
       cartList.splice(index, 1);
+      showToast("Item removed from cart", "info");
     } else {
       cartList[index].quantity = newQty;
       cartList[index].qty = newQty;
@@ -849,10 +892,12 @@ function updateItemQuantity(index, delta) {
 
 function removeCartItem(index) {
   let cartList = getCart();
+  const removedName = cartList[index] ? cartList[index].name : "Item";
   cartList.splice(index, 1);
   saveCart(cartList);
   renderCartPage();
   if (typeof renderCartItems === 'function') renderCartItems();
+  showToast(`${removedName} removed from cart`, "info");
 }
 
 window.updateItemQuantity = updateItemQuantity;
@@ -1001,12 +1046,12 @@ function proceedToCheckout() {
   const cart = getCart();
   
   if (!cart || cart.length === 0) {
-    alert("Your Cart is empty!");
+    showToast("Your Cart is empty!", "error");
     return;
   }
 
   if (!token) {
-    alert("Please login before the Checkout.");
+    showToast("Please login before the Checkout.", "info");
     openAuthModal();
     return;
   }
@@ -1100,6 +1145,7 @@ function suggestSearch() {
 
   res.innerHTML = `<p style="color: #64748b; padding: 10px 0;">Found ${matchesCount} item(s)</p>`;
 }
+
 // Item එක click කරපු ගමන්Data සේව් කරලා අලුත් Page එකට යවන Function එක
 function openProductPage(product) {
   // Click කරපු product එකේ විස්තර LocalStorage එකේ Save කරනවා
@@ -1108,21 +1154,7 @@ function openProductPage(product) {
   // අලුත් Detail Page එකට Redirect කරනවා
   window.location.href = "product-detail.html";
 }
-function toggleCategoryMore(buttonElement) {
-  // Click කළ බටන් එක අයිති Category Block එක සොයා ගැනීම
-  const categoryBlock = buttonElement.closest('.room-category-block');
-  const productGrid = categoryBlock.querySelector('.furniture-item-grid');
 
-  // 'expanded' class එක toggle කිරීම
-  productGrid.classList.toggle('expanded');
-
-  // Button එකේ Text එක සහ Icon එක මාරු කිරීම
-  if (productGrid.classList.contains('expanded')) {
-    buttonElement.innerHTML = 'View Less <i class="fa-solid fa-chevron-up"></i>';
-  } else {
-    buttonElement.innerHTML = 'View More Items <i class="fa-solid fa-chevron-down"></i>';
-  }
-}
 function toggleCategoryMore(button) {
   // Click කළ Button එක පිහිටි Parent Category Block එක සොයාගැනීම
   const categoryBlock = button.closest('.room-category-block');
@@ -1146,32 +1178,3 @@ function toggleCategoryMore(button) {
     }
   }
 }
-// Native browser alert ko custom popup se replace karna
-window.alert = function(message) {
-  let container = document.getElementById("custom-alert-container");
-  
-  if (!container) {
-    container = document.createElement("div");
-    container.id = "custom-alert-container";
-    document.body.appendChild(container);
-  }
-
-  const toast = document.createElement("div");
-  toast.className = "custom-alert-toast";
-  toast.innerHTML = `
-    <i class="fa-solid fa-circle-info"></i>
-    <span>${message}</span>
-    <button class="custom-alert-close" onclick="this.parentElement.remove()">&times;</button>
-  `;
-
-  container.appendChild(toast);
-
-  // Trigger Slide-In Animation
-  setTimeout(() => toast.classList.add("show"), 10);
-
-  // 3.5 seconds ke baad auto hide
-  setTimeout(() => {
-    toast.classList.remove("show");
-    setTimeout(() => toast.remove(), 400);
-  }, 3500);
-};

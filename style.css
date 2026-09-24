@@ -3179,8 +3179,8 @@ img {
 .furniture-item-grid.show-all .furniture-card:nth-child(n+4) {
   display: flex !important;
 }
-/* Custom Styled Notification Toast */
-#custom-alert-container {
+/* Toast Notification Container */
+.toast-container {
   position: fixed;
   top: 20px;
   right: 20px;
@@ -3191,47 +3191,64 @@ img {
   pointer-events: none;
 }
 
-.custom-alert-toast {
+/* Base Toast Style */
+.toast {
   pointer-events: auto;
-  min-width: 280px;
-  max-width: 380px;
-  background: var(--wood-dark, #2c1810);
-  color: #ffffff;
-  padding: 14px 20px;
+  min-width: 300px;
+  max-width: 420px;
+  padding: 14px 18px;
   border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
-  border-left: 5px solid var(--accent-gold, #d97706);
+  background: #0f172a;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  font-size: 0.95rem;
-  font-weight: 600;
+  border-left: 5px solid #8b5a2b; /* Theme Accent Color */
   opacity: 0;
   transform: translateX(100%);
-  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.custom-alert-toast.show {
+/* Active State Animation */
+.toast.show {
   opacity: 1;
   transform: translateX(0);
 }
 
-.custom-alert-toast i {
-  color: var(--accent-gold, #fbbf24);
-  font-size: 1.2rem;
+/* Toast Variants */
+.toast.toast-error {
+  border-left-color: #ef4444;
 }
 
-.custom-alert-close {
+.toast.toast-success {
+  border-left-color: #10b981;
+}
+
+.toast.toast-info {
+  border-left-color: #3b82f6;
+}
+
+/* Toast Text and Icon */
+.toast-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.toast-close-btn {
   background: none;
   border: none;
-  color: #cbd5e1;
+  color: #94a3b8;
   font-size: 1.1rem;
   cursor: pointer;
-  padding: 0;
-  margin-left: auto;
+  padding: 0 4px;
 }
 
-.custom-alert-close:hover {
+.toast-close-btn:hover {
   color: #ffffff;
 }
