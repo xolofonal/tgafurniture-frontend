@@ -13,68 +13,73 @@ function getCartData() {
 }
 
 function toggleCheckoutDelivery(isDelivery) {
-  const addressSection = document.getElementById("address-section");
-  const addressInput = document.getElementById("address");
-  const cityInput = document.getElementById("city");
-
   localStorage.setItem('isDeliveryChecked', JSON.stringify(isDelivery));
-
-  if (addressSection) {
-    addressSection.style.display = isDelivery ? "block" : "none";
-  }
-
-  if (addressInput) addressInput.required = isDelivery;
-  if (cityInput) cityInput.required = isDelivery;
-
   renderCheckoutSummary();
 }
 
 function renderCheckoutSummary() {
-  const itemsContainer = document.getElementById("checkout-items-list");
-  const subtotalElem = document.getElementById("checkout-subtotal");
-  const deliveryElem = document.getElementById("checkout-delivery");
-  const totalElem = document.getElementById("checkout-total");
+  const checkoutListContainer = document.getElementById('checkout-items-list');
+  const checkoutSubtotal = document.getElementById('checkout-subtotal');
+  const checkoutDelivery = document.getElementById('checkout-delivery');
+  const checkoutTotal = document.getElementById('checkout-total');
 
-  const cart = getCartData();
-  if (!itemsContainer) return;
+  const cart = getCart(); 
+  if (!cart || cart.length === 0) return;
 
-  itemsContainer.innerHTML = "";
+  const storedDelivery = JSON.parse(localStorage.getItem('isDeliveryChecked'));
+  // Default delivery is true unless explicitly set to false
+  const isDeliveryChecked = storedDelivery !== null ? storedDelivery : true;
 
-  if (!cart || cart.length === 0) {
-    itemsContainer.innerHTML = "<p>Your cart is empty.</p>";
-    if (subtotalElem) subtotalElem.textContent = "LKR 0.00";
-    if (deliveryElem) deliveryElem.textContent = "LKR 0.00";
-    if (totalElem) totalElem.textContent = "LKR 0.00";
-    return;
+  const chkDelivery = document.getElementById('chk-delivery');
+  const chkPickup = document.getElementById('chk-pickup');
+  if (chkDelivery && chkPickup) {
+    chkDelivery.checked = isDeliveryChecked;
+    chkPickup.checked = !isDeliveryChecked;
   }
 
+  // Store Pickup chuno var Delivery Fee = 0
+  const deliveryFee = isDeliveryChecked ? 2500 : 0;
   let subtotal = 0;
+  if (checkoutListContainer) checkoutListContainer.innerHTML = '';
 
   cart.forEach(item => {
-    const rawPrice = item.price !== undefined ? item.price : item.unitPrice;
-    const price = typeof rawPrice === 'number' ? rawPrice : parseFloat(String(rawPrice || 0).replace(/[^0-9.]/g, "")) || 0;
+    const rawPrice = item.price !== undefined ? item.price : 0;
+    const price = typeof rawPrice === 'number' 
+                  ? rawPrice 
+                  : parseFloat(String(rawPrice || 0).replace(/[^0-9.]/g, "")) || 0;
     const qty = Number(item.quantity || item.qty || 1);
     const itemTotal = price * qty;
     subtotal += itemTotal;
 
-    const div = document.createElement("div");
-    div.className = "summary-item";
-    div.style.cssText = "display: flex; justify-content: space-between; margin-bottom: 8px;";
-    div.innerHTML = `
-      <span>${item.name || item.title} (x${qty})</span>
-      <span>LKR ${itemTotal.toLocaleString('en-US', {minimumFractionDigits: 2})}</span>
-    `;
-    itemsContainer.appendChild(div);
+    if (checkoutListContainer) {
+      checkoutListContainer.innerHTML += `
+        <div class="checkout-item-row" style="display:flex; justify-content:space-between; margin-bottom: 8px;">
+          <span>${item.name || item.title} (x${qty})</span>
+          <span>LKR ${itemTotal.toLocaleString('en-US', {minimumFractionDigits: 2})}</span>
+        </div>
+      `;
+    }
   });
 
-  const isDeliveryChecked = JSON.parse(localStorage.getItem('isDeliveryChecked'));
-  const isDelivery = isDeliveryChecked !== null ? isDeliveryChecked : true;
-  const deliveryFee = isDelivery ? 2500 : 0;
-  const total = subtotal + deliveryFee;
+  const grandTotal = subtotal + deliveryFee;
 
-  if (subtotalElem) subtotalElem.textContent = `LKR ${subtotal.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
-  if (deliveryElem) deliveryElem.textContent = isDelivery ? `LKR ${deliveryFee.toLocaleString('en-US', {minimumFractionDigits: 2})}` : "0";
-  if (totalElem) totalElem.textContent = `LKR ${total.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+  if (checkoutSubtotal) checkoutSubtotal.textContent = `LKR ${subtotal.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+  if (checkoutDelivery) checkoutDelivery.textContent = isDeliveryChecked ? `LKR ${deliveryFee.toLocaleString('en-US', {minimumFractionDigits: 2})}` : "Free";
+  if (checkoutTotal) checkoutTotal.textContent = `LKR ${grandTotal.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+
+  const addressSection = document.getElementById('address-section');
+  const addressInput = document.getElementById('address');
+  const cityInput = document.getElementById('city');
+
+  if (!isDeliveryChecked) {
+    if (addressSection) addressSection.style.display = 'none';
+    if (addressInput) addressInput.removeAttribute('required');
+    if (cityInput) cityInput.removeAttribute('required');
+  } else {
+    if (addressSection) addressSection.style.display = 'block';
+    if (addressInput) addressInput.setAttribute('required', 'true');
+    if (cityInput) cityInput.setAttribute('required', 'true');
+  }
 }
 
 async function sendWhatsAppOrder(e) {
@@ -93,7 +98,7 @@ async function sendWhatsAppOrder(e) {
 
   const cart = getCartData();
   if (!cart || cart.length === 0) {
-    alert("ඔබගේ Cart එක හිස්ව පවතී!");
+    alert("Cart empty hai!");
     return false;
   }
 
@@ -113,7 +118,6 @@ async function sendWhatsAppOrder(e) {
   const addressVal = (isDelivery && addressElem && addressElem.value.trim() !== "") ? addressElem.value.trim() : "Store Pickup";
   const cityVal = (isDelivery && cityElem && cityElem.value.trim() !== "") ? cityElem.value.trim() : "Store Pickup";
 
-  // Subtotal සහ Items පෙළ සකස් කිරීම
   let subtotal = 0;
   let itemsText = "";
 
@@ -127,11 +131,12 @@ async function sendWhatsAppOrder(e) {
     itemsText += `${index + 1}. *${item.name || item.title}*\n   - Qty: ${qty}\n   - Price: LKR ${itemTotal.toLocaleString('en-US')}\n`;
   });
 
+  // Store Pickup par delivery fee 0 rahega
   const deliveryFee = isDelivery ? 2500 : 0;
   const totalAmount = subtotal + deliveryFee;
   const orderId = "ORD-" + Date.now();
 
-  // 1. Back-end එකට Order Details Save කිරීම (Optionally)
+  // 1. Back-end Order Save
   try {
     await fetch(`${API_URL}/orders`, {
       method: "POST",
@@ -152,7 +157,7 @@ async function sendWhatsAppOrder(e) {
     console.warn("Backend order save failed or skipped:", err);
   }
 
-  // 2. WhatsApp Message Text එක සැකසීම
+  // 2. WhatsApp Message Formatting
   let message = `🛒 *NEW ORDER INQUIRY - TGA FURNITURE*\n\n`;
   message += `🔖 *Order ID:* ${orderId}\n`;
   message += `👤 *Customer Name:* ${firstName} ${lastName}\n`;
@@ -166,15 +171,21 @@ async function sendWhatsAppOrder(e) {
 
   message += `\n📦 *ORDER ITEMS:*\n${itemsText}\n`;
   message += `💰 *Subtotal:* LKR ${subtotal.toLocaleString('en-US', {minimumFractionDigits: 2})}\n`;
-  message += `🚚 *Delivery Fee:* ${isDelivery ? 'LKR ' + deliveryFee.toLocaleString('en-US', {minimumFractionDigits: 2}) : '0'}\n`;
+  
+  // Dynamic Delivery Fee Text for WhatsApp Message
+  if (isDelivery) {
+    message += `🚚 *Delivery Fee:* LKR ${deliveryFee.toLocaleString('en-US', {minimumFractionDigits: 2})}\n`;
+  } else {
+    message += `🚚 *Delivery Fee:* Free (Store Pickup)\n`;
+  }
+  
   message += `💵 *TOTAL PRICE:* LKR ${totalAmount.toLocaleString('en-US', {minimumFractionDigits: 2})}\n\n`;
   message += `Please confirm my order. Thank you!`;
 
-  // 3. Encoded WhatsApp URL එක සාදා redirect කිරීම
+  // 3. Open WhatsApp
   const encodedMessage = encodeURIComponent(message);
   const whatsappUrl = `https://wa.me/${94775670819}?text=${encodedMessage}`;
 
-  // 4. Cart එක Clear කර WhatsApp එකට යැවීම
   localStorage.removeItem("cartItems");
   localStorage.removeItem("isDeliveryChecked");
   
