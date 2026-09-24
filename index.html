@@ -78,9 +78,11 @@
     </section>
   </div>
 
-<!-- Mobile View Hero Section -->
+<!-- Mobile View Hero Section (Video / Banner එකට උඩින් Title එක නොපෙන්වයි) -->
 <section class="mobile-hero mobile-only">
-  <div class="mobile-hero-bg"></div>
+  <div class="mobile-hero-bg">
+    <!-- Mobile එකට අවශ්‍ය Video හෝ High-Quality Image එක -->
+  </div>
   <div class="mobile-hero-content">
     <div class="mobile-btn-group">
       <a href="#categories" class="m-btn m-btn-primary">Explore Products</a>
@@ -88,7 +90,7 @@
   </div>
 </section>
 
-<!-- Custom Work Section -->
+<!-- Mobile එකට වීඩියෝ එක යටින් ලස්සනට නිර්මාණය කළ Custom Work Section එක -->
 <section class="mobile-custom-work-section mobile-only">
   <div class="custom-work-card">
     <span class="custom-badge"><i class="fa-solid fa-wand-magic-sparkles"></i> Handcrafted Perfection</span>
@@ -160,7 +162,9 @@
     <div id="living-sec" class="room-category-block reveal-on-scroll" data-sec-category="living" style="margin-top: 3rem;">
       <h3 class="room-title"><i class="fa-solid fa-couch"></i> Living Room Furniture</h3>
       
-      <div class="furniture-item-grid grid-3-col"></div>
+      <div class="furniture-item-grid grid-3-col">
+        <!-- Dynamic Products Loaded from Backend -->
+      </div>
       <div class="category-view-more">
         <button class="view-more-btn" onclick="toggleCategoryMore(this)">
           View More Items <i class="fa-solid fa-chevron-down"></i>
@@ -172,7 +176,9 @@
     <div id="dining-sec" class="room-category-block reveal-on-scroll" data-sec-category="dining" style="margin-top: 3rem;">
       <h3 class="room-title"><i class="fa-solid fa-utensils"></i> Dining Room Furniture</h3>
       
-      <div class="furniture-item-grid grid-3-col"></div>
+      <div class="furniture-item-grid grid-3-col">
+        <!-- Dynamic Products Loaded from Backend -->
+      </div>
       <div class="category-view-more">
         <button class="view-more-btn" onclick="toggleCategoryMore(this)">
           View More Items <i class="fa-solid fa-chevron-down"></i>
@@ -184,7 +190,9 @@
     <div id="office-sec" class="room-category-block reveal-on-scroll" data-sec-category="office" style="margin-top: 3rem;">
       <h3 class="room-title"><i class="fa-solid fa-briefcase"></i> Office Furniture</h3>
       
-      <div class="furniture-item-grid grid-3-col"></div>
+      <div class="furniture-item-grid grid-3-col">
+        <!-- Dynamic Products Loaded from Backend -->
+      </div>
       <div class="category-view-more">
         <button class="view-more-btn" onclick="toggleCategoryMore(this)">
           View More Items <i class="fa-solid fa-chevron-down"></i>
@@ -196,7 +204,9 @@
     <div id="decor-sec" class="room-category-block reveal-on-scroll" data-sec-category="decor" style="margin-top: 3rem;">
       <h3 class="room-title"><i class="fa-solid fa-leaf"></i> Decorations</h3>
       
-      <div class="furniture-item-grid grid-3-col"></div>
+      <div class="furniture-item-grid grid-3-col">
+        <!-- Dynamic Products Loaded from Backend -->
+      </div>
       <div class="category-view-more">
         <button class="view-more-btn" onclick="toggleCategoryMore(this)">
           View More Items <i class="fa-solid fa-chevron-down"></i>
@@ -260,11 +270,13 @@
     <div class="modal-content glass-card">
       <button class="close-modal-btn" onclick="closeAuthModal()">&times;</button>
       
+      
       <div class="auth-tabs" id="authTabs">
         <button id="loginTabBtn" class="tab-btn active" onclick="switchAuthTab('login')">Login</button>
         <button id="registerTabBtn" class="tab-btn" onclick="switchAuthTab('register')">Register</button>
       </div>
 
+      
       <form id="loginForm" onsubmit="handleLogin(event)">
         <div class="input-group">
           <label for="loginEmail">Email</label>
@@ -280,6 +292,7 @@
         <button type="submit" class="btn btn-primary btn-full">Login</button>
       </form>
 
+    
       <form id="registerForm" onsubmit="handleRegister(event)" style="display: none;">
         <div class="input-group">
           <label for="regName">Full Name</label>
@@ -296,6 +309,7 @@
         <button type="submit" class="btn btn-primary btn-full">Register</button>
       </form>
 
+   
       <form id="otpForm" onsubmit="handleVerifyOTP(event)" style="display: none;">
         <h3>Verify Email OTP</h3>
         <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 10px;">Enter the code sent to your email</p>
@@ -308,6 +322,7 @@
     </div>
   </div>
 
+ 
   <div id="forgotPasswordModal" class="modal-overlay hidden">
     <div class="modal-content glass-card">
       <button class="close-modal-btn" onclick="closeForgotPasswordModal()">&times;</button>
@@ -321,6 +336,7 @@
         </div>
         <button type="button" class="btn btn-primary btn-full" onclick="sendResetOTP()">Send Reset OTP</button>
       </div>
+
 
       <div id="stepVerifyOtp" class="hidden">
         <h3>Enter OTP & New Password</h3>
@@ -349,10 +365,11 @@
         <div class="cart-summary-line"><span>Subtotal:</span><span id="cartSubtotal">LKR 0.00</span></div>
         <div class="cart-summary-line"><span>Discount (10%):</span><span id="cartDiscount">- LKR 0.00</span></div>
         <div class="cart-summary-line total"><span>Total:</span><span id="cartTotal">LKR 0.00</span></div>
-        <div class="cart-drawer-actions" style="margin-top: 15px; display: flex; gap: 10px;">
-          <a href="cart.html" class="btn btn-secondary" style="flex: 1; text-align: center;">View Cart</a>
-          <a href="checkout.html" class="btn btn-primary" style="flex: 1; text-align: center;">Checkout</a>
-        </div>
+        <!-- JavaScript function එකට Event එක නොව Product Object එක pass කරන්න -->
+<div class="cart-drawer-actions" style="margin-top: 15px; display: flex; gap: 10px;">
+  <a href="cart.html" class="btn btn-secondary" style="flex: 1; text-align: center;">View Cart</a>
+  <a href="checkout.html" class="btn btn-primary" style="flex: 1; text-align: center;">Checkout</a>
+</div>
       </div>
     </div>
   </div>
@@ -367,7 +384,6 @@
       <div id="searchResults"></div>
     </div>
   </div>
-  
   <footer class="footer">
     <div class="footer-container">
       <div class="footer-col">
@@ -397,30 +413,31 @@
 
       <div class="footer-col">
         <h4>Follow Us</h4>
-        <div class="social-links-container">
-          <a href="https://www.facebook.com/share/1FbLfZGo8X/" target="_blank" class="social-btn facebook" title="Facebook">
-            <i class="fa-brands fa-facebook-f"></i>
-          </a>
-          <a href="https://wa.me/c/94775670819" target="_blank" class="social-btn whatsapp" title="WhatsApp">
-            <i class="fa-brands fa-whatsapp"></i>
-          </a>
-        </div>
+<div class="social-links-container">
+  <a href="https://www.facebook.com/share/1FbLfZGo8X/" target="_blank" class="social-btn facebook" title="Facebook">
+    <i class="fa-brands fa-facebook-f"></i>
+  </a>
+  <a href="https://wa.me/c/94775670819" target="_blank" class="social-btn whatsapp" title="WhatsApp">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+</div>
       </div>
-
-      <div class="footer-col">
-        <h4>Our Policies</h4>
-        <ul>
-          <li><a href="terms&conditions.html">Terms & Conditions</a></li>
-          <li><a href="privacypolicy.html">Privacy Policy</a></li>
-          <li><a href="returnpolicy.html">Return & Refund Policy</a></li>
-        </ul>
-      </div>
+<div class="footer-col">
+      <h4>Our Policies</h4>
+      <ul>
+        <li><a href="terms&conditions.html">Terms & Conditions</a></li>
+        <li><a href="privacypolicy.html">Privacy Policy</a></li>
+        <li><a href="returnpolicy.html">Return & Refund Policy</a></li>
+      </ul>
     </div>
 
-    <div class="footer-bottom">
-      <p>&copy; 2026 TGA Furniture. All Rights Reserved.</p>
-    </div>
-  </footer>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2026 TGA Furniture. All Rights Reserved.</p>
+  </div>
+</footer>
+
 
   <script src="script.js"></script>
 
