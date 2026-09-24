@@ -494,10 +494,13 @@ if (userIcon) {
     e.preventDefault();
     const user = JSON.parse(localStorage.getItem("user"));
     if (user) {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      showToast("Logged out successfully!", "info");
-      setTimeout(() => location.reload(), 1000);
+      // Eka paratama log out nowi confirmation ekak illane mehemai:
+      if (confirm("Oyata aniwaaryenma log out wenna oneda?")) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        showToast("Logged out successfully!", "info");
+        setTimeout(() => location.reload(), 1000);
+      }
     } else {
       openAuthModal();
     }
