@@ -123,9 +123,6 @@ async function fetchAndRenderProducts() {
     const products = await response.json();
     if (!Array.isArray(products) || products.length === 0) return;
 
-    // Sabhi products ko global array me save kar rahe hain suggestions ke liye
-    allLoadedProducts = products;
-
     const sections = ['bedroom-sec', 'living-sec', 'dining-sec', 'office-sec', 'decor-sec'];
     sections.forEach(secId => {
       const secEl = document.getElementById(secId);
