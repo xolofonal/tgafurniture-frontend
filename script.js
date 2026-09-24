@@ -90,14 +90,21 @@ function addToCart(product) {
   const price = typeof rawPrice === 'number' ? rawPrice : parseFloat(String(rawPrice).replace(/[^0-9.]/g, "")) || 0;
 
   const itemTitle = (typeof product.name === 'string' && product.name.trim() !== "") ? product.name : "Furniture Item";
-  const existingIndex = cart.findIndex(item => item.name === itemTitle || (product._id && item._id === product._id));
+
+  // FIX: Match by unique _id first, if not present match by exact item name
+  const existingIndex = cart.findIndex(item => {
+    if (product._id && item._id) {
+      return item._id === product._id;
+    }
+    return item.name === itemTitle;
+  });
 
   if (existingIndex > -1) {
     cart[existingIndex].quantity = (Number(cart[existingIndex].quantity || cart[existingIndex].qty) || 1) + 1;
     cart[existingIndex].qty = cart[existingIndex].quantity;
   } else {
     cart.push({
-      _id: product._id || Date.now().toString(),
+      _id: product._id || Date.now().toString() + Math.random().toString(36).substr(2, 4),
       name: itemTitle,
       price: price,
       imageUrl: product.imageUrl || product.image || "https://via.placeholder.com/150",
