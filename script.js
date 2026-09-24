@@ -1123,26 +1123,21 @@ function toggleCategoryMore(buttonElement) {
     buttonElement.innerHTML = 'View More Items <i class="fa-solid fa-chevron-down"></i>';
   }
 }
-function toggleCategoryMore(button) {
-  // Click කළ Button එක පිහිටි Parent Category Block එක සොයාගැනීම
-  const categoryBlock = button.closest('.room-category-block');
-  
-  if (!categoryBlock) return;
-
-  // එම Block එක තුළ ඇති Furniture Grid එක ලබාගැනීම
+function toggleCategoryMore(btn) {
+  // Button ke parent block se grid elements dhundhna
+  const categoryBlock = btn.closest('.room-category-block');
   const grid = categoryBlock.querySelector('.furniture-item-grid');
 
   if (grid) {
-    // Grid එකට 'show-all' class එක toggle කිරීම
+    // 'show-all' class ko toggle karna
     grid.classList.toggle('show-all');
+    btn.classList.toggle('expanded');
 
-    // Button එකෙහි Text එක සහ Icon එක මාරු කිරීම
+    // Button text aur Icon badalna
     if (grid.classList.contains('show-all')) {
-      button.innerHTML = 'View Less Items <i class="fa-solid fa-chevron-up"></i>';
-      button.classList.add('expanded');
+      btn.innerHTML = 'Show Less <i class="fa-solid fa-chevron-up"></i>';
     } else {
-      button.innerHTML = 'View More Items <i class="fa-solid fa-chevron-down"></i>';
-      button.classList.remove('expanded');
+      btn.innerHTML = 'View More Items <i class="fa-solid fa-chevron-down"></i>';
     }
   }
 }

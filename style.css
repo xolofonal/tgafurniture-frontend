@@ -3176,7 +3176,6 @@ img {
   display: none !important;
 }
 
-/* 2. 'show-all' class එක එකතු වූ පසු සියලුම Cards (Grid 3 Column ලෙසම) ප්‍රදර්ශනය කිරීම */
 .furniture-item-grid.show-all .furniture-card:nth-child(n+4) {
   display: flex !important;
 }
