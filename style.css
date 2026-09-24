@@ -3118,3 +3118,56 @@ img {
     display: none !important;
   }
 }
+/* Product Grid එකේ 1 පේළියකට Grid 3ක් තැබීම */
+.furniture-item-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 1.8rem;
+}
+
+/* 4 වන Card එකේ සිට සියලුම Cards ආරම්භයේදී සඟවා තැබීම */
+.furniture-item-grid .furniture-card:nth-child(n+4) {
+  display: none;
+}
+
+/* View More ක්ලික් කළ විට සඟවා තිබූ Cards නැවත ප්‍රදර්ශනය කිරීම */
+.furniture-item-grid.show-all .furniture-card:nth-child(n+4) {
+  display: flex !important;
+}
+
+/* Responsive: Mobile / Tablet වලදී Grid එක පහසුවෙන් Adjust වීම */
+@media (max-width: 992px) {
+  .furniture-item-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .furniture-item-grid {
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
+}
+/* ආරම්භයේදී 3 කට පසුව ඇති සියලුම Products සඟවා තැබීම */
+.furniture-item-grid .furniture-card:nth-child(n+4) {
+  display: none;
+}
+
+/* View More එක Click කළ පසු සක්‍රීය වන Expanded class එක මඟින් 
+   පළමු Products 9 දක්වාම ප්‍රදර්ශනය කිරීම */
+.furniture-item-grid.expanded .furniture-card:nth-child(-n+9) {
+  display: flex !important;
+}
+
+/* Products 3 බැගින් ලස්සනට පේළියට සැකසීමට Grid එක Limit කිරීම */
+.furniture-item-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+/* Mobile Screens සඳහා Responsive adjustment */
+@media (max-width: 768px) {
+  .furniture-item-grid {
+    grid-template-columns: repeat(1, 1fr); /* Mobile වලදී පේළියට 1 බැගින් */
+  }
+}

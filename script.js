@@ -1108,3 +1108,41 @@ function openProductPage(product) {
   // අලුත් Detail Page එකට Redirect කරනවා
   window.location.href = "product-detail.html";
 }
+function toggleCategoryMore(buttonElement) {
+  // Click කළ බටන් එක අයිති Category Block එක සොයා ගැනීම
+  const categoryBlock = buttonElement.closest('.room-category-block');
+  const productGrid = categoryBlock.querySelector('.furniture-item-grid');
+
+  // 'expanded' class එක toggle කිරීම
+  productGrid.classList.toggle('expanded');
+
+  // Button එකේ Text එක සහ Icon එක මාරු කිරීම
+  if (productGrid.classList.contains('expanded')) {
+    buttonElement.innerHTML = 'View Less <i class="fa-solid fa-chevron-up"></i>';
+  } else {
+    buttonElement.innerHTML = 'View More Items <i class="fa-solid fa-chevron-down"></i>';
+  }
+}
+function toggleCategoryMore(btn) {
+  const categoryBlock = btn.closest('.room-category-block');
+  if (!categoryBlock) return;
+  
+  const extraItems = categoryBlock.querySelectorAll('.extra-item');
+  const isExpanded = btn.classList.contains('expanded');
+
+  extraItems.forEach(item => {
+    if (isExpanded) {
+      item.style.display = 'none';
+    } else {
+      item.style.display = 'flex';
+    }
+  });
+
+  btn.classList.toggle('expanded');
+  
+  if (isExpanded) {
+    btn.innerHTML = 'View More Items <i class="fa-solid fa-chevron-down"></i>';
+  } else {
+    btn.innerHTML = 'Show Less <i class="fa-solid fa-chevron-up"></i>';
+  }
+}
