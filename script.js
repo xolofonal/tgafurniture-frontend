@@ -497,7 +497,7 @@ function showLogoutConfirm(onConfirm) {
           <i class="fa-solid fa-triangle-exclamation"></i>
         </div>
         <h3 style="margin: 0 0 10px; color: #1e293b; font-size: 1.2rem;">Log Out</h3>
-        <p style="color: #64748b; font-size: 0.95rem; margin-bottom: 20px;">Tumhala khrokhar log out karayche ahe ka?</p>
+        <p style="color: #64748b; font-size: 0.95rem; margin-bottom: 20px;">Are you want to log-out?</p>
         <div style="display: flex; gap: 10px; justify-content: center;">
           <button id="confirmNoBtn" style="padding: 8px 16px; border: 1px solid #cbd5e1; background: #f1f5f9; color: #334155; border-radius: 6px; cursor: pointer; font-weight: 600; flex: 1;">Cancel</button>
           <button id="confirmYesBtn" style="padding: 8px 16px; border: none; background: #ef4444; color: #ffffff; border-radius: 6px; cursor: pointer; font-weight: 600; flex: 1;">Log Out</button>
