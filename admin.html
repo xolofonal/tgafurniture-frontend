@@ -6,6 +6,11 @@
   <title>TGA Furniture - Admin Panel</title>
   <link rel="icon" type="image/png" href="favicon.png"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- SweetAlert2 CSS & JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
     body { background-color: #f4f6f9; color: #333333; }
@@ -43,135 +48,9 @@
     th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
     th { background: #f8f9fa; font-size: 0.9rem; }
     .product-img { width: 45px; height: 45px; object-fit: cover; border-radius: 4px; }
-    .price-strike { text-decoration: line-through; color: #888; font-size: 0.85rem; margin-right: 5px; }
-    .discount-badge { background: #e74c3c; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
-
-    /* ==================== CUSTOM ALERTS & MODAL CSS ==================== */
-    #toast-container {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .toast {
-      min-width: 280px;
-      padding: 14px 20px;
-      border-radius: 8px;
-      color: #fff;
-      font-weight: 600;
-      font-size: 0.95rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      animation: slideIn 0.3s ease-out forwards;
-    }
-
-    .toast.success { background-color: #2ecc71; }
-    .toast.error { background-color: #e74c3c; }
-    .toast.warning { background-color: #f39c12; }
-    .toast.info { background-color: #3498db; }
-
-    @keyframes slideIn {
-      from { transform: translateX(100%); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
-    }
-
-    @keyframes fadeOut {
-      from { opacity: 1; transform: translateX(0); }
-      to { opacity: 0; transform: translateX(100%); }
-    }
-
-    /* Custom Confirmation Modal */
-    .modal-overlay {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9998;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s ease;
-    }
-
-    .modal-overlay.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .modal-card {
-      background: white;
-      padding: 25px;
-      border-radius: 12px;
-      width: 90%;
-      max-width: 400px;
-      text-align: center;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      transform: scale(0.8);
-      transition: transform 0.2s ease;
-    }
-
-    .modal-overlay.active .modal-card {
-      transform: scale(1);
-    }
-
-    .modal-icon {
-      font-size: 2.5rem;
-      color: #e74c3c;
-      margin-bottom: 12px;
-    }
-
-    .modal-card h3 {
-      margin-bottom: 10px;
-      color: #2c3e50;
-    }
-
-    .modal-card p {
-      font-size: 0.95rem;
-      color: #666;
-      margin-bottom: 20px;
-    }
-
-    .modal-actions {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-    }
-
-    .btn-secondary {
-      background: #95a5a6;
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-    }
   </style>
 </head>
 <body>
-
-<!-- Toast Notification Container -->
-<div id="toast-container"></div>
-
-<!-- Custom Confirmation Modal -->
-<div id="confirmModal" class="modal-overlay">
-  <div class="modal-card">
-    <i class="fa-solid fa-triangle-exclamation modal-icon"></i>
-    <h3 id="modalTitle">Konfirmasi</h3>
-    <p id="modalMessage">Apakah Anda yakin?</p>
-    <div class="modal-actions">
-      <button class="btn-secondary" id="modalCancelBtn">Batal</button>
-      <button class="btn btn-danger" id="modalConfirmBtn">Ya, Hapus</button>
-    </div>
-  </div>
-</div>
 
 <!-- Login Section -->
 <div id="loginSection" class="login-wrapper">
@@ -290,9 +169,7 @@
             <label>Announcement Text</label>
             <input type="text" id="announcementText" required placeholder="e.g. ✨ Special seasonal discounts available ✨">
           </div>
-          <button type="submit" class="btn btn-warning"><style>
-    
-</style><i class="fa-solid fa-plus"></i> Add Announcement</button>
+          <button type="submit" class="btn btn-warning"><i class="fa-solid fa-plus"></i> Add Announcement</button>
         </form>
       </div>
 
@@ -334,59 +211,32 @@
 <script>
 const API_URL = 'https://tgafurniture-backend.vercel.app/api';
 
-/* ==================== CUSTOM ALERT & CONFIRM SYSTEM ==================== */
-function showToast(message, type = 'info') {
-  const container = document.getElementById('toast-container');
-  const toast = document.createElement('div');
-  toast.className = `toast ${type}`;
-  
-  let iconClass = 'fa-circle-info';
-  if (type === 'success') iconClass = 'fa-circle-check';
-  if (type === 'error') iconClass = 'fa-circle-xmark';
-  if (type === 'warning') iconClass = 'fa-triangle-exclamation';
-
-  toast.innerHTML = `<i class="fa-solid ${iconClass}"></i> <span>${message}</span>`;
-  container.appendChild(toast);
-
-  setTimeout(() => {
-    toast.style.animation = 'fadeOut 0.3s ease-out forwards';
-    setTimeout(() => toast.remove(), 300);
-  }, 3500);
-}
-
-function showConfirm(message, title = "Confirmation") {
-  return new Promise((resolve) => {
-    const modal = document.getElementById('confirmModal');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalMessage = document.getElementById('modalMessage');
-    const confirmBtn = document.getElementById('modalConfirmBtn');
-    const cancelBtn = document.getElementById('modalCancelBtn');
-
-    modalTitle.textContent = title;
-    modalMessage.textContent = message;
-    modal.classList.add('active');
-
-    const handleConfirm = () => {
-      cleanup();
-      resolve(true);
-    };
-
-    const handleCancel = () => {
-      cleanup();
-      resolve(false);
-    };
-
-    const cleanup = () => {
-      modal.classList.remove('active');
-      confirmBtn.removeEventListener('click', handleConfirm);
-      cancelBtn.removeEventListener('click', handleCancel);
-    };
-
-    confirmBtn.addEventListener('click', handleConfirm);
-    cancelBtn.addEventListener('click', handleCancel);
+/* ==================== SWEETALERT HELPER FUNCTIONS ==================== */
+function showToast(message, icon = 'success') {
+  Swal.fire({
+    icon: icon,
+    title: message,
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true
   });
 }
-/* ====================================================================== */
+
+function showConfirm(title, text) {
+  return Swal.fire({
+    title: title,
+    text: text,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#e74c3c',
+    cancelButtonColor: '#95a5a6',
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'Cancel'
+  });
+}
+/* ==================================================================== */
 
 async function apiRequest(endpoint, method = 'GET', body = null) {
   const token = localStorage.getItem('adminToken');
@@ -435,12 +285,12 @@ document.getElementById('adminLoginForm').addEventListener('submit', async (e) =
     if (token) {
       localStorage.setItem('adminToken', token);
       showDashboard();
-      showToast('Logged in successfully!', 'success');
+      showToast('Login successful!', 'success');
     } else {
-      showToast("Login failed. No token received from server.", 'error');
+      showToast('Login failed. No token received.', 'error');
     }
   } catch (err) {
-    showToast("Login Error: " + err.message, 'error');
+    showToast('Login Error: ' + err.message, 'error');
   }
 });
 
@@ -507,20 +357,20 @@ document.getElementById('announcementForm')?.addEventListener('submit', async (e
     document.getElementById('announcementForm').reset();
     loadAnnouncements();
   } catch (err) {
-    showToast("Error: " + err.message, 'error');
+    showToast('Error: ' + err.message, 'error');
   }
 });
 
 async function deleteAnnouncement(id) {
-  const confirmed = await showConfirm('Are you sure you want to remove this announcement?', 'Delete Announcement');
-  if (!confirmed) return;
+  const confirmResult = await showConfirm('Delete Announcement?', 'Are you sure you want to remove this announcement?');
+  if (!confirmResult.isConfirmed) return;
 
   try {
     const res = await apiRequest(`/announcements/${id}`, 'DELETE');
-    showToast(res.message || 'Announcement deleted!', 'success');
+    showToast(res.message || 'Announcement deleted successfully!', 'success');
     loadAnnouncements();
   } catch (err) {
-    showToast(err.message, 'error');
+    showToast('Error: ' + err.message, 'error');
   }
 }
 
@@ -621,20 +471,20 @@ document.getElementById('addProductForm')?.addEventListener('submit', async (e) 
 
     loadProducts();
   } catch (err) {
-    showToast("Error: " + err.message, 'error');
+    showToast('Error: ' + err.message, 'error');
   }
 });
 
 async function deleteProduct(id) {
-  const confirmed = await showConfirm('Are you sure you want to delete this product?', 'Delete Product');
-  if (!confirmed) return;
+  const confirmResult = await showConfirm('Delete Product?', 'Are you sure you want to delete this product?');
+  if (!confirmResult.isConfirmed) return;
 
   try {
     const res = await apiRequest(`/products/${id}`, 'DELETE');
-    showToast(res.message || 'Product deleted!', 'success');
+    showToast(res.message || 'Product deleted successfully!', 'success');
     loadProducts();
   } catch (err) {
-    showToast(err.message, 'error');
+    showToast('Error: ' + err.message, 'error');
   }
 }
 
@@ -648,7 +498,7 @@ document.getElementById('changePasswordForm')?.addEventListener('submit', async 
     showToast(res.message || 'Password updated successfully!', 'success');
     document.getElementById('changePasswordForm').reset();
   } catch (err) {
-    showToast("Error: " + err.message, 'error');
+    showToast('Error: ' + err.message, 'error');
   }
 });
 </script>
