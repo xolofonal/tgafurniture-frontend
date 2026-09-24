@@ -73,6 +73,7 @@
   
   <!-- Sidebar -->
   <div class="sidebar">
+    Pre-configured Panel Header
     <h2>TGA Admin</h2>
     <button class="sidebar-btn active" id="btnTabProducts" onclick="switchTab('products')">
       <i class="fa-solid fa-box"></i> Products & Discounts
@@ -209,11 +210,23 @@
 <script>
 const API_URL = 'https://tgafurniture-backend.vercel.app/api';
 
+/* Helper function to sanitize backend messages to English */
+function translateErrorMessage(msg) {
+  if (!msg) return 'An error occurred during API request.';
+  if (msg.includes('පැරණි Password එක වැරදියි') || msg.toLowerCase().includes('old password')) {
+    return 'Incorrect old password!';
+  }
+  if (msg.includes('Product එක ඉවත් කළා') || msg.toLowerCase().includes('product deleted')) {
+    return 'Product removed successfully!';
+  }
+  return msg;
+}
+
 /* ==================== SWEETALERT HELPER FUNCTIONS ==================== */
 function showToast(message, icon = 'success') {
   Swal.fire({
     icon: icon,
-    title: message,
+    title: translateErrorMessage(message),
     toast: true,
     position: 'top-end',
     showConfirmButton: false,
@@ -255,7 +268,7 @@ async function apiRequest(endpoint, method = 'GET', body = null) {
       logout();
       throw new Error('Session expired. Please login again.');
     }
-    throw new Error(data.message || 'An error occurred during API request.');
+    throw new Error(translateErrorMessage(data.message));
   }
   return data;
 }
@@ -310,7 +323,7 @@ function switchTab(tab) {
   document.getElementById('tabProducts').classList.toggle('hidden', !isProducts);
   document.getElementById('tabSettings').classList.toggle('hidden', isProducts);
   document.getElementById('btnTabProducts').classList.toggle('active', isProducts);
-  document.getElementById('btnTabSettings').classList.toggle('active', !isProducts);
+  document.getElementById('btnTabSettings').classList.toggle('active', isProducts);
 
   if (!isProducts) {
     loadAnnouncements();
@@ -469,7 +482,7 @@ document.getElementById('addProductForm')?.addEventListener('submit', async (e) 
 
     loadProducts();
   } catch (err) {
-    showToast('Error: ' + err.message, 'error');
+    showToast(err.message, 'error');
   }
 });
 
@@ -482,7 +495,7 @@ async function deleteProduct(id) {
     showToast('Product removed successfully!', 'success');
     loadProducts();
   } catch (err) {
-    showToast('Error: ' + err.message, 'error');
+    showToast(err.message, 'error');
   }
 }
 
@@ -496,7 +509,7 @@ document.getElementById('changePasswordForm')?.addEventListener('submit', async 
     showToast('Password updated successfully!', 'success');
     document.getElementById('changePasswordForm').reset();
   } catch (err) {
-    showToast('Error: ' + err.message, 'error');
+    showToast(err.message, 'error');
   }
 });
 </script>
