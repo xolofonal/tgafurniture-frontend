@@ -1,5 +1,5 @@
 const API_URL = 'https://tgafurniture-backend.vercel.app';
-const OWNER_WHATSAPP_NUMBER = "94771234567";
+const OWNER_WHATSAPP_NUMBER = "94775670819";
 
 function getCartData() {
   try {
@@ -20,6 +20,7 @@ function renderCheckoutSummary() {
   const checkoutSubtotal = document.getElementById('checkout-subtotal');
   const checkoutDelivery = document.getElementById('checkout-delivery');
   const checkoutTotal = document.getElementById('checkout-total');
+  const deliveryFeeRow = document.getElementById('delivery-fee-row');
 
   const cart = getCartData(); 
   if (!checkoutListContainer) return;
@@ -44,7 +45,6 @@ function renderCheckoutSummary() {
     chkPickup.checked = !isDeliveryChecked;
   }
 
-  // Home Delivery තේරූ විට LKR 2,500 එකතු වේ. Store Pickup වලදී 0 වේ.
   const deliveryFee = isDeliveryChecked ? 2500 : 0;
   let subtotal = 0;
 
@@ -68,7 +68,17 @@ function renderCheckoutSummary() {
   const grandTotal = subtotal + deliveryFee;
 
   if (checkoutSubtotal) checkoutSubtotal.textContent = `LKR ${subtotal.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
-  if (checkoutDelivery) checkoutDelivery.textContent = isDeliveryChecked ? `LKR ${deliveryFee.toLocaleString('en-US', {minimumFractionDigits: 2})}` : "Free";
+  
+  // Delivery Fee row Toggle Effect
+  if (deliveryFeeRow) {
+    if (isDeliveryChecked) {
+      deliveryFeeRow.style.display = 'flex';
+      if (checkoutDelivery) checkoutDelivery.textContent = `LKR ${deliveryFee.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+    } else {
+      deliveryFeeRow.style.display = 'none';
+    }
+  }
+
   if (checkoutTotal) checkoutTotal.textContent = `LKR ${grandTotal.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
 
   const addressSection = document.getElementById('address-section');
@@ -135,7 +145,6 @@ async function sendWhatsAppOrder(e) {
     itemsText += `${index + 1}. *${item.name || item.title}*\n   - Qty: ${qty}\n   - Price: LKR ${itemTotal.toLocaleString('en-US')}\n`;
   });
 
-  // Home Delivery තේරූ විට පමණක් LKR 2,500 Delivery Fee එකක් එකතු වේ
   const deliveryFee = isDelivery ? 2500 : 0;
   const totalAmount = subtotal + deliveryFee;
   const orderId = "ORD-" + Date.now();
@@ -160,7 +169,7 @@ async function sendWhatsAppOrder(e) {
     console.warn("Backend order save failed or skipped:", err);
   }
 
-  // WhatsApp Message සකස් කිරීම
+  // WhatsApp Message Formatting
   let message = `🛒 *NEW ORDER INQUIRY - TGA FURNITURE*\n\n`;
   message += `🔖 *Order ID:* ${orderId}\n`;
   message += `👤 *Customer Name:* ${firstName} ${lastName}\n`;
@@ -175,13 +184,11 @@ async function sendWhatsAppOrder(e) {
   message += `\n📦 *ORDER ITEMS:*\n${itemsText}\n`;
   message += `💰 *Subtotal:* LKR ${subtotal.toLocaleString('en-US', {minimumFractionDigits: 2})}\n`;
   
-  // Store Pickup තේරූ විට Delivery Fee අයින් වී Free (Store Pickup) ලෙස පෙන්වයි
+  // WhatsApp Message: Sirf Delivery hone par hi Delivery Fee dikhayega
   if (isDelivery) {
     message += `🚚 *Delivery Fee:* LKR ${deliveryFee.toLocaleString('en-US', {minimumFractionDigits: 2})}\n`;
-  } else {
-    message += `🚚 *Delivery Fee:* Free (Store Pickup)\n`;
   }
-  
+
   message += `💵 *TOTAL PRICE:* LKR ${totalAmount.toLocaleString('en-US', {minimumFractionDigits: 2})}\n\n`;
   message += `Please confirm my order. Thank you!`;
 
