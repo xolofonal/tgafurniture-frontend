@@ -1146,3 +1146,32 @@ function toggleCategoryMore(button) {
     }
   }
 }
+// Native browser alert ko custom popup se replace karna
+window.alert = function(message) {
+  let container = document.getElementById("custom-alert-container");
+  
+  if (!container) {
+    container = document.createElement("div");
+    container.id = "custom-alert-container";
+    document.body.appendChild(container);
+  }
+
+  const toast = document.createElement("div");
+  toast.className = "custom-alert-toast";
+  toast.innerHTML = `
+    <i class="fa-solid fa-circle-info"></i>
+    <span>${message}</span>
+    <button class="custom-alert-close" onclick="this.parentElement.remove()">&times;</button>
+  `;
+
+  container.appendChild(toast);
+
+  // Trigger Slide-In Animation
+  setTimeout(() => toast.classList.add("show"), 10);
+
+  // 3.5 seconds ke baad auto hide
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => toast.remove(), 400);
+  }, 3500);
+};
