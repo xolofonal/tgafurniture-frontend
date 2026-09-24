@@ -208,11 +208,13 @@
 <script>
 const API_URL = 'https://tgafurniture-backend.vercel.app/api';
 
-// API Helper
 async function apiRequest(endpoint, method = 'GET', body = null) {
   const token = localStorage.getItem('adminToken');
   const headers = { 'Content-Type': 'application/json' };
-  if (token) headers['Authorization'] = `Bearer ${token}`;
+  
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
 
   const config = { method, headers };
   if (body) config.body = JSON.stringify(body);
@@ -221,6 +223,11 @@ async function apiRequest(endpoint, method = 'GET', body = null) {
   const data = await res.json().catch(() => ({}));
   
   if (!res.ok) {
+    // Token එක කල්ඉකුත් වී ඇත්නම් Auto-Logout කිරීම
+    if (res.status === 401 || res.status === 403) {
+      logout();
+      throw new Error('Session expired. Please login again.');
+    }
     throw new Error(data.message || 'An error occurred during API request.');
   }
   return data;
@@ -382,7 +389,6 @@ function addImageUrlInput() {
   container.appendChild(div);
 }
 
-// SINGLE Add Product Form Submit Handler (Fixed Duplicate Event Issue)
 document.getElementById('addProductForm')?.addEventListener('submit', async (e) => {
   e.preventDefault();
 
@@ -398,11 +404,16 @@ document.getElementById('addProductForm')?.addEventListener('submit', async (e) 
     }
   }
 
-  // Collect all image URLs from input fields
+  // සියලුම Image URLs inputs වලින් array එකකට එකතු කර ගැනීම
   const imageUrlElements = document.querySelectorAll('.imageUrlInput');
   const images = Array.from(imageUrlElements)
                       .map(el => el.value.trim())
                       .filter(url => url !== '');
+
+  if (images.length === 0) {
+    alert('Please enter at least one image URL!');
+    return;
+  }
 
   const newProduct = {
     name: document.getElementById('name').value.trim(),
@@ -410,9 +421,9 @@ document.getElementById('addProductForm')?.addEventListener('submit', async (e) 
     price: origPrice,
     discountPrice: discPrice,
     description: document.getElementById('description') ? document.getElementById('description').value.trim() : '',
-    imageUrl: images[0] || 'https://via.placeholder.com/150', // Main Image
-    images: images,                                             // Array 1
-    imageUrls: images                                          // Array 2 (for backend compatibility)
+    imageUrl: images[0], // Main Image එක ලෙස පළමු URL එක
+    images: images,      // Array format 1 (MongoDB Array Schema සඳහා)
+    imageUrls: images    // Array format 2 (Backend compatibility සඳහා)
   };
 
   try {
@@ -421,15 +432,17 @@ document.getElementById('addProductForm')?.addEventListener('submit', async (e) 
     
     document.getElementById('addProductForm').reset();
     
-    // Reset image inputs container back to 1 field
-    const container = document.getElementById('imageUrlsContainer');
-    if (container) {
-      container.innerHTML = `
-        <div class="image-input-row" style="display: flex; gap: 8px; margin-bottom: 8px;">
-          <input type="url" class="imageUrlInput" placeholder="Paste image web link" required style="flex:1; padding:8px; border:1px solid #ccc; border-radius:6px;">
-          <button type="button" class="btn" onclick="addImageUrlInput()" style="background:#3498db; padding: 8px 14px;"><i class="fa-solid fa-plus"></i></button>
-        </div>`;
-    }
+// Form reset වූ පසු Image Input Container එක මුල සිට පිහිටුවීම
+const container = document.getElementById('imageUrlsContainer');
+if (container) {
+  container.innerHTML = `
+    <div class="image-input-row" style="display: flex; gap: 8px; margin-bottom: 8px;">
+      <input type="url" class="imageUrlInput" placeholder="Paste image web link" required style="flex:1; padding:8px; border:1px solid #ccc; border-radius:6px;">
+      <button type="button" class="btn" onclick="addImageUrlInput()" style="background:#3498db; color: white; border: none; border-radius: 6px; padding: 8px 14px; cursor: pointer;">
+        <i class="fa-solid fa-plus"></i>
+      </button>
+    </div>`;
+}
 
     loadProducts();
   } catch (err) {
