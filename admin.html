@@ -93,53 +93,51 @@
     <!-- Products Tab -->
     <div id="tabProducts">
       
-<div class="card">
-  <h2><i class="fa-solid fa-plus"></i> Add New Product</h2>
-  <form id="addProductForm">
-    <div class="form-grid">
-      <div class="form-group">
-        <label>Product Name</label>
-        <input type="text" id="name" required placeholder="Enter product name">
-      </div>
-      <div class="form-group">
-        <label>Category</label>
-        <select id="category" required>
-          <option value="Bedroom">Bedroom</option>
-          <option value="Living">Living Room</option>
-          <option value="Dining">Dining Room</option>
-          <option value="Tables">Tables</option>
-          <option value="Office">Office</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Original Price (LKR)</label>
-        <input type="number" id="originalPrice" required placeholder="Regular price">
-      </div>
-      <div class="form-group">
-        <label>Discount Price (LKR) - <i>Optional</i></label>
-        <input type="number" id="discountPrice" placeholder="Leave empty if no discount">
-      </div>
-      
-      <!-- Description Field -->
-      <div class="form-group" style="grid-column: span 2;">
-        <label>Product Description</label>
-        <textarea id="description" rows="3" placeholder="Enter product description..." style="width:100%; padding:8px; border-radius:6px; border:1px solid #ccc;"></textarea>
-      </div>
+      <div class="card">
+        <h2><i class="fa-solid fa-plus"></i> Add New Product</h2>
+        <form id="addProductForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Product Name</label>
+              <input type="text" id="name" required placeholder="Enter product name">
+            </div>
+            <div class="form-group">
+              <label>Category</label>
+              <select id="category" required>
+                <option value="Bedroom">Bedroom</option>
+                <option value="Living">Living Room</option>
+                <option value="Dining">Dining Room</option>
+                <option value="Tables">Tables</option>
+                <option value="Office">Office</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Original Price (LKR)</label>
+              <input type="number" id="originalPrice" required placeholder="Regular price">
+            </div>
+            <div class="form-group">
+              <label>Discount Price (LKR) - <i>Optional</i></label>
+              <input type="number" id="discountPrice" placeholder="Leave empty if no discount">
+            </div>
+            
+            <div class="form-group" style="grid-column: span 2;">
+              <label>Product Description</label>
+              <textarea id="description" rows="3" placeholder="Enter product description..." style="width:100%; padding:8px; border-radius:6px; border:1px solid #ccc;"></textarea>
+            </div>
 
-      <!-- Multiple Image URLs Container with '+' Button -->
-      <div class="form-group" style="grid-column: span 2;">
-        <label>Image URLs</label>
-        <div id="imageUrlsContainer">
-          <div class="image-input-row" style="display: flex; gap: 8px; margin-bottom: 8px;">
-            <input type="url" class="imageUrlInput" placeholder="Paste image web link" required style="flex:1; padding:8px; border:1px solid #ccc; border-radius:6px;">
-            <button type="button" class="btn" onclick="addImageUrlInput()" style="background:#3498db; padding: 8px 14px;"><i class="fa-solid fa-plus"></i></button>
+            <div class="form-group" style="grid-column: span 2;">
+              <label>Image URLs</label>
+              <div id="imageUrlsContainer">
+                <div class="image-input-row" style="display: flex; gap: 8px; margin-bottom: 8px;">
+                  <input type="url" class="imageUrlInput" placeholder="Paste image web link" required style="flex:1; padding:8px; border:1px solid #ccc; border-radius:6px;">
+                  <button type="button" class="btn" onclick="addImageUrlInput()" style="background:#3498db; padding: 8px 14px;"><i class="fa-solid fa-plus"></i></button>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
+          <button type="submit" class="btn"><i class="fa-solid fa-save"></i> Save Product</button>
+        </form>
       </div>
-    </div>
-    <button type="submit" class="btn"><i class="fa-solid fa-save"></i> Save Product</button>
-  </form>
-</div>
 
       <div class="card">
         <h2><i class="fa-solid fa-list"></i> Existing Products</h2>
@@ -353,7 +351,7 @@ document.getElementById('announcementForm')?.addEventListener('submit', async (e
 
   try {
     const res = await apiRequest('/announcements', 'POST', { text: textVal });
-    showToast(res.message || 'Announcement added successfully!', 'success');
+    showToast('Announcement added successfully!', 'success');
     document.getElementById('announcementForm').reset();
     loadAnnouncements();
   } catch (err) {
@@ -367,7 +365,7 @@ async function deleteAnnouncement(id) {
 
   try {
     const res = await apiRequest(`/announcements/${id}`, 'DELETE');
-    showToast(res.message || 'Announcement deleted successfully!', 'success');
+    showToast('Announcement removed successfully!', 'success');
     loadAnnouncements();
   } catch (err) {
     showToast('Error: ' + err.message, 'error');
@@ -454,7 +452,7 @@ document.getElementById('addProductForm')?.addEventListener('submit', async (e) 
 
   try {
     const res = await apiRequest('/products', 'POST', newProduct);
-    showToast(res.message || 'Product created successfully!', 'success');
+    showToast('Product created successfully!', 'success');
     
     document.getElementById('addProductForm').reset();
     
@@ -481,7 +479,7 @@ async function deleteProduct(id) {
 
   try {
     const res = await apiRequest(`/products/${id}`, 'DELETE');
-    showToast(res.message || 'Product deleted successfully!', 'success');
+    showToast('Product removed successfully!', 'success');
     loadProducts();
   } catch (err) {
     showToast('Error: ' + err.message, 'error');
@@ -495,7 +493,7 @@ document.getElementById('changePasswordForm')?.addEventListener('submit', async 
 
   try {
     const res = await apiRequest('/users/change-password', 'PUT', { oldPassword, newPassword });
-    showToast(res.message || 'Password updated successfully!', 'success');
+    showToast('Password updated successfully!', 'success');
     document.getElementById('changePasswordForm').reset();
   } catch (err) {
     showToast('Error: ' + err.message, 'error');
