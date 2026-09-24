@@ -141,12 +141,12 @@ const logoutBtn = document.getElementById('logout-btn');
   if (logoutBtn) {
     logoutBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      if (confirm("Tumhala khrokhar log out karayche ahe ka?")) {
+      showLogoutConfirm(() => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         showToast("Logged out successfully!", "info");
         setTimeout(() => window.location.reload(), 1000);
-      }
+      });
     });
   }
 });
@@ -482,18 +482,74 @@ function addToCartFromModal() {
   }
 }
 
+// Custom Logout Confirmation Modal Function
+function showLogoutConfirm(onConfirm) {
+  let modal = document.getElementById("custom-confirm-modal");
+  
+  if (!modal) {
+    modal = document.createElement("div");
+    modal.id = "custom-confirm-modal";
+    modal.style.cssText = "position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 9999; opacity: 0; transition: opacity 0.3s ease;";
+    
+    modal.innerHTML = `
+      <div style="background: #ffffff; padding: 25px; border-radius: 12px; width: 320px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); transform: scale(0.9); transition: transform 0.3s ease;">
+        <div style="font-size: 2.5rem; color: #f59e0b; margin-bottom: 10px;">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+        <h3 style="margin: 0 0 10px; color: #1e293b; font-size: 1.2rem;">Log Out</h3>
+        <p style="color: #64748b; font-size: 0.95rem; margin-bottom: 20px;">Tumhala khrokhar log out karayche ahe ka?</p>
+        <div style="display: flex; gap: 10px; justify-content: center;">
+          <button id="confirmNoBtn" style="padding: 8px 16px; border: 1px solid #cbd5e1; background: #f1f5f9; color: #334155; border-radius: 6px; cursor: pointer; font-weight: 600; flex: 1;">Cancel</button>
+          <button id="confirmYesBtn" style="padding: 8px 16px; border: none; background: #ef4444; color: #ffffff; border-radius: 6px; cursor: pointer; font-weight: 600; flex: 1;">Log Out</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  }
+
+  modal.style.display = "flex";
+  setTimeout(() => {
+    modal.style.opacity = "1";
+    modal.firstElementChild.style.transform = "scale(1)";
+  }, 10);
+
+  const yesBtn = document.getElementById("confirmYesBtn");
+  const noBtn = document.getElementById("confirmNoBtn");
+
+  const closeModal = () => {
+    modal.style.opacity = "0";
+    modal.firstElementChild.style.transform = "scale(0.9)";
+    setTimeout(() => {
+      modal.style.display = "none";
+    }, 300);
+  };
+
+  yesBtn.onclick = () => {
+    closeModal();
+    if (onConfirm) onConfirm();
+  };
+
+  noBtn.onclick = () => {
+    closeModal();
+  };
+  
+  modal.onclick = (e) => {
+    if (e.target === modal) closeModal();
+  };
+}
+
 const userIcon = document.querySelector(".account-btn") || document.querySelector(".fa-user")?.closest("button, a");
 if (userIcon) {
   userIcon.addEventListener("click", (e) => {
     e.preventDefault();
     const user = JSON.parse(localStorage.getItem("user"));
     if (user) {
-      if (confirm("Tumhala khrokhar log out karayche ahe ka?")) {
+      showLogoutConfirm(() => {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
         showToast("Logged out successfully!", "info");
         setTimeout(() => location.reload(), 1000);
-      }
+      });
     } else {
       openAuthModal();
     }
