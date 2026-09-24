@@ -298,27 +298,62 @@ let currentSelectedProduct = null;
 function openProductModal(product) {
   currentSelectedProduct = product;
   
-  // 1. Multiple images තිබේදැයි බලන්න (නැතිනම් Single image එක Array එකකට දමන්න)
-  let rawImages = (Array.isArray(product.images) && product.images.length > 0) 
-    ? product.images 
-    : [product.imageUrl || 'https://via.placeholder.com/300'];
+  // 1. Extra Image URLs සහ Images Arrays සියල්ල එකට එකතු කර ප්‍රධාන Image එකද සහිතව එකම List එකක් සාදා ගැනීම
+  let rawImages = [];
 
-  // 2. Image URLs නිවැරදිව Resolve කිරීම (Relative path එකක් ආවොත් backend URL එක එකතු කිරීම)
+  // Pradhana Image එක
+  if (product.imageUrl && typeof product.imageUrl === 'string' && product.imageUrl.trim() !== '') {
+    rawImages.push(product.imageUrl.trim());
+  }
+
+  // images Array එකේ ඇති රූප එකතු කිරීම
+  if (Array.isArray(product.images) && product.images.length > 0) {
+    product.images.forEach(img => {
+      if (img && typeof img === 'string' && img.trim() !== '') {
+        rawImages.push(img.trim());
+      }
+    });
+  }
+
+  // Admin Panel එකෙන් Extra URLs ලෙස එකතු කරන imageUrls Array එක පරීක්ෂා කර එකතු කිරීම
+  if (Array.isArray(product.imageUrls) && product.imageUrls.length > 0) {
+    product.imageUrls.forEach(url => {
+      if (url && typeof url === 'string' && url.trim() !== '') {
+        rawImages.push(url.trim());
+      }
+    });
+  }
+
+  // Array එකේ Duplicate පින්තූර ඇත්නම් ඒවා ඉවත් කිරීම (Unique URLs)
+  rawImages = [...new Set(rawImages)];
+
+  // එකදු Image එකක්වත් නැතිනම් Placeholder image එකක් දැමීම
+  if (rawImages.length === 0) {
+    rawImages = ['https://via.placeholder.com/300'];
+  }
+
+  // 2. Image URLs නිවැරදිව Resolve කිරීම
   currentProductImages = rawImages.map(img => {
     if (!img) return 'https://via.placeholder.com/300';
-    if (!img.startsWith('http://') && !img.startsWith('https://') && !img.startsWith('data:image')) {
-      const baseUrl = API_URL.replace(/\/api\/?$/, '');
-      const cleanPath = img.startsWith('/') ? img : `/${img}`;
+    
+    // Backslashes (\\) Forward slashes (/) කිරීම
+    let cleanImg = img.replace(/\\/g, '/');
+
+    if (!cleanImg.startsWith('http://') && !cleanImg.startsWith('https://') && !cleanImg.startsWith('data:image')) {
+      const baseUrl = (typeof API_URL !== 'undefined' && API_URL) 
+        ? API_URL.replace(/\/api\/?$/, '') 
+        : window.location.origin;
+      const cleanPath = cleanImg.startsWith('/') ? cleanImg : `/${cleanImg}`;
       return `${baseUrl}${cleanPath}`;
     }
-    return img;
+    return cleanImg;
   });
     
   currentImageIndex = 0;
 
   // Data Set කිරීම
   document.getElementById('modalTitle').textContent = product.name;
-  document.getElementById('modalCategory').textContent = product.category;
+  document.getElementById('modalCategory').textContent = product.category || 'General';
   document.getElementById('modalDescription').textContent = product.description || 'No description available.';
   
   // Price formatting
