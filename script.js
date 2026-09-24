@@ -1,4 +1,4 @@
-const API_URL = 'https://tgafurniture-backend.vercel.app/api';
+const API_URL = 'https://tgafurniture-backend.vercel.app';
 function checkAuthAndOpenCart(event) {
   if (event) event.preventDefault();
   
@@ -158,15 +158,18 @@ async function fetchAndRenderProducts() {
           // --- Image URL Resolution Fix ---
           let displayImage = 'https://via.placeholder.com/150';
           
-          if (product.imageUrl && product.imageUrl.trim() !== '') {
-            displayImage = product.imageUrl;
-          } else if (Array.isArray(product.images) && product.images.length > 0) {
+          // 1. Multi-image array එක තියෙනවා නම් ඒකේ පළමු Image එකට මුල් තැන දීම
+          if (Array.isArray(product.images) && product.images.length > 0 && product.images[0]) {
             displayImage = product.images[0];
+          } else if (product.imageUrl && typeof product.imageUrl === 'string' && product.imageUrl.trim() !== '') {
+            displayImage = product.imageUrl;
           }
 
-          // Relative path (Uploads folder) එකක් ආවොත් backend URL එක එකතු කිරීම
-          if (displayImage && !displayImage.startsWith('http://') && !displayImage.startsWith('https://')) {
-            displayImage = `${API_URL.replace('/api', '')}${displayImage.startsWith('/') ? '' : '/'}${displayImage}`;
+          // 2. Relative path (Uploads folder) එකක් ආවොත් backend URL එක නිවැරදිව එකතු කිරීම
+          if (displayImage && !displayImage.startsWith('http://') && !displayImage.startsWith('https://') && !displayImage.startsWith('data:image')) {
+            const baseUrl = API_URL.replace(/\/api\/?$/, ''); 
+            const cleanPath = displayImage.startsWith('/') ? displayImage : `/${displayImage}`;
+            displayImage = `${baseUrl}${cleanPath}`;
           }
 
           const card = document.createElement('div');
@@ -207,7 +210,7 @@ async function fetchAndRenderProducts() {
     console.error("Error loading products:", error);
   }
 }
-// CART DRAWER ITEM RENDER FUNCTION
+
 function renderCartItems() {
   const drawerList = document.getElementById("cartItemsList");
   const subtotalEl = document.getElementById("cartSubtotal");
@@ -284,10 +287,21 @@ let currentSelectedProduct = null;
 function openProductModal(product) {
   currentSelectedProduct = product;
   
-  // Multiple images තිබේදැයි බලන්න (නැතිනම් Single image එක Array එකකට දමන්න)
-  currentProductImages = (product.images && product.images.length > 0) 
+  // 1. Multiple images තිබේදැයි බලන්න (නැතිනම් Single image එක Array එකකට දමන්න)
+  let rawImages = (Array.isArray(product.images) && product.images.length > 0) 
     ? product.images 
     : [product.imageUrl || 'https://via.placeholder.com/300'];
+
+  // 2. Image URLs නිවැරදිව Resolve කිරීම (Relative path එකක් ආවොත් backend URL එක එකතු කිරීම)
+  currentProductImages = rawImages.map(img => {
+    if (!img) return 'https://via.placeholder.com/300';
+    if (!img.startsWith('http://') && !img.startsWith('https://') && !img.startsWith('data:image')) {
+      const baseUrl = API_URL.replace(/\/api\/?$/, '');
+      const cleanPath = img.startsWith('/') ? img : `/${img}`;
+      return `${baseUrl}${cleanPath}`;
+    }
+    return img;
+  });
     
   currentImageIndex = 0;
 
@@ -308,7 +322,7 @@ function openProductModal(product) {
     oldPriceEl.style.display = 'none';
   }
 
-  // Quantitiy Reset
+  // Quantity Reset
   document.getElementById('modalQty').value = 1;
 
   // Render Image & Thumbnails
