@@ -3171,3 +3171,12 @@ img {
     grid-template-columns: repeat(1, 1fr); /* Mobile වලදී පේළියට 1 බැගින් */
   }
 }
+/* 1. ආරම්භයේදී 3 වන Item එකට පසු ඇති සියලුම Cards සඟවා තැබීම */
+.furniture-item-grid .furniture-card:nth-child(n+4) {
+  display: none !important;
+}
+
+/* 2. 'show-all' class එක එකතු වූ පසු සියලුම Cards (Grid 3 Column ලෙසම) ප්‍රදර්ශනය කිරීම */
+.furniture-item-grid.show-all .furniture-card:nth-child(n+4) {
+  display: flex !important;
+}
