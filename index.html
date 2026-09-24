@@ -385,50 +385,63 @@
     </div>
   </div>
 <!-- Product Detail Modal (Daraz Style) -->
+<!-- Full Page Product Modal (Daraz Style with Suggestions) -->
 <div id="productDetailModal" class="product-modal-overlay hidden">
-  <div class="product-modal-card">
+  <div class="product-modal-card full-page-modal">
     <button class="close-modal-btn" onclick="closeProductModal()">&times;</button>
     
-    <div class="product-modal-body">
-      <!-- Image Gallery Section -->
-      <div class="product-gallery">
-        <div class="main-image-container">
-          <button class="arrow-btn prev-btn" onclick="changeImage(-1)"><i class="fa-solid fa-chevron-left"></i></button>
-          <img id="modalMainImg" src="" alt="Product Image">
-          <button class="arrow-btn next-btn" onclick="changeImage(1)"><i class="fa-solid fa-chevron-right"></i></button>
+    <div class="product-modal-scrollable">
+      <!-- Main Product Details Container -->
+      <div class="product-modal-body">
+        <!-- Image Gallery Section with Zoom Effect -->
+        <div class="product-gallery">
+          <div class="main-image-container" id="imgZoomContainer">
+            <button class="arrow-btn prev-btn" onclick="changeImage(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+            <img id="modalMainImg" src="" alt="Product Image">
+            <button class="arrow-btn next-btn" onclick="changeImage(1)"><i class="fa-solid fa-chevron-right"></i></button>
+          </div>
+          <div id="modalThumbnails" class="thumbnail-list"></div>
         </div>
-        <div id="modalThumbnails" class="thumbnail-list"></div>
+
+        <!-- Product Details Section -->
+        <div class="product-info-details">
+          <span id="modalCategory" class="product-category-tag">Category</span>
+          <h2 id="modalTitle">Product Title</h2>
+          
+          <div class="price-box">
+            <span id="modalDiscountPrice" class="modal-price">LKR 0.00</span>
+            <span id="modalOriginalPrice" class="modal-old-price">LKR 0.00</span>
+          </div>
+
+          <div class="description-box">
+            <h4>Product Description</h4>
+            <p id="modalDescription">Detailed product description goes here...</p>
+          </div>
+
+          <div class="modal-actions">
+            <div class="qty-selector">
+              <button onclick="updateQty(-1)">-</button>
+              <input type="number" id="modalQty" value="1" min="1" readonly>
+              <button onclick="updateQty(1)">+</button>
+            </div>
+            <button class="btn btn-primary add-to-cart-modal-btn" onclick="addToCartFromModal()">
+              <i class="fa-solid fa-cart-shopping"></i> Add to Cart
+            </button>
+          </div>
+        </div>
       </div>
 
-      <!-- Product Details Section -->
-      <div class="product-info-details">
-        <span id="modalCategory" class="product-category-tag">Category</span>
-        <h2 id="modalTitle">Product Title</h2>
-        
-        <div class="price-box">
-          <span id="modalDiscountPrice" class="modal-price">LKR 0.00</span>
-          <span id="modalOriginalPrice" class="modal-old-price">LKR 0.00</span>
-        </div>
-
-        <div class="description-box">
-          <h4>Product Description</h4>
-          <p id="modalDescription">Detailed product description goes here...</p>
-        </div>
-
-        <div class="modal-actions">
-          <div class="qty-selector">
-            <button onclick="updateQty(-1)">-</button>
-            <input type="number" id="modalQty" value="1" min="1" readonly>
-            <button onclick="updateQty(1)">+</button>
-          </div>
-          <button class="btn btn-primary add-to-cart-modal-btn" onclick="addToCartFromModal()">
-            <i class="fa-solid fa-cart-shopping"></i> Add to Cart
-          </button>
+      <!-- Suggested Products Section (Yata 6 Item Penana Section Eka) -->
+      <div class="suggested-products-section">
+        <h3 class="suggested-title"><i class="fa-solid fa-lightbulb"></i> You May Also Like</h3>
+        <div id="suggestedProductsGrid" class="furniture-item-grid grid-3-col">
+          <!-- JS මගින් Category එකට අදාළ Suggestions 6ක් මෙතැනට Load වේ -->
         </div>
       </div>
     </div>
   </div>
 </div>
+
   <footer class="footer">
     <div class="footer-container">
       <div class="footer-col">
