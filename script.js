@@ -4,6 +4,7 @@ const API_URL = 'https://tgafurniture-backend.vercel.app/api';
 function showToast(message, type = "info") {
   let container = document.getElementById("toast-container");
   
+  // Container එක නැත්නම් dynamically create කිරීම
   if (!container) {
     container = document.createElement("div");
     container.id = "toast-container";
@@ -11,6 +12,7 @@ function showToast(message, type = "info") {
     document.body.appendChild(container);
   }
 
+  // Icons configuration
   let icon = '<i class="fa-solid fa-circle-info" style="color: #3b82f6;"></i>';
   if (type === "success") icon = '<i class="fa-solid fa-circle-check" style="color: #10b981;"></i>';
   if (type === "error") icon = '<i class="fa-solid fa-circle-exclamation" style="color: #ef4444;"></i>';
@@ -27,8 +29,10 @@ function showToast(message, type = "info") {
 
   container.appendChild(toast);
 
+  // Trigger animation
   setTimeout(() => toast.classList.add("show"), 10);
 
+  // Auto disappear after 4 seconds
   setTimeout(() => {
     toast.classList.remove("show");
     setTimeout(() => toast.remove(), 350);
@@ -51,6 +55,7 @@ function checkAuthAndOpenCart(event) {
   }
 }
 
+// Cart Buttons setup
 document.addEventListener("DOMContentLoaded", () => {
   const cartButtons = document.querySelectorAll(".cart-btn");
   cartButtons.forEach(btn => {
@@ -58,6 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+// HELPER FUNCTIONS FOR CART & LOCALSTORAGE
 function getCart() {
   const cartData = localStorage.getItem("cartItems");
   try {
@@ -113,6 +119,7 @@ function addToCart(product) {
 
 window.addToCart = addToCart;
 
+// DOM CONTENT LOADED
 document.addEventListener("DOMContentLoaded", () => {
   updateUserUI();
   updateCartBadge();
@@ -141,12 +148,10 @@ document.addEventListener("DOMContentLoaded", () => {
   if (logoutBtn) {
     logoutBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      if (confirm("Oyata aniwaaryenma log out wenna oneda?")) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        showToast("Logged out successfully!", "info");
-        setTimeout(() => window.location.reload(), 1000);
-      }
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      showToast("Logged out successfully!", "info");
+      setTimeout(() => window.location.reload(), 1000);
     });
   }
 });
@@ -489,12 +494,10 @@ if (userIcon) {
     e.preventDefault();
     const user = JSON.parse(localStorage.getItem("user"));
     if (user) {
-      if (confirm("Oyata aniwaaryenma log out wenna oneda?")) {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        showToast("Logged out successfully!", "info");
-        setTimeout(() => location.reload(), 1000);
-      }
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      showToast("Logged out successfully!", "info");
+      setTimeout(() => location.reload(), 1000);
     } else {
       openAuthModal();
     }
@@ -801,6 +804,7 @@ function closeCartDrawer() {
   }
 }
 
+// CART PAGE & ACTIONS
 function renderCartPage() {
   const container = document.getElementById('cart-items-list');
   const cartCountEl = document.getElementById('cart-total-count');
@@ -1142,21 +1146,29 @@ function suggestSearch() {
   res.innerHTML = `<p style="color: #64748b; padding: 10px 0;">Found ${matchesCount} item(s)</p>`;
 }
 
+// Item එක click කරපු ගමන්Data සේව් කරලා අලුත් Page එකට යවන Function එක
 function openProductPage(product) {
+  // Click කරපු product එකේ විස්තර LocalStorage එකේ Save කරනවා
   localStorage.setItem("selectedProduct", JSON.stringify(product));
+  
+  // අලුත් Detail Page එකට Redirect කරනවා
   window.location.href = "product-detail.html";
 }
 
 function toggleCategoryMore(button) {
+  // Click කළ Button එක පිහිටි Parent Category Block එක සොයාගැනීම
   const categoryBlock = button.closest('.room-category-block');
   
   if (!categoryBlock) return;
 
+  // එම Block එක තුළ ඇති Furniture Grid එක ලබාගැනීම
   const grid = categoryBlock.querySelector('.furniture-item-grid');
 
   if (grid) {
+    // Grid එකට 'show-all' class එක toggle කිරීම
     grid.classList.toggle('show-all');
 
+    // Button එකෙහි Text එක සහ Icon එක මාරු කිරීම
     if (grid.classList.contains('show-all')) {
       button.innerHTML = 'View Less Items <i class="fa-solid fa-chevron-up"></i>';
       button.classList.add('expanded');
