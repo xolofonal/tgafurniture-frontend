@@ -1,4 +1,5 @@
-const API_URL = 'https://tgafurniture-backend.vercel.app';
+const API_URL = 'https://tgafurniture-backend.vercel.app/api';
+
 function checkAuthAndOpenCart(event) {
   if (event) event.preventDefault();
   
@@ -6,26 +7,24 @@ function checkAuthAndOpenCart(event) {
   const user = JSON.parse(localStorage.getItem("user"));
 
   if (!token || !user) {
-    // Login වී නොමැති නම් Login Modal එක පෙන්වීම සහ Alert එකක් දීම
     alert("Please Log/Register first!");
     if (typeof openAuthModal === 'function') {
       openAuthModal();
     }
   } else {
-    // Login වී ඇත්නම් Cart පිටුවට හෝ Drawer එකට යැවීම
     window.location.href = "cart.html"; 
-    // නැතහොත් openCartDrawer(); භාවිතා කළ හැක.
   }
 }
 
-// Cart Buttons සඳහා මෙම Event එක සම්බන්ධ කිරීම
+// Cart Buttons setup
 document.addEventListener("DOMContentLoaded", () => {
   const cartButtons = document.querySelectorAll(".cart-btn");
   cartButtons.forEach(btn => {
     btn.addEventListener("click", checkAuthAndOpenCart);
   });
 });
-// 1. HELPER FUNCTIONS FOR CART & LOCALSTORAGE
+
+// HELPER FUNCTIONS FOR CART & LOCALSTORAGE
 function getCart() {
   const cartData = localStorage.getItem("cartItems");
   try {
@@ -39,7 +38,7 @@ function getCart() {
 
 function saveCart(cartList) {
   localStorage.setItem("cartItems", JSON.stringify(cartList));
-  localStorage.setItem("cart", JSON.stringify(cartList)); // Key දෙකම Sync කිරීම
+  localStorage.setItem("cart", JSON.stringify(cartList));
   updateCartBadge();
 }
 
@@ -78,7 +77,6 @@ function addToCart(product) {
   saveCart(cart);
 }
 
-// Window Object එකට Expose කිරීම (HTML inline events සඳහා)
 window.addToCart = addToCart;
 
 // DOM CONTENT LOADED
@@ -98,7 +96,6 @@ document.addEventListener("DOMContentLoaded", () => {
     renderCheckoutSummary();
   }
 
-  // Mobile menu setup
   const menuBtn = document.getElementById('mobile-menu-btn');
   const navLinks = document.getElementById('nav-links');
   if (menuBtn && navLinks) {
@@ -107,7 +104,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Logout button setup
   const logoutBtn = document.getElementById('logout-btn');
   if (logoutBtn) {
     logoutBtn.addEventListener('click', (e) => {
@@ -155,27 +151,21 @@ async function fetchAndRenderProducts() {
             ? `<span class="price-strike" style="text-decoration:line-through; color:#888; font-size:0.85rem; margin-right:5px;">LKR ${Number(product.price).toLocaleString()}</span>` 
             : '';
 
-          // --- Image URL Resolution Fix ---
           let displayImage = 'https://via.placeholder.com/150';
           
-          // 1. Image Path එක ලබා ගැනීම (String එකක්දැයි පරීක්ෂා කිරීම)
           if (product.imageUrl && typeof product.imageUrl === 'string' && product.imageUrl.trim() !== '') {
             displayImage = product.imageUrl.trim();
           } else if (Array.isArray(product.images) && product.images.length > 0 && product.images[0]) {
             displayImage = product.images[0].trim();
           }
 
-          // 2. Windows Backslashes (\) Forward Slashes (/) බවට පත්කිරීම
           if (typeof displayImage === 'string') {
             displayImage = displayImage.replace(/\\/g, '/');
           }
 
-          // 3. Relative path එකක් ආවොත් පමණක් Base URL එක එකතු කිරීම
           if (displayImage && !displayImage.startsWith('http://') && !displayImage.startsWith('https://') && !displayImage.startsWith('data:image')) {
             try {
-              const baseUrl = (typeof API_URL !== 'undefined' && API_URL && API_URL.startsWith('http')) 
-                ? new URL(API_URL).origin 
-                : window.location.origin;
+              const baseUrl = API_URL.replace(/\/api\/?$/, '');
               displayImage = new URL(displayImage, baseUrl).href;
             } catch (err) {
               console.error("Error constructing image URL:", err);
@@ -279,7 +269,7 @@ function renderCartItems() {
     `;
   }).join('');
 
-  const discount = subtotal * 0.10; // 10% Discount calculation
+  const discount = subtotal * 0.10;
   const total = subtotal - discount;
 
   if (subtotalEl) subtotalEl.innerText = `LKR ${subtotal.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
@@ -287,26 +277,21 @@ function renderCartItems() {
   if (totalEl) totalEl.innerText = `LKR ${total.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
 }
 
-// Global scope එකට Expose කිරීම
 window.renderCartItems = renderCartItems;
 
 let currentProductImages = [];
 let currentImageIndex = 0;
 let currentSelectedProduct = null;
 
-// Product Card එක click කළ විට ක්‍රියාත්මක වන Function එක
 function openProductModal(product) {
   currentSelectedProduct = product;
   
-  // 1. Extra Image URLs සහ Images Arrays සියල්ල එකට එකතු කර ප්‍රධාන Image එකද සහිතව එකම List එකක් සාදා ගැනීම
   let rawImages = [];
 
-  // Pradhana Image එක
   if (product.imageUrl && typeof product.imageUrl === 'string' && product.imageUrl.trim() !== '') {
     rawImages.push(product.imageUrl.trim());
   }
 
-  // images Array එකේ ඇති රූප එකතු කිරීම
   if (Array.isArray(product.images) && product.images.length > 0) {
     product.images.forEach(img => {
       if (img && typeof img === 'string' && img.trim() !== '') {
@@ -315,7 +300,6 @@ function openProductModal(product) {
     });
   }
 
-  // Admin Panel එකෙන් Extra URLs ලෙස එකතු කරන imageUrls Array එක පරීක්ෂා කර එකතු කිරීම
   if (Array.isArray(product.imageUrls) && product.imageUrls.length > 0) {
     product.imageUrls.forEach(url => {
       if (url && typeof url === 'string' && url.trim() !== '') {
@@ -324,25 +308,19 @@ function openProductModal(product) {
     });
   }
 
-  // Array එකේ Duplicate පින්තූර ඇත්නම් ඒවා ඉවත් කිරීම (Unique URLs)
   rawImages = [...new Set(rawImages)];
 
-  // එකදු Image එකක්වත් නැතිනම් Placeholder image එකක් දැමීම
   if (rawImages.length === 0) {
     rawImages = ['https://via.placeholder.com/300'];
   }
 
-  // 2. Image URLs නිවැරදිව Resolve කිරීම
   currentProductImages = rawImages.map(img => {
     if (!img) return 'https://via.placeholder.com/300';
     
-    // Backslashes (\\) Forward slashes (/) කිරීම
     let cleanImg = img.replace(/\\/g, '/');
 
     if (!cleanImg.startsWith('http://') && !cleanImg.startsWith('https://') && !cleanImg.startsWith('data:image')) {
-      const baseUrl = (typeof API_URL !== 'undefined' && API_URL) 
-        ? API_URL.replace(/\/api\/?$/, '') 
-        : window.location.origin;
+      const baseUrl = API_URL.replace(/\/api\/?$/, '');
       const cleanPath = cleanImg.startsWith('/') ? cleanImg : `/${cleanImg}`;
       return `${baseUrl}${cleanPath}`;
     }
@@ -351,35 +329,29 @@ function openProductModal(product) {
     
   currentImageIndex = 0;
 
-  // Data Set කිරීම
   document.getElementById('modalTitle').textContent = product.name;
   document.getElementById('modalCategory').textContent = product.category || 'General';
   document.getElementById('modalDescription').textContent = product.description || 'No description available.';
   
-  // Price formatting
   const mainPrice = product.discountPrice || product.price;
   document.getElementById('modalDiscountPrice').textContent = `LKR ${Number(mainPrice).toLocaleString()}`;
   
   const oldPriceEl = document.getElementById('modalOriginalPrice');
   if (product.discountPrice) {
     oldPriceEl.textContent = `LKR ${Number(product.price).toLocaleString()}`;
-    oldPriceEl.style.display = 'inline';
+ OldPriceEl.style.display = 'inline';
   } else {
     oldPriceEl.style.display = 'none';
   }
 
-  // Quantity Reset
   document.getElementById('modalQty').value = 1;
 
-  // Render Image & Thumbnails
   updateGalleryImage();
   renderThumbnails();
 
-  // Show Modal
   document.getElementById('productDetailModal').classList.remove('hidden');
 }
 
-// Image Switch (Arrow Keys Click කළ විට)
 function changeImage(direction) {
   currentImageIndex += direction;
   if (currentImageIndex < 0) {
@@ -393,7 +365,6 @@ function changeImage(direction) {
 function updateGalleryImage() {
   document.getElementById('modalMainImg').src = currentProductImages[currentImageIndex];
   
-  // Highlight active thumbnail
   const thumbs = document.querySelectorAll('.thumbnail-list img');
   thumbs.forEach((thumb, index) => {
     thumb.classList.toggle('active-thumb', index === currentImageIndex);
@@ -416,12 +387,10 @@ function renderThumbnails() {
   });
 }
 
-// Modal Close කිරීම
 function closeProductModal() {
   document.getElementById('productDetailModal').classList.add('hidden');
 }
 
-// Quantity Adjustments
 function updateQty(delta) {
   const qtyInput = document.getElementById('modalQty');
   let val = parseInt(qtyInput.value) + delta;
@@ -826,41 +795,39 @@ function renderCartPage() {
     const itemImg = item.imageUrl || item.image || item.img || "https://via.placeholder.com/60";
     const itemName = item.name || item.title || "Furniture Item";
 
-// renderCartPage ශ්‍රිතය ඇතුළත Return වන HTML කොටස:
-return `
-  <div class="cart-item">
-    <div style="display:flex; align-items:center; gap: 15px;">
-      <img src="${itemImg}" alt="${itemName}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
-      <div>
-        <h4 style="margin: 0; font-size: 1rem; color: #1e293b;">${itemName}</h4>
-        <p style="margin: 4px 0 0; color: #64748b; font-size: 0.9rem;">LKR ${price.toLocaleString('en-US', {minimumFractionDigits: 2})}</p>
+    return `
+      <div class="cart-item">
+        <div style="display:flex; align-items:center; gap: 15px;">
+          <img src="${itemImg}" alt="${itemName}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
+          <div>
+            <h4 style="margin: 0; font-size: 1rem; color: #1e293b;">${itemName}</h4>
+            <p style="margin: 4px 0 0; color: #64748b; font-size: 0.9rem;">LKR ${price.toLocaleString('en-US', {minimumFractionDigits: 2})}</p>
+          </div>
+        </div>
+        
+        <div style="display:flex; align-items:center; gap: 15px;">
+          <div style="display:flex; align-items:center; border: 1px solid #cbd5e1; border-radius: 6px; overflow: hidden; background: #fff;">
+            <button type="button" onclick="window.updateItemQuantity(${index}, -1)" style="padding: 4px 10px; border:none; background: #f1f5f9; cursor:pointer; font-weight:bold;">-</button>
+            <span style="padding: 4px 12px; font-weight: 600; min-width: 20px; text-align: center;">${qty}</span>
+            <button type="button" onclick="window.updateItemQuantity(${index}, 1)" style="padding: 4px 10px; border:none; background: #f1f5f9; cursor:pointer; font-weight:bold;">+</button>
+          </div>
+          
+          <span style="font-weight: bold; min-width: 100px; text-align: right; color: #0f172a;">
+            LKR ${(price * qty).toLocaleString('en-US', {minimumFractionDigits: 2})}
+          </span>
+          
+          <button type="button" onclick="window.removeCartItem(${index})" style="padding: 6px 10px; border:none; background:#ef4444; color:#fff; border-radius: 6px; cursor:pointer;" title="Remove Item">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </div>
       </div>
-    </div>
-    
-    <div style="display:flex; align-items:center; gap: 15px;">
-      <div style="display:flex; align-items:center; border: 1px solid #cbd5e1; border-radius: 6px; overflow: hidden; background: #fff;">
-        <button type="button" onclick="window.updateItemQuantity(${index}, -1)" style="padding: 4px 10px; border:none; background: #f1f5f9; cursor:pointer; font-weight:bold;">-</button>
-        <span style="padding: 4px 12px; font-weight: 600; min-width: 20px; text-align: center;">${qty}</span>
-        <button type="button" onclick="window.updateItemQuantity(${index}, 1)" style="padding: 4px 10px; border:none; background: #f1f5f9; cursor:pointer; font-weight:bold;">+</button>
-      </div>
-      
-      <span style="font-weight: bold; min-width: 100px; text-align: right; color: #0f172a;">
-        LKR ${(price * qty).toLocaleString('en-US', {minimumFractionDigits: 2})}
-      </span>
-      
-      <button type="button" onclick="window.removeCartItem(${index})" style="padding: 6px 10px; border:none; background:#ef4444; color:#fff; border-radius: 6px; cursor:pointer;" title="Remove Item">
-        <i class="fa-solid fa-trash"></i>
-      </button>
-    </div>
-  </div>
-`;
+    `;
   }).join('');
 
   if (cartCountEl) cartCountEl.innerText = totalQty;
   updateCartTotals();
 }
 
-// Function Declarations
 function updateItemQuantity(index, delta) {
   let cartList = getCart();
   if (cartList[index]) {
@@ -885,10 +852,9 @@ function removeCartItem(index) {
   cartList.splice(index, 1);
   saveCart(cartList);
   renderCartPage();
-  renderCartItems();
+  if (typeof renderCartItems === 'function') renderCartItems();
 }
 
-// Window Object Exposure (Only Once)
 window.updateItemQuantity = updateItemQuantity;
 window.removeCartItem = removeCartItem;
 window.removeItem = removeCartItem;
@@ -896,19 +862,6 @@ window.changeQuantity = updateItemQuantity;
 window.removeFromCart = removeCartItem;
 window.renderCartItems = renderCartItems;
 window.addToCart = addToCart;
-
-
-function removeCartItem(index) {
-  let cartList = getCart();
-  cartList.splice(index, 1);
-  saveCart(cartList);
-  renderCartPage();
-  if (typeof renderCartItems === 'function') renderCartItems();
-}
-
-function removeItem(index) { removeCartItem(index); }
-function changeQuantity(index, delta) { updateItemQuantity(index, delta); }
-function removeFromCart(index) { removeCartItem(index); }
 
 function updateCartTotals() {
   const cartList = getCart();
@@ -935,7 +888,6 @@ function updateCartTotals() {
   if (totalEl) totalEl.innerText = `LKR ${subtotal.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
 }
 
-// CHECKOUT CALCULATIONS
 function toggleCheckoutDelivery(isDelivery) {
   localStorage.setItem('isDeliveryChecked', JSON.stringify(isDelivery));
   renderCheckoutSummary();
@@ -1004,7 +956,6 @@ function renderCheckoutSummary() {
   }
 }
 
-// GLOBAL EVENT LISTENER FOR ADD TO CART BUTTONS
 document.addEventListener("click", function (e) {
   const btn = e.target.closest(".add-to-cart-btn");
   if (!btn) return;
@@ -1054,14 +1005,12 @@ function proceedToCheckout() {
     return;
   }
 
-  // පරිශීලකයා Login වී ඇත්දැයි පරික්ෂා කිරීම
   if (!token) {
     alert("Please login before the Checkout.");
-    openAuthModal(); // Login Modal එක විවෘත කරයි
+    openAuthModal();
     return;
   }
 
-  // Login වී ඇත්නම් පමණක් checkout පිටුවට යැවීම
   window.location.href = 'checkout.html';
 }
 

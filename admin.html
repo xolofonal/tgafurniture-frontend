@@ -223,7 +223,6 @@ async function apiRequest(endpoint, method = 'GET', body = null) {
   const data = await res.json().catch(() => ({}));
   
   if (!res.ok) {
-    // Token එක කල්ඉකුත් වී ඇත්නම් Auto-Logout කිරීම
     if (res.status === 401 || res.status === 403) {
       logout();
       throw new Error('Session expired. Please login again.');
@@ -233,7 +232,6 @@ async function apiRequest(endpoint, method = 'GET', body = null) {
   return data;
 }
 
-// Initial Check
 document.addEventListener('DOMContentLoaded', () => {
   const token = localStorage.getItem('adminToken');
   if (token) {
@@ -241,7 +239,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Login
 document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const emailVal = document.getElementById('adminEmail').value.trim();
@@ -278,7 +275,6 @@ function logout() {
   document.getElementById('loginSection').classList.remove('hidden');
 }
 
-// Tab Switch
 function switchTab(tab) {
   const isProducts = tab === 'products';
   document.getElementById('tabProducts').classList.toggle('hidden', !isProducts);
@@ -291,7 +287,6 @@ function switchTab(tab) {
   }
 }
 
-// Announcements
 async function loadAnnouncements() {
   try {
     const announcements = await apiRequest('/announcements');
@@ -375,7 +370,6 @@ async function loadProducts() {
   }
 }
 
-// Add extra image URL input line when '+' clicked
 function addImageUrlInput() {
   const container = document.getElementById('imageUrlsContainer');
   if (!container) return;
@@ -404,7 +398,6 @@ document.getElementById('addProductForm')?.addEventListener('submit', async (e) 
     }
   }
 
-  // සියලුම Image URLs inputs වලින් array එකකට එකතු කර ගැනීම
   const imageUrlElements = document.querySelectorAll('.imageUrlInput');
   const images = Array.from(imageUrlElements)
                       .map(el => el.value.trim())
@@ -421,9 +414,9 @@ document.getElementById('addProductForm')?.addEventListener('submit', async (e) 
     price: origPrice,
     discountPrice: discPrice,
     description: document.getElementById('description') ? document.getElementById('description').value.trim() : '',
-    imageUrl: images[0], // Main Image එක ලෙස පළමු URL එක
-    images: images,      // Array format 1 (MongoDB Array Schema සඳහා)
-    imageUrls: images    // Array format 2 (Backend compatibility සඳහා)
+    imageUrl: images[0],
+    images: images,
+    imageUrls: images
   };
 
   try {
@@ -432,17 +425,16 @@ document.getElementById('addProductForm')?.addEventListener('submit', async (e) 
     
     document.getElementById('addProductForm').reset();
     
-// Form reset වූ පසු Image Input Container එක මුල සිට පිහිටුවීම
-const container = document.getElementById('imageUrlsContainer');
-if (container) {
-  container.innerHTML = `
-    <div class="image-input-row" style="display: flex; gap: 8px; margin-bottom: 8px;">
-      <input type="url" class="imageUrlInput" placeholder="Paste image web link" required style="flex:1; padding:8px; border:1px solid #ccc; border-radius:6px;">
-      <button type="button" class="btn" onclick="addImageUrlInput()" style="background:#3498db; color: white; border: none; border-radius: 6px; padding: 8px 14px; cursor: pointer;">
-        <i class="fa-solid fa-plus"></i>
-      </button>
-    </div>`;
-}
+    const container = document.getElementById('imageUrlsContainer');
+    if (container) {
+      container.innerHTML = `
+        <div class="image-input-row" style="display: flex; gap: 8px; margin-bottom: 8px;">
+          <input type="url" class="imageUrlInput" placeholder="Paste image web link" required style="flex:1; padding:8px; border:1px solid #ccc; border-radius:6px;">
+          <button type="button" class="btn" onclick="addImageUrlInput()" style="background:#3498db; color: white; border: none; border-radius: 6px; padding: 8px 14px; cursor: pointer;">
+            <i class="fa-solid fa-plus"></i>
+          </button>
+        </div>`;
+    }
 
     loadProducts();
   } catch (err) {
@@ -462,7 +454,6 @@ async function deleteProduct(id) {
   }
 }
 
-// Password Change
 document.getElementById('changePasswordForm')?.addEventListener('submit', async (e) => {
   e.preventDefault();
   const oldPassword = document.getElementById('oldPassword').value;
