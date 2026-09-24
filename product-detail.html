@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details - TGA Furniture</title>
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* ==========================================
+       NAV BAR BUTTON OVERLAY FIX (DIRECT OVERRIDE)
+       ========================================== */
+    .nav-links .nav-link-item,
+    nav.nav-links div.nav-link-item {
+      background: none !important;
+      background-color: transparent !important;
+      box-shadow: none !important;
+      border: none !important;
+      border-radius: 0 !important;
+      padding: 0 !important;
+      margin: 0 4px !important;
+    }
+
+    /* Target the inner A links strictly */
+    .nav-links .nav-link-item > a {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      padding: 8px 20px !important;
+      color: #0f172a !important;
+      text-decoration: none !important;
+      font-weight: 600 !important;
+      border-radius: 25px !important;
+      background: transparent !important;
+      transition: all 0.3s ease !important;
+    }
+
+    /* Remove extra pseudo elements/layers */
+    .nav-links .nav-link-item::before,
+    .nav-links .nav-link-item::after,
+    .nav-links .nav-link-item > a::before,
+    .nav-links .nav-link-item > a::after {
+      display: none !important;
+      content: none !important;
+    }
+
+    /* Clean Hover State */
+    .nav-links .nav-link-item > a:hover {
+      background: var(--wood-medium, #4a2c11) !important;
+      color: #ffffff !important;
+    }
+
+    /* ==========================================
+       PRODUCT PAGE STYLES
+       ========================================== */
+    .product-page-container {
+      max-width: 1200px;
+      margin: 2.5rem auto;
+      padding: 0 1.5rem;
+      flex: 1;
+    }
+
+    .product-details-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      background: #ffffff;
+      padding: 2.5rem;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      border: 1px solid var(--border-color, #e2e8f0);
+    }
+
+    .product-image-box {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #fafafa;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #eee;
+      padding: 1rem;
+    }
+
+    .product-image-box img {
+      width: 100%;
+      max-height: 450px;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+    }
+
+    .product-image-box img:hover {
+      transform: scale(1.03);
+    }
+
+    .product-info-box {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .category-badge {
+      background: #f1f5f9;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      width: fit-content;
+      color: var(--wood-light, #8b5a2b);
+      font-weight: 700;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .product-title {
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+      color: #0f172a;
+      line-height: 1.2;
+      font-weight: 800;
+    }
+
+    .price-container {
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: baseline;
+      gap: 15px;
+    }
+
+    .current-price {
+      font-size: 1.9rem;
+      font-weight: 800;
+      color: var(--wood-light, #8b5a2b);
+    }
+
+    .old-price {
+      text-decoration: line-through;
+      color: #94a3b8;
+      font-size: 1.2rem;
+    }
+
+    .description-container {
+      margin-bottom: 2rem;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 1.2rem;
+    }
+
+    .description-container h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: #334155;
+      font-weight: 700;
+    }
+
+    .description-container p {
+      color: #64748b;
+      line-height: 1.7;
+    }
+
+    .btn-add-cart-detail {
+      background: linear-gradient(135deg, var(--wood-medium, #4a2c11), var(--wood-dark, #2c1810));
+      color: #ffffff;
+      border: none;
+      padding: 14px 28px;
+      font-size: 1.05rem;
+      font-weight: bold;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: fit-content;
+      box-shadow: 0 8px 20px rgba(74, 44, 17, 0.25);
+    }
+
+    .btn-add-cart-detail:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 25px rgba(74, 44, 17, 0.35);
+    }
+
+    .error-message {
+      text-align: center;
+      padding: 4rem 1rem;
+      color: #ef4444;
+      grid-column: 1 / -1;
+    }
+
+    @media (max-width: 768px) {
+      .product-details-wrapper {
+        grid-template-columns: 1fr;
+        padding: 1.5rem;
+        gap: 1.5rem;
+      }
+
+      .product-title {
+        font-size: 1.7rem;
+      }
+
+      .btn-add-cart-detail {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header & Navigation -->
+  <header class="header">
+    <div class="header-container">
+      <button class="hamburger-btn" id="mobile-menu-btn" aria-label="Toggle Menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <a href="index.html" class="logo">
+        <img src="logo.png" alt="TGA Furniture Logo" class="site-logo-img">
+      </a>
+
+      <nav class="nav-links" id="nav-links">
+        <div class="nav-link-item">
+          <a href="index.html">Home</a>
+        </div>
+        <div class="nav-link-item dropdown">
+          <a href="index.html#categories">Categories <i class="fa-solid fa-chevron-down nav-arrow"></i></a>
+          <div class="megamenu-box glass-card">
+            <div class="dropdown-grid">
+              <a href="index.html#bedroom-sec" class="dropdown-card">
+                <i class="fa-solid fa-bed"></i>
+                <div>
+                  <h4>Bedroom</h4>
+                  <p>Beds, Wardrobes & Sets</p>
+                </div>
+              </a>
+              <a href="index.html#living-sec" class="dropdown-card">
+                <i class="fa-solid fa-couch"></i>
+                <div>
+                  <h4>Living Room</h4>
+                  <p>Sofas, TV Units & Chairs</p>
+                </div>
+              </a>
+              <a href="index.html#dining-sec" class="dropdown-card">
+                <i class="fa-solid fa-utensils"></i>
+                <div>
+                  <h4>Dining</h4>
+                  <p>Tables & Chairs</p>
+                </div>
+              </a>
+              <a href="index.html#office-sec" class="dropdown-card">
+                <i class="fa-solid fa-briefcase"></i>
+                <div>
+                  <h4>Office</h4>
+                  <p>Desks & Workstations</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="nav-link-item">
+          <a href="about.html">About Us</a>
+        </div>
+        <div class="nav-link-item">
+          <a href="contact.html">Contact</a>
+        </div>
+      </nav>
+
+      <div class="header-actions">
+        <button type="button" onclick="openDrawerSearch()" aria-label="Search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+        <button type="button" class="account-btn" aria-label="User Account">
+          <i class="fa-solid fa-user"></i>
+        </button>
+        <a href="cart.html" class="cart-btn">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span id="cart-count-badge" class="cart-badge">0</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Product Detail View -->
+  <main class="product-page-container">
+    <div id="product-detail-view" class="product-details-wrapper"></div>
+  </main>
+
+  <!-- Right Side Search Drawer -->
+  <div class="drawer-search-overlay" id="drawerSearch">
+    <div class="drawer-search-content">
+      <div class="drawer-search-header">
+        <h3>Search Furniture</h3>
+        <button class="drawer-close-btn" onclick="closeDrawerSearch()">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <input type="text" id="drawerInput" placeholder="Type to search..." onkeyup="suggestSearch()">
+      <div id="searchResults"></div>
+    </div>
+  </div>
+
+  <!-- Auth Modal (Login / Register) -->
+  <div class="modal-overlay" id="authModal">
+    <div class="modal-box">
+      <button class="close-modal" onclick="closeAuthModal()">&times;</button>
+      <div class="auth-tabs" id="authTabs">
+        <button class="tab-btn active" id="loginTabBtn" onclick="switchAuthTab('login')">Login</button>
+        <button class="tab-btn" id="registerTabBtn" onclick="switchAuthTab('register')">Register</button>
+      </div>
+
+      <!-- Login Form -->
+      <form class="auth-form" id="loginForm" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="loginEmail" placeholder="name@example.com" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="loginPassword" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+      </form>
+
+      <!-- Register Form -->
+      <form class="auth-form hidden" id="registerForm" onsubmit="handleRegister(event)">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="regName" placeholder="John Doe" required>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="regEmail" placeholder="name@example.com" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="regPassword" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+      </form>
+
+      <!-- OTP Form -->
+      <form class="auth-form hidden" id="otpForm" onsubmit="handleVerifyOTP(event)">
+        <input type="hidden" id="otpEmail">
+        <div class="form-group">
+          <label>Enter OTP Code</label>
+          <input type="text" id="otpInput" placeholder="6-digit code" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Verify Email</button>
+      </form>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <a href="#" class="logo">
+          <img src="logo.png" alt="TGA Furniture Logo" class="site-logo-img">
+        </a>
+        <p>Premium handcrafted solid wooden furniture engineered for luxury, durability, and natural aesthetic appeal.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Showroom Locations</h4>
+        <ul>
+          <li><a href="#branches">Galenbidunuwawa</a></li>
+          <li><a href="#branches">Mihinthale</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Furniture Types</h4>
+        <ul>
+          <li><a href="#bedroom-sec">Solid Teak Beds</a></li>
+          <li><a href="#living-sec">Wooden Sofa Sets</a></li>
+          <li><a href="#dining-sec">Dining Tables & Chairs</a></li>
+          <li><a href="#office-sec">Office Desks</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Follow Us</h4>
+        <div class="social-links-container">
+          <a href="https://www.facebook.com/share/1FbLfZGo8X/" target="_blank" class="social-btn facebook" title="Facebook">
+            <i class="fa-brands fa-facebook-f"></i>
+          </a>
+          <a href="https://wa.me/c/94775670819" target="_blank" class="social-btn whatsapp" title="WhatsApp">
+            <i class="fa-brands fa-whatsapp"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Our Policies</h4>
+        <ul>
+          <li><a href="terms&conditions.html">Terms & Conditions</a></li>
+          <li><a href="privacypolicy.html">Privacy Policy</a></li>
+          <li><a href="returnpolicy.html">Return & Refund Policy</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 TGA Furniture. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      loadProductDetails();
+    });
+
+    function loadProductDetails() {
+      const detailContainer = document.getElementById("product-detail-view");
+      const productData = JSON.parse(localStorage.getItem("selectedProduct"));
+
+      if (!productData) {
+        detailContainer.innerHTML = `
+          <div class="error-message">
+            <h2>Product Details Not Found!</h2>
+            <p><a href="index.html" style="color:var(--wood-light, #8b5a2b); text-decoration:underline;">Return to Home Page</a></p>
+          </div>
+        `;
+        return;
+      }
+
+      const displayPrice = productData.discountPrice ? productData.discountPrice : productData.price;
+      const oldPriceHTML = productData.discountPrice 
+        ? `<span class="old-price">LKR ${Number(productData.price).toLocaleString()}</span>` 
+        : '';
+
+      const imageSrc = productData.imageUrl || productData.image || 'https://via.placeholder.com/400';
+
+      detailContainer.innerHTML = `
+        <div class="product-image-box">
+          <img src="${imageSrc}" alt="${productData.name}" onerror="this.onerror=null;this.src='https://via.placeholder.com/400';">
+        </div>
+        <div class="product-info-box">
+          <span class="category-badge">${productData.category || 'General'}</span>
+          <h1 class="product-title">${productData.name}</h1>
+          
+          <div class="price-container">
+            <span class="current-price">LKR ${Number(displayPrice).toLocaleString()}</span>
+            ${oldPriceHTML}
+          </div>
+
+          <div class="description-container">
+            <h3>Description</h3>
+            <p>${productData.description || 'No detailed description available for this item.'}</p>
+          </div>
+
+          <button type="button" class="btn-add-cart-detail" id="mainAddToCartBtn">
+            <i class="fa-solid fa-cart-shopping"></i> Add to Cart
+          </button>
+        </div>
+      `;
+
+      document.getElementById("mainAddToCartBtn").addEventListener("click", () => {
+        handleProductDetailAddToCart(productData);
+      });
+    }
+
+    function handleProductDetailAddToCart(product) {
+      if (typeof addToCart === 'function') {
+        addToCart(product);
+        alert("Product successfully added to Cart!");
+      }
+    }
+  </script>
+</body>
+</html>
