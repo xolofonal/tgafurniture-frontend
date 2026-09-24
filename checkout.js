@@ -1,6 +1,4 @@
-const API_URL = 'https://tgafurniture-backend.vercel.app/api';
-
-// Owner ගේ WhatsApp අංකය (Country code එක සහිතව, '+' නැතිව)
+const API_URL = 'https://tgafurniture-backend.vercel.app';
 const OWNER_WHATSAPP_NUMBER = "94771234567";
 
 function getCartData() {
@@ -23,11 +21,20 @@ function renderCheckoutSummary() {
   const checkoutDelivery = document.getElementById('checkout-delivery');
   const checkoutTotal = document.getElementById('checkout-total');
 
-  const cart = getCart(); 
-  if (!cart || cart.length === 0) return;
+  const cart = getCartData(); 
+  if (!checkoutListContainer) return;
+
+  checkoutListContainer.innerHTML = '';
+
+  if (!cart || cart.length === 0) {
+    checkoutListContainer.innerHTML = "<p>Your cart is empty.</p>";
+    if (checkoutSubtotal) checkoutSubtotal.textContent = "LKR 0.00";
+    if (checkoutDelivery) checkoutDelivery.textContent = "LKR 0.00";
+    if (checkoutTotal) checkoutTotal.textContent = "LKR 0.00";
+    return;
+  }
 
   const storedDelivery = JSON.parse(localStorage.getItem('isDeliveryChecked'));
-  // Default delivery is true unless explicitly set to false
   const isDeliveryChecked = storedDelivery !== null ? storedDelivery : true;
 
   const chkDelivery = document.getElementById('chk-delivery');
@@ -37,13 +44,12 @@ function renderCheckoutSummary() {
     chkPickup.checked = !isDeliveryChecked;
   }
 
-  // Store Pickup chuno var Delivery Fee = 0
+  // Home Delivery තේරූ විට LKR 2,500 එකතු වේ. Store Pickup වලදී 0 වේ.
   const deliveryFee = isDeliveryChecked ? 2500 : 0;
   let subtotal = 0;
-  if (checkoutListContainer) checkoutListContainer.innerHTML = '';
 
   cart.forEach(item => {
-    const rawPrice = item.price !== undefined ? item.price : 0;
+    const rawPrice = item.price !== undefined ? item.price : item.unitPrice;
     const price = typeof rawPrice === 'number' 
                   ? rawPrice 
                   : parseFloat(String(rawPrice || 0).replace(/[^0-9.]/g, "")) || 0;
@@ -51,14 +57,12 @@ function renderCheckoutSummary() {
     const itemTotal = price * qty;
     subtotal += itemTotal;
 
-    if (checkoutListContainer) {
-      checkoutListContainer.innerHTML += `
-        <div class="checkout-item-row" style="display:flex; justify-content:space-between; margin-bottom: 8px;">
-          <span>${item.name || item.title} (x${qty})</span>
-          <span>LKR ${itemTotal.toLocaleString('en-US', {minimumFractionDigits: 2})}</span>
-        </div>
-      `;
-    }
+    checkoutListContainer.innerHTML += `
+      <div class="checkout-item-row" style="display:flex; justify-content:space-between; margin-bottom: 8px;">
+        <span>${item.name || item.title} (x${qty})</span>
+        <span>LKR ${itemTotal.toLocaleString('en-US', {minimumFractionDigits: 2})}</span>
+      </div>
+    `;
   });
 
   const grandTotal = subtotal + deliveryFee;
@@ -98,7 +102,7 @@ async function sendWhatsAppOrder(e) {
 
   const cart = getCartData();
   if (!cart || cart.length === 0) {
-    alert("Cart empty hai!");
+    alert("ඔබගේ Cart එක හිස්ව පවතී!");
     return false;
   }
 
@@ -131,12 +135,11 @@ async function sendWhatsAppOrder(e) {
     itemsText += `${index + 1}. *${item.name || item.title}*\n   - Qty: ${qty}\n   - Price: LKR ${itemTotal.toLocaleString('en-US')}\n`;
   });
 
-  // Store Pickup par delivery fee 0 rahega
+  // Home Delivery තේරූ විට පමණක් LKR 2,500 Delivery Fee එකක් එකතු වේ
   const deliveryFee = isDelivery ? 2500 : 0;
   const totalAmount = subtotal + deliveryFee;
   const orderId = "ORD-" + Date.now();
 
-  // 1. Back-end Order Save
   try {
     await fetch(`${API_URL}/orders`, {
       method: "POST",
@@ -157,7 +160,7 @@ async function sendWhatsAppOrder(e) {
     console.warn("Backend order save failed or skipped:", err);
   }
 
-  // 2. WhatsApp Message Formatting
+  // WhatsApp Message සකස් කිරීම
   let message = `🛒 *NEW ORDER INQUIRY - TGA FURNITURE*\n\n`;
   message += `🔖 *Order ID:* ${orderId}\n`;
   message += `👤 *Customer Name:* ${firstName} ${lastName}\n`;
@@ -172,7 +175,7 @@ async function sendWhatsAppOrder(e) {
   message += `\n📦 *ORDER ITEMS:*\n${itemsText}\n`;
   message += `💰 *Subtotal:* LKR ${subtotal.toLocaleString('en-US', {minimumFractionDigits: 2})}\n`;
   
-  // Dynamic Delivery Fee Text for WhatsApp Message
+  // Store Pickup තේරූ විට Delivery Fee අයින් වී Free (Store Pickup) ලෙස පෙන්වයි
   if (isDelivery) {
     message += `🚚 *Delivery Fee:* LKR ${deliveryFee.toLocaleString('en-US', {minimumFractionDigits: 2})}\n`;
   } else {
@@ -182,9 +185,8 @@ async function sendWhatsAppOrder(e) {
   message += `💵 *TOTAL PRICE:* LKR ${totalAmount.toLocaleString('en-US', {minimumFractionDigits: 2})}\n\n`;
   message += `Please confirm my order. Thank you!`;
 
-  // 3. Open WhatsApp
   const encodedMessage = encodeURIComponent(message);
-  const whatsappUrl = `https://wa.me/${94775670819}?text=${encodedMessage}`;
+  const whatsappUrl = `https://wa.me/${OWNER_WHATSAPP_NUMBER}?text=${encodedMessage}`;
 
   localStorage.removeItem("cartItems");
   localStorage.removeItem("isDeliveryChecked");
