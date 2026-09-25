@@ -1199,22 +1199,15 @@ function suggestSearch() {
     return;
   }
 
-  // Keywords වෙන් කරගැනීම
-  const searchKeywords = val.split(" ").filter(keyword => keyword !== "");
-
-  // Drawer එක ඇතුළත පෙන්වීමට match වන cards එකතු කරගන්නා array එක
+  // Search Input එක කුඩා කොටස් වලට කඩා නොගෙන, මුළු වචනය එකවර සෙවීම (Exact String Matching)
   let matchedCards = [];
 
   cards.forEach((card) => {
     const title = card.querySelector("h4") ? card.querySelector("h4").innerText.toLowerCase() : "";
     const category = card.getAttribute("data-category") ? card.getAttribute("data-category").toLowerCase() : "";
     
-    // ඕනෑම Keyword එකක් match වේදැයි බලයි (some භාවිතා කිරීමෙන් සෙවීම පහසු වේ)
-    const isMatched = searchKeywords.some(keyword => 
-      title.includes(keyword) || category.includes(keyword)
-    );
-
-    if (isMatched) {
+    // සම්පූර්ණ Input එක Title එකේ හෝ Category එකේ තිබේදැයි බලයි
+    if (title.includes(val) || category.includes(val)) {
       matchedCards.push(card);
     }
   });
@@ -1225,18 +1218,42 @@ function suggestSearch() {
   if (matchedCards.length > 0) {
     // 1. ගණන පෙන්වන Header එක
     const countText = document.createElement("p");
-    countText.style.cssText = "color: #64748b; padding: 10px 0; font-weight: 600;";
+    countText.style.cssText = "color: #64748b; padding: 10px 0 5px 0; font-weight: 600; font-size: 0.9rem;";
     countText.innerText = `Found ${matchedCards.length} item(s)`;
     res.appendChild(countText);
 
-    // 2. සොයාගත් Cards වල Clone (පිටපතක්) Drawer එක ඇතුළට එකතු කිරීම
+    // 2. Horizontal Scroll සක්‍රිය වන Image Grid Container එක සෑදීම
+    const gridContainer = document.createElement("div");
+    gridContainer.className = "search-results-grid";
+
+    // 3. සොයාගත් Cards වල Clone (පිටපතක්) Horizontal Bar එකට එකතු කිරීම
     matchedCards.forEach((card) => {
-      const clonedCard = card.cloneNode(true); // Original Card එක Clone කිරීම
-      clonedCard.style.setProperty("display", "flex", "important"); // Drawer එක තුළ display flex කිරීම
-      clonedCard.style.marginBottom = "15px"; // Cards අතර පරතරය තැබීම
+      const clonedCard = card.cloneNode(true);
+      clonedCard.style.setProperty("display", "flex", "important");
       
-      res.appendChild(clonedCard);
+      // Card එක Click කළ විට Original Modal එක Open වන ලෙස Event එක නැවත බද්ධ කිරීම
+      clonedCard.addEventListener('click', (e) => {
+        if (!e.target.closest('.add-to-cart-btn')) {
+          // Card එකේ ඇති Product details ලබාගෙන Modal එක open කිරීම
+          const title = clonedCard.querySelector("h4")?.innerText || "";
+          const priceText = clonedCard.querySelector(".price")?.innerText || "0";
+          const price = parseFloat(priceText.replace(/[^0-9.]/g, "")) || 0;
+          const imageUrl = clonedCard.querySelector("img")?.src || "";
+          const category = clonedCard.getAttribute("data-category") || "";
+
+          openProductModal({
+            name: title,
+            price: price,
+            imageUrl: imageUrl,
+            category: category
+          });
+        }
+      });
+
+      gridContainer.appendChild(clonedCard);
     });
+
+    res.appendChild(gridContainer);
   } else {
     // කිසිවක් හමු නොවූ විට
     res.innerHTML = `<p style="color: #ef4444; padding: 10px 0; font-weight: 600;">No items found matching "${input.value}"</p>`;
