@@ -48,14 +48,14 @@
     th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
     th { background: #f8f9fa; font-size: 0.9rem; }
     .product-img { width: 45px; height: 45px; object-fit: cover; border-radius: 4px; }
-    /* Mobile view (Screen size 768px peksha kami astana) */
+    /* Mobile View Corrections */
 @media (max-width: 768px) {
   .admin-layout {
     flex-direction: column;
-    padding-bottom: 70px; /* Khali navigation bar sathi jaga */
+    padding-bottom: 75px; /* bottom bar එකට ඉඩ තැබීමට */
   }
 
-  /* Side panel mobile var khali bottom navigation bar banvayla */
+  /* Side panel එක යටටම ෆික්ස් කිරීම */
   .sidebar {
     position: fixed;
     bottom: 0;
@@ -67,25 +67,26 @@
     align-items: center;
     padding: 0 10px;
     background: #2c3e50;
-    z-index: 1000;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.15);
+    z-index: 9999;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
   }
 
-  /* Title mobile view madhe hide kela */
+  /* Title එක හංගන්න */
   .sidebar h2 {
-    display: none;
+    display: none !important;
   }
 
-  /* Side buttons mobile view madhe bottom navigation icons sathi */
+  /* Bottom bar icons සකස් කිරීම */
   .sidebar-btn {
     flex: 1;
     justify-content: center;
-    padding: 8px 5px;
+    padding: 6px;
     margin-bottom: 0;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     flex-direction: column;
-    gap: 4px;
+    gap: 3px;
     text-align: center;
+    border-radius: 4px;
   }
 
   .sidebar-btn i {
@@ -94,21 +95,32 @@
 
   .main-content {
     padding: 15px;
-  }
-
-  .header-bar {
-    flex-direction: row;
-    justify-content: space-between;
+    margin-bottom: 20px;
   }
 
   .header-bar h1 {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
   }
 
-  /* Mobile screen var table overflow scroll sathi */
+  .form-grid {
+    grid-template-columns: 1fr; /* Form inputs තනි පේළියට */
+  }
+
+  /* Card සහ Tab overlap වෙන එක වැළැක්වීම */
   .card {
-    overflow-x: auto;
     padding: 15px;
+    width: 100%;
+  }
+
+  /* Table එක mobile එකේ ලස්සනට Scroll වෙන්න */
+  div#tabProducts .card:has(table),
+  div#tabSettings .card:has(table) {
+    overflow-x: auto;
+  }
+
+  /* Hidden Element එක හරියටම සැඟවීම */
+  .hidden {
+    display: none !important;
   }
 }
   </style>
