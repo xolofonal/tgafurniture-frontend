@@ -1190,45 +1190,55 @@ function suggestSearch() {
 
   if (!input || !res) return;
 
-  // Case-insensitive කිරීම සඳහා සෙවුම් අගය Simple Akuru (toLowerCase) කරගෙන trim කරගනු ලැබේ
+  // Search input එක ලබාගෙන trim සහ lowerCase කරගැනීම
   const val = input.value.toLowerCase().trim();
 
-  // සෙවුම් පද එකකට වඩා ඇත්නම් ඒවා වෙන් වෙන් වශයෙන් පරීක්ෂා කිරීමට (Keywords Matching)
-  const searchKeywords = val.split(" ").filter(keyword => keyword !== "");
-
+  // Search Input එක හිස් නම් drawer එකේ results මුලුමනින්ම clear කිරීම
   if (val === "") {
     res.innerHTML = "";
-    // Search input එක හිස් විට සියලුම Cards පෙන්වීම
-    cards.forEach((card) => {
-      card.style.setProperty("display", "flex", "important");
-    });
     return;
   }
 
-  let matchesCount = 0;
+  // Keywords වෙන් කරගැනීම
+  const searchKeywords = val.split(" ").filter(keyword => keyword !== "");
+
+  // Drawer එක ඇතුළත පෙන්වීමට match වන cards එකතු කරගන්නා array එක
+  let matchedCards = [];
 
   cards.forEach((card) => {
-    // Card එකේ Title එක, Category එක සහ Description එක (ඇත්නම්) ලබා ගැනීම
     const title = card.querySelector("h4") ? card.querySelector("h4").innerText.toLowerCase() : "";
     const category = card.getAttribute("data-category") ? card.getAttribute("data-category").toLowerCase() : "";
     
-    // Title එක හෝ Category එක සොයන Keywords වලට ගැළපේදැයි බලයි
-    const isMatched = searchKeywords.every(keyword => 
+    // ඕනෑම Keyword එකක් match වේදැයි බලයි (some භාවිතා කිරීමෙන් සෙවීම පහසු වේ)
+    const isMatched = searchKeywords.some(keyword => 
       title.includes(keyword) || category.includes(keyword)
     );
 
     if (isMatched) {
-      card.style.setProperty("display", "flex", "important");
-      matchesCount++;
-    } else {
-      card.style.setProperty("display", "none", "important");
+      matchedCards.push(card);
     }
   });
 
-  // ප්‍රතිඵල ගණන සටහන් කිරීම
-  if (matchesCount > 0) {
-    res.innerHTML = `<p style="color: #64748b; padding: 10px 0; font-weight: 600;">Found ${matchesCount} item(s)</p>`;
+  // Drawer එකේ ඇති පැරණි ප්‍රතිඵල ඉවත් කිරීම
+  res.innerHTML = "";
+
+  if (matchedCards.length > 0) {
+    // 1. ගණන පෙන්වන Header එක
+    const countText = document.createElement("p");
+    countText.style.cssText = "color: #64748b; padding: 10px 0; font-weight: 600;";
+    countText.innerText = `Found ${matchedCards.length} item(s)`;
+    res.appendChild(countText);
+
+    // 2. සොයාගත් Cards වල Clone (පිටපතක්) Drawer එක ඇතුළට එකතු කිරීම
+    matchedCards.forEach((card) => {
+      const clonedCard = card.cloneNode(true); // Original Card එක Clone කිරීම
+      clonedCard.style.setProperty("display", "flex", "important"); // Drawer එක තුළ display flex කිරීම
+      clonedCard.style.marginBottom = "15px"; // Cards අතර පරතරය තැබීම
+      
+      res.appendChild(clonedCard);
+    });
   } else {
+    // කිසිවක් හමු නොවූ විට
     res.innerHTML = `<p style="color: #ef4444; padding: 10px 0; font-weight: 600;">No items found matching "${input.value}"</p>`;
   }
 }
