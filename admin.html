@@ -14,6 +14,7 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
     body { background-color: #f4f6f9; color: #333333; }
+    
     .hidden { display: none !important; }
     
     /* Login Screen */
@@ -48,81 +49,55 @@
     th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
     th { background: #f8f9fa; font-size: 0.9rem; }
     .product-img { width: 45px; height: 45px; object-fit: cover; border-radius: 4px; }
-    /* Mobile View Corrections */
-@media (max-width: 768px) {
-  .admin-layout {
-    flex-direction: column;
-    padding-bottom: 75px;
-  }
 
-  /* Side panel එක යටටම ෆික්ස් කිරීම */
-  .sidebar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 60px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 0 10px;
-    background: #2c3e50;
-    z-index: 9999;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
-  }
+    /* Mobile Responsive View */
+    @media (max-width: 768px) {
+      .admin-layout {
+        flex-direction: column;
+        padding-bottom: 75px;
+      }
 
-  /* Title එක හංගන්න */
-  .sidebar h2 {
-    display: none !important;
-  }
+      .sidebar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 60px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding: 0 10px;
+        background: #2c3e50;
+        z-index: 9999;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+      }
 
-  /* Bottom bar icons සකස් කිරීම */
-  .sidebar-btn {
-    flex: 1;
-    justify-content: center;
-    padding: 6px;
-    margin-bottom: 0;
-    font-size: 0.75rem;
-    flex-direction: column;
-    gap: 3px;
-    text-align: center;
-    border-radius: 4px;
-  }
+      .sidebar h2 { display: none !important; }
 
-  .sidebar-btn i {
-    font-size: 1.2rem;
-  }
+      .sidebar-btn {
+        flex: 1;
+        justify-content: center;
+        padding: 6px;
+        margin-bottom: 0;
+        font-size: 0.75rem;
+        flex-direction: column;
+        gap: 3px;
+        text-align: center;
+        border-radius: 4px;
+      }
 
-  .main-content {
-    padding: 15px;
-    margin-bottom: 20px;
-  }
+      .sidebar-btn i { font-size: 1.2rem; }
+      .main-content { padding: 15px; margin-bottom: 20px; }
+      .header-bar h1 { font-size: 1.2rem; }
+      .form-grid { grid-template-columns: 1fr; }
+      .card { padding: 15px; width: 100%; }
 
-  .header-bar h1 {
-    font-size: 1.2rem;
-  }
-
-  .form-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .card {
-    padding: 15px;
-    width: 100%;
-  }
-
-  /* Table එක mobile එකේ horizontal scroll වෙන්න (Overlap නොවී) */
-  .card table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
-}
-
-/* Hidden elements හරියටම සැඟවීමට (Global level) */
-.hidden {
-  display: none !important;
-}
+      .card table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+    }
   </style>
 </head>
 <body>
@@ -179,32 +154,33 @@
 
             <div class="form-group">
               <label>Category</label>
-                <select id="category" required>
-                  <option value="Bedroom">Bedroom</option>
-                  <option value="Living">Living Room</option>
-                  <option value="Dining">Dining Room</option>
-                  <option value="Tables">Tables</option>
-                  <option value="Office">Office</option>
-                  <option value="Decor">Decorations</option>
-                  <option value="mattress">Mattress</option> 
-                </select>
-              </div>
+              <select id="category" required>
+                <option value="Bedroom">Bedroom</option>
+                <option value="Living">Living Room</option>
+                <option value="Dining">Dining Room</option>
+                <option value="Tables">Tables</option>
+                <option value="Office">Office</option>
+                <option value="Decor">Decorations</option>
+                <option value="mattress">Mattress</option> 
+              </select>
             </div>
+
             <div class="form-group">
               <label>Original Price (LKR)</label>
               <input type="number" id="originalPrice" required placeholder="Regular price">
             </div>
+
             <div class="form-group">
               <label>Discount Price (LKR) - <i>Optional</i></label>
               <input type="number" id="discountPrice" placeholder="Leave empty if no discount">
             </div>
             
-            <div class="form-group" style="grid-column: span 2;">
+            <div class="form-group" style="grid-column: 1 / -1;">
               <label>Product Description</label>
               <textarea id="description" rows="3" placeholder="Enter product description..." style="width:100%; padding:8px; border-radius:6px; border:1px solid #ccc;"></textarea>
             </div>
 
-            <div class="form-group" style="grid-column: span 2;">
+            <div class="form-group" style="grid-column: 1 / -1;">
               <label>Image URLs</label>
               <div id="imageUrlsContainer">
                 <div class="image-input-row" style="display: flex; gap: 8px; margin-bottom: 8px;">
@@ -214,7 +190,7 @@
               </div>
             </div>
           </div>
-          <button type="submit" class="btn"><i class="fa-solid fa-save"></i> Save Product</button>
+          <button type="submit" class="btn" style="margin-top: 15px;"><i class="fa-solid fa-save"></i> Save Product</button>
         </form>
       </div>
 
@@ -288,7 +264,6 @@
 <script>
 const API_URL = 'https://tgafurniture-backend.vercel.app/api';
 
-/* Helper function to sanitize backend messages to English */
 function translateErrorMessage(msg) {
   if (!msg) return 'An error occurred during API request.';
   if (msg.includes('පැරණි Password එක වැරදියි') || msg.toLowerCase().includes('old password')) {
@@ -300,7 +275,6 @@ function translateErrorMessage(msg) {
   return msg;
 }
 
-/* ==================== SWEETALERT HELPER FUNCTIONS ==================== */
 function showToast(message, icon = 'success') {
   Swal.fire({
     icon: icon,
@@ -325,7 +299,6 @@ function showConfirm(title, text) {
     cancelButtonText: 'Cancel'
   });
 }
-/* ==================================================================== */
 
 async function apiRequest(endpoint, method = 'GET', body = null) {
   const token = localStorage.getItem('adminToken');
@@ -386,7 +359,7 @@ document.getElementById('adminLoginForm').addEventListener('submit', async (e) =
 function showDashboard() {
   document.getElementById('loginSection').classList.add('hidden');
   document.getElementById('adminDashboard').classList.remove('hidden');
-  loadProducts();
+  switchTab('products');
 }
 
 function logout() {
@@ -398,12 +371,23 @@ function logout() {
 
 function switchTab(tab) {
   const isProducts = tab === 'products';
-  document.getElementById('tabProducts').classList.toggle('hidden', !isProducts);
-  document.getElementById('tabSettings').classList.toggle('hidden', isProducts);
-  document.getElementById('btnTabProducts').classList.toggle('active', isProducts);
-  document.getElementById('btnTabSettings').classList.toggle('active', isProducts);
+  
+  const tabProducts = document.getElementById('tabProducts');
+  const tabSettings = document.getElementById('tabSettings');
+  const btnProducts = document.getElementById('btnTabProducts');
+  const btnSettings = document.getElementById('btnTabSettings');
 
-  if (!isProducts) {
+  if (isProducts) {
+    tabProducts.classList.remove('hidden');
+    tabSettings.classList.add('hidden');
+    btnProducts.classList.add('active');
+    btnSettings.classList.remove('active');
+    loadProducts();
+  } else {
+    tabProducts.classList.add('hidden');
+    tabSettings.classList.remove('hidden');
+    btnProducts.classList.remove('active');
+    btnSettings.classList.add('active');
     loadAnnouncements();
   }
 }
@@ -441,7 +425,7 @@ document.getElementById('announcementForm')?.addEventListener('submit', async (e
   const textVal = document.getElementById('announcementText').value.trim();
 
   try {
-    const res = await apiRequest('/announcements', 'POST', { text: textVal });
+    await apiRequest('/announcements', 'POST', { text: textVal });
     showToast('Announcement added successfully!', 'success');
     document.getElementById('announcementForm').reset();
     loadAnnouncements();
@@ -455,7 +439,7 @@ async function deleteAnnouncement(id) {
   if (!confirmResult.isConfirmed) return;
 
   try {
-    const res = await apiRequest(`/announcements/${id}`, 'DELETE');
+    await apiRequest(`/announcements/${id}`, 'DELETE');
     showToast('Announcement removed successfully!', 'success');
     loadAnnouncements();
   } catch (err) {
@@ -542,7 +526,7 @@ document.getElementById('addProductForm')?.addEventListener('submit', async (e) 
   };
 
   try {
-    const res = await apiRequest('/products', 'POST', newProduct);
+    await apiRequest('/products', 'POST', newProduct);
     showToast('Product created successfully!', 'success');
     
     document.getElementById('addProductForm').reset();
@@ -569,7 +553,7 @@ async function deleteProduct(id) {
   if (!confirmResult.isConfirmed) return;
 
   try {
-    const res = await apiRequest(`/products/${id}`, 'DELETE');
+    await apiRequest(`/products/${id}`, 'DELETE');
     showToast('Product removed successfully!', 'success');
     loadProducts();
   } catch (err) {
@@ -583,7 +567,7 @@ document.getElementById('changePasswordForm')?.addEventListener('submit', async 
   const newPassword = document.getElementById('newPassword').value;
 
   try {
-    const res = await apiRequest('/users/change-password', 'PUT', { oldPassword, newPassword });
+    await apiRequest('/users/change-password', 'PUT', { oldPassword, newPassword });
     showToast('Password updated successfully!', 'success');
     document.getElementById('changePasswordForm').reset();
   } catch (err) {
