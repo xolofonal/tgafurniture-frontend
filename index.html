@@ -145,6 +145,7 @@
       <button class="btn filter-chip" onclick="filterByCategory('dining', this)">Dining Room</button>
       <button class="btn filter-chip" onclick="filterByCategory('office', this)">Office</button>
       <button class="btn filter-chip" onclick="filterByCategory('decor', this)">Decorations</button>
+      <button class="filter-chip" onclick="filterByCategory('mattress', this)">Mattresses</button>
     </div>
 
 <div id="bedroom-sec" class="room-category-block reveal-on-scroll" data-sec-category="bedroom">
@@ -213,6 +214,18 @@
         </button>
       </div>
     </div>
+<div id="mattress-sec" class="room-category-block reveal-on-scroll" data-sec-category="mattress" style="margin-top: 3rem;">
+  <h3 class="room-title"><i class="fa-solid fa-bed"></i> Mattresses & Bedding</h3>
+  
+  <div class="furniture-item-grid grid-3-col">
+    <!-- Dynamic Products Loaded from Backend -->
+  </div>
+  <div class="category-view-more">
+    <button class="view-more-btn" onclick="toggleCategoryMore(this)">
+      View More Items <i class="fa-solid fa-chevron-down"></i>
+    </button>
+  </div>
+</div>
   </section>
 
   
@@ -453,6 +466,7 @@
           <li><a href="#living-sec">Wooden Sofa Sets</a></li>
           <li><a href="#dining-sec">Dining Tables & Chairs</a></li>
           <li><a href="#office-sec">Office Desks</a></li>
+          <li><a href="#mattress-sec">Mattress</a></li>
         </ul>
       </div>
 

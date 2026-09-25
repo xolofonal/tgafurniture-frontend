@@ -166,7 +166,8 @@ async function fetchAndRenderProducts() {
     const products = await response.json();
     if (!Array.isArray(products) || products.length === 0) return;
 
-    const sections = ['bedroom-sec', 'living-sec', 'dining-sec', 'office-sec', 'decor-sec'];
+    // 1. Grid Sections සුද්ද කිරීම (Clear Grid)
+    const sections = ['bedroom-sec', 'living-sec', 'dining-sec', 'office-sec', 'decor-sec', 'mattress-sec'];
     sections.forEach(secId => {
       const secEl = document.getElementById(secId);
       if (secEl) {
@@ -175,11 +176,14 @@ async function fetchAndRenderProducts() {
       }
     });
 
+    // 2. Products එක එක ගෙන අදාළ Section එකට එක් කිරීම
     products.forEach(product => {
       const category = (product.category || '').toLowerCase();
-      let targetSecId = 'living-sec';
+      let targetSecId = 'living-sec'; // Default section
 
-      if (category.includes('bed') || category.includes('room')) targetSecId = 'bedroom-sec';
+      // Category matching logic
+      if (category.includes('mattress')) targetSecId = 'mattress-sec';
+      else if (category.includes('bed') || category.includes('room')) targetSecId = 'bedroom-sec';
       else if (category.includes('liv') || category.includes('sofa') || category.includes('chair')) targetSecId = 'living-sec';
       else if (category.includes('din') || category.includes('table')) targetSecId = 'dining-sec';
       else if (category.includes('off') || category.includes('desk')) targetSecId = 'office-sec';
@@ -189,11 +193,13 @@ async function fetchAndRenderProducts() {
       if (secElement) {
         const grid = secElement.querySelector('.furniture-item-grid');
         if (grid) {
+          // මිල සහ ඩිස්කවුන්ට් සැකසීම
           const displayPrice = product.discountPrice ? product.discountPrice : product.price;
           const oldPriceHTML = product.discountPrice 
             ? `<span class="price-strike" style="text-decoration:line-through; color:#888; font-size:0.85rem; margin-right:5px;">LKR ${Number(product.price).toLocaleString()}</span>` 
             : '';
 
+          // Image URL එක නිවැරදි කිරීම
           let displayImage = 'https://via.placeholder.com/150';
           
           if (product.imageUrl && typeof product.imageUrl === 'string' && product.imageUrl.trim() !== '') {
@@ -216,6 +222,7 @@ async function fetchAndRenderProducts() {
             }
           }
 
+          // Card Element එක නිර්මාණය කිරීම
           const card = document.createElement('div');
           card.className = 'furniture-card';
           card.setAttribute('data-category', category);
@@ -240,6 +247,7 @@ async function fetchAndRenderProducts() {
             </div>
           `;
 
+          // Card එක Click කළ විට Modal එක Open වීම (Add to Cart Button එක හැර)
           card.addEventListener('click', (e) => {
             if (!e.target.closest('.add-to-cart-btn')) {
               openProductModal(product);
