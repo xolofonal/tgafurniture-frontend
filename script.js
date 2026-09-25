@@ -1190,26 +1190,47 @@ function suggestSearch() {
 
   if (!input || !res) return;
 
+  // Case-insensitive කිරීම සඳහා සෙවුම් අගය Simple Akuru (toLowerCase) කරගෙන trim කරගනු ලැබේ
   const val = input.value.toLowerCase().trim();
 
-  if (!val) {
+  // සෙවුම් පද එකකට වඩා ඇත්නම් ඒවා වෙන් වෙන් වශයෙන් පරීක්ෂා කිරීමට (Keywords Matching)
+  const searchKeywords = val.split(" ").filter(keyword => keyword !== "");
+
+  if (val === "") {
     res.innerHTML = "";
-    cards.forEach((card) => (card.style.display = "block"));
+    // Search input එක හිස් විට සියලුම Cards පෙන්වීම
+    cards.forEach((card) => {
+      card.style.setProperty("display", "flex", "important");
+    });
     return;
   }
 
   let matchesCount = 0;
+
   cards.forEach((card) => {
+    // Card එකේ Title එක, Category එක සහ Description එක (ඇත්නම්) ලබා ගැනීම
     const title = card.querySelector("h4") ? card.querySelector("h4").innerText.toLowerCase() : "";
-    if (title.includes(val)) {
-      card.style.display = "block";
+    const category = card.getAttribute("data-category") ? card.getAttribute("data-category").toLowerCase() : "";
+    
+    // Title එක හෝ Category එක සොයන Keywords වලට ගැළපේදැයි බලයි
+    const isMatched = searchKeywords.every(keyword => 
+      title.includes(keyword) || category.includes(keyword)
+    );
+
+    if (isMatched) {
+      card.style.setProperty("display", "flex", "important");
       matchesCount++;
     } else {
-      card.style.display = "none";
+      card.style.setProperty("display", "none", "important");
     }
   });
 
-  res.innerHTML = `<p style="color: #64748b; padding: 10px 0;">Found ${matchesCount} item(s)</p>`;
+  // ප්‍රතිඵල ගණන සටහන් කිරීම
+  if (matchesCount > 0) {
+    res.innerHTML = `<p style="color: #64748b; padding: 10px 0; font-weight: 600;">Found ${matchesCount} item(s)</p>`;
+  } else {
+    res.innerHTML = `<p style="color: #ef4444; padding: 10px 0; font-weight: 600;">No items found matching "${input.value}"</p>`;
+  }
 }
 
 function openProductPage(product) {
