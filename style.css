@@ -1330,7 +1330,82 @@ img {
     gap: 8px;
   }
 }
+/* Horizontal Scroll Wrapper */
+.horizontal-scroll-container {
+  width: 100%;
+  overflow-x: auto;
+  padding-bottom: 1.5rem;
+  /* smooth scrolling for mobile/touch */
+  -webkit-overflow-scrolling: touch; 
+}
 
+/* Scrollbar Style (Smooth & Custom) */
+.horizontal-scroll-container::-webkit-scrollbar {
+  height: 8px;
+}
+.horizontal-scroll-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+.horizontal-scroll-container::-webkit-scrollbar-thumb {
+  background: var(--wood-light, #8b5a2b);
+  border-radius: 10px;
+}
+
+/* 6 Blocks Horizontal Layout */
+.horizontal-grid {
+  display: flex;
+  gap: 1.5rem;
+  min-width: max-content; /* Blocks 6 එකම පෙළට තබා ගනී */
+}
+
+
+
+.room-category-block:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg, 0 15px 25px -5px rgba(0, 0, 0, 0.1));
+}
+
+/* Category Image Style */
+.category-image-wrapper {
+  width: 100%;
+  height: 180px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.category-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Image එක කපී යාම හෝ Strech වීම පාලනය කරයි */
+  transition: transform 0.3s ease;
+}
+
+.room-category-block:hover .category-img {
+  transform: scale(1.05); /* Hover කිරීමේදී Image එක Zoom වේ */
+}
+
+.room-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--wood-dark, #2c1810);
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* සියලුම Category Titles වල Icons සඳහා එකම Color එකක් ලබාදීම */
+.room-title i,
+.room-title svg {
+  color: var(--wood-light, #8b5a2b);
+  fill: var(--wood-light, #8b5a2b); /* SVG එකෙහි පාට වෙනස් කිරීමට */
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  vertical-align: middle;
+}
 
 /* --- 2. Font Surface Background Image එක නිවැරදි කිරීම --- */
 .wooden-text-surface {

@@ -1284,3 +1284,4 @@ function toggleCategoryMore(button) {
     }
   }
 }
+
