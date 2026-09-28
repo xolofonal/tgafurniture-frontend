@@ -166,7 +166,7 @@ async function fetchAndRenderProducts() {
     const products = await response.json();
     if (!Array.isArray(products) || products.length === 0) return;
 
-    // URL එකේ Parameters පරික්ෂා කිරීම (උදා: products.html?type=chair)
+    // URL එකේ Parameters පරික්ෂා කිරීම (උදා: products.html?category=decorations හෝ ?type=decor)
     const urlParams = new URLSearchParams(window.location.search);
     const selectedType = urlParams.get('type')?.toLowerCase();
     const selectedCategoryParam = urlParams.get('category')?.toLowerCase();
@@ -181,31 +181,36 @@ async function fetchAndRenderProducts() {
       }
     });
 
-    // 2. Type එකක් URL එකේ ඇත්නම්, Quick Category Filtering සඳහා
-    if (selectedType) {
-      // Type එකට අදාළ Products පමණක් ලබාගැනීම
+    // 2. Quick Category එකක් click කර වෙනම Page/View එකක් ලෙස open වී ඇත්නම්:
+    if (selectedCategoryParam || selectedType) {
+      const filterKey = selectedCategoryParam || selectedType;
+
+      // Decoration හෝ අදාළ Filter එකට ගැළපෙන Products ලබාගැනීම
       const filteredProducts = products.filter(p => {
+        const pCategory = (p.category || '').toLowerCase();
         const pType = (p.type || '').toLowerCase();
         const pName = (p.name || '').toLowerCase();
-        return pType.includes(selectedType) || pName.includes(selectedType);
+
+        return pCategory.includes(filterKey) || pType.includes(filterKey) || pName.includes(filterKey);
       });
 
-      // Quick Category filtered View එක පෙන්වන container එකට හෝ ප්‍රධාන section එකකට render කිරීම
-      renderFilteredProductsView(filteredProducts, selectedType);
+      // වෙනම Filtered Dedicated View එකක් render කිරීම
+      renderFilteredProductsView(filteredProducts, filterKey);
       return;
     }
 
-    // 3. සාමාන්‍ය Category-wise Rendering Logic එක
+    // 3. Main Furniture Collection එකේ Categories යටතේ නිවැරදිව පෙන්වීමට
     products.forEach(product => {
       const category = (product.category || '').toLowerCase();
       let targetSecId = 'living-sec';
 
+      // Category matching logic
       if (category.includes('mattress')) targetSecId = 'mattress-sec';
       else if (category.includes('bed') || category.includes('room')) targetSecId = 'bedroom-sec';
-      else if (category.includes('liv') || category.includes('sofa') || category.includes('chair')) targetSecId = 'living-sec';
       else if (category.includes('din') || category.includes('table')) targetSecId = 'dining-sec';
       else if (category.includes('off') || category.includes('desk')) targetSecId = 'office-sec';
-      else if (category.includes('dec') || category.includes('decor')) targetSecId = 'decor-sec';
+      else if (category.includes('dec') || category.includes('decor') || category.includes('decoration')) targetSecId = 'decor-sec'; // Decor Category එක සදහා
+      else if (category.includes('liv') || category.includes('sofa') || category.includes('chair')) targetSecId = 'living-sec';
 
       const secElement = document.getElementById(targetSecId);
       if (secElement) {
