@@ -1284,3 +1284,24 @@ function toggleCategoryMore(button) {
     }
   }
 }
+
+function filterByQuickType(selectedCategory, element) {
+  // Active class manage karne ke liye
+  const allBlocks = document.querySelectorAll('.horizontal-grid .room-category-block');
+  allBlocks.forEach(block => block.classList.remove('active'));
+  if (element) element.classList.add('active');
+
+  const targetCategory = selectedCategory.toLowerCase();
+  const productCards = document.querySelectorAll('.furniture-card');
+
+  productCards.forEach(card => {
+    // Har product card ke data-category attribute ko check karein
+    const cardCategory = (card.getAttribute('data-category') || '').toLowerCase();
+
+    if (targetCategory === 'all' || cardCategory === targetCategory) {
+      card.style.setProperty('display', 'flex', 'important');
+    } else {
+      card.style.setProperty('display', 'none', 'important');
+    }
+  });
+}
