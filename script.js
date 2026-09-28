@@ -166,7 +166,12 @@ async function fetchAndRenderProducts() {
     const products = await response.json();
     if (!Array.isArray(products) || products.length === 0) return;
 
-    // 1. Grid Sections සුද්ද කිරීම (Clear Grid)
+    // URL එකේ Parameters පරික්ෂා කිරීම (උදා: products.html?type=chair)
+    const urlParams = new URLSearchParams(window.location.search);
+    const selectedType = urlParams.get('type')?.toLowerCase();
+    const selectedCategoryParam = urlParams.get('category')?.toLowerCase();
+
+    // 1. Grid Sections Clear කිරීම
     const sections = ['bedroom-sec', 'living-sec', 'dining-sec', 'office-sec', 'decor-sec', 'mattress-sec'];
     sections.forEach(secId => {
       const secEl = document.getElementById(secId);
@@ -176,12 +181,25 @@ async function fetchAndRenderProducts() {
       }
     });
 
-    // 2. Products එක එක ගෙන අදාළ Section එකට එක් කිරීම
+    // 2. Type එකක් URL එකේ ඇත්නම්, Quick Category Filtering සඳහා
+    if (selectedType) {
+      // Type එකට අදාළ Products පමණක් ලබාගැනීම
+      const filteredProducts = products.filter(p => {
+        const pType = (p.type || '').toLowerCase();
+        const pName = (p.name || '').toLowerCase();
+        return pType.includes(selectedType) || pName.includes(selectedType);
+      });
+
+      // Quick Category filtered View එක පෙන්වන container එකට හෝ ප්‍රධාන section එකකට render කිරීම
+      renderFilteredProductsView(filteredProducts, selectedType);
+      return;
+    }
+
+    // 3. සාමාන්‍ය Category-wise Rendering Logic එක
     products.forEach(product => {
       const category = (product.category || '').toLowerCase();
-      let targetSecId = 'living-sec'; // Default section
+      let targetSecId = 'living-sec';
 
-      // Category matching logic
       if (category.includes('mattress')) targetSecId = 'mattress-sec';
       else if (category.includes('bed') || category.includes('room')) targetSecId = 'bedroom-sec';
       else if (category.includes('liv') || category.includes('sofa') || category.includes('chair')) targetSecId = 'living-sec';
@@ -193,74 +211,94 @@ async function fetchAndRenderProducts() {
       if (secElement) {
         const grid = secElement.querySelector('.furniture-item-grid');
         if (grid) {
-          // මිල සහ ඩිස්කවුන්ට් සැකසීම
-          const displayPrice = product.discountPrice ? product.discountPrice : product.price;
-          const oldPriceHTML = product.discountPrice 
-            ? `<span class="price-strike" style="text-decoration:line-through; color:#888; font-size:0.85rem; margin-right:5px;">LKR ${Number(product.price).toLocaleString()}</span>` 
-            : '';
-
-          // Image URL එක නිවැරදි කිරීම
-          let displayImage = 'https://via.placeholder.com/150';
-          
-          if (product.imageUrl && typeof product.imageUrl === 'string' && product.imageUrl.trim() !== '') {
-            displayImage = product.imageUrl.trim();
-          } else if (Array.isArray(product.images) && product.images.length > 0 && product.images[0]) {
-            displayImage = product.images[0].trim();
-          }
-
-          if (typeof displayImage === 'string') {
-            displayImage = displayImage.replace(/\\/g, '/');
-          }
-
-          if (displayImage && !displayImage.startsWith('http://') && !displayImage.startsWith('https://') && !displayImage.startsWith('data:image')) {
-            try {
-              const baseUrl = API_URL.replace(/\/api\/?$/, '');
-              displayImage = new URL(displayImage, baseUrl).href;
-            } catch (err) {
-              console.error("Error constructing image URL:", err);
-              displayImage = 'https://via.placeholder.com/150';
-            }
-          }
-
-          // Card Element එක නිර්මාණය කිරීම
-          const card = document.createElement('div');
-          card.className = 'furniture-card';
-          card.setAttribute('data-category', category);
-
-          card.innerHTML = `
-            <img src="${displayImage}" alt="${product.name}" onerror="this.onerror=null;this.src='https://via.placeholder.com/150';">
-            <div class="furniture-card-info">
-              <h4>${product.name}</h4>
-              <p>Category: ${product.category || 'General'}</p>
-              <div class="price-container">
-                ${oldPriceHTML}
-                <span class="price">LKR ${Number(displayPrice).toLocaleString()}</span>
-              </div>
-              <button class="btn add-to-cart-btn" 
-                      data-id="${product._id}" 
-                      data-name="${product.name}" 
-                      data-price="${displayPrice}" 
-                      data-image="${displayImage}"
-                      data-category="${product.category}">
-                <i class="fa-solid fa-cart-shopping"></i> Add to Cart
-              </button>
-            </div>
-          `;
-
-          // Card එක Click කළ විට Modal එක Open වීම (Add to Cart Button එක හැර)
-          card.addEventListener('click', (e) => {
-            if (!e.target.closest('.add-to-cart-btn')) {
-              openProductModal(product);
-            }
-          });
-
+          const card = createProductCard(product);
           grid.appendChild(card);
         }
       }
     });
+
   } catch (error) {
     console.error("Error loading products:", error);
   }
+}
+
+// Product Card නිර්මාණය කරන Helper Function එක
+function createProductCard(product) {
+  const displayPrice = product.discountPrice ? product.discountPrice : product.price;
+  const oldPriceHTML = product.discountPrice 
+    ? `<span class="price-strike" style="text-decoration:line-through; color:#888; font-size:0.85rem; margin-right:5px;">LKR ${Number(product.price).toLocaleString()}</span>` 
+    : '';
+
+  let displayImage = product.imageUrl || (product.images && product.images[0]) || 'https://via.placeholder.com/150';
+
+  const card = document.createElement('div');
+  card.className = 'furniture-card';
+  card.setAttribute('data-category', product.category || '');
+  card.setAttribute('data-type', product.type || '');
+
+  card.innerHTML = `
+    <img src="${displayImage}" alt="${product.name}" onerror="this.onerror=null;this.src='https://via.placeholder.com/150';">
+    <div class="furniture-card-info">
+      <h4>${product.name}</h4>
+      <p>Category: ${product.category || 'General'}</p>
+      <div class="price-container">
+        ${oldPriceHTML}
+        <span class="price">LKR ${Number(displayPrice).toLocaleString()}</span>
+      </div>
+      <button class="btn add-to-cart-btn" 
+              data-id="${product._id}" 
+              data-name="${product.name}" 
+              data-price="${displayPrice}" 
+              data-image="${displayImage}"
+              data-category="${product.category}">
+        <i class="fa-solid fa-cart-shopping"></i> Add to Cart
+      </button>
+    </div>
+  `;
+
+  card.addEventListener('click', (e) => {
+    if (!e.target.closest('.add-to-cart-btn')) {
+      openProductModal(product);
+    }
+  });
+
+  return card;
+}
+
+// Filtered Page display කිරීම සඳහා Function එක
+function renderFilteredProductsView(products, typeName) {
+  const mainContainer = document.querySelector('.main-content') || document.querySelector('main') || document.body;
+  
+  // Section Headers Hide කර Single Dynamic Grid එකක් සෑදීම
+  const roomBlocks = document.querySelectorAll('.room-category-block');
+  roomBlocks.forEach(block => block.style.display = 'none');
+
+  let filterSection = document.getElementById('type-filtered-section');
+  if (!filterSection) {
+    filterSection = document.createElement('section');
+    filterSection.id = 'type-filtered-section';
+    filterSection.className = 'section-padding';
+    filterSection.innerHTML = `
+      <div class="section-header">
+        <h2 class="section-title" style="text-transform: capitalize;">All ${typeName}s</h2>
+        <p class="section-tag">Showing results from all categories</p>
+      </div>
+      <div class="furniture-item-grid" id="type-filtered-grid"></div>
+    `;
+    mainContainer.prepend(filterSection);
+  }
+
+  const grid = document.getElementById('type-filtered-grid');
+  grid.innerHTML = '';
+
+  if (products.length === 0) {
+    grid.innerHTML = `<p style="grid-column: 1/-1; text-align:center; padding: 2rem;">No ${typeName} items found.</p>`;
+    return;
+  }
+
+  products.forEach(product => {
+    grid.appendChild(createProductCard(product));
+  });
 }
 
 function renderCartItems() {
@@ -1084,13 +1122,18 @@ document.addEventListener("click", function (e) {
   let rawImage = btn.dataset.image || card?.querySelector("img")?.src || "";
   let rawCategory = btn.dataset.category || card?.getAttribute("data-category") || "Furniture";
 
-  const productData = {
-    _id: btn.dataset.id || Date.now().toString(),
-    name: rawName,
-    price: rawPrice,
-    imageUrl: rawImage,
-    category: rawCategory
-  };
+// Step 1: Admin Form madhun rawType chi value ghya
+const rawType = document.getElementById('productType')?.value?.trim().toLowerCase() || 'other';
+
+// Step 2: Object update kara
+const productData = {
+  _id: btn.dataset.id || Date.now().toString(),
+  name: rawName,
+  price: rawPrice,
+  imageUrl: rawImage,
+  category: rawCategory,
+  type: rawType // Navin Item Type field add kela ahe
+};
 
   addToCart(productData);
 
@@ -1284,4 +1327,3 @@ function toggleCategoryMore(button) {
     }
   }
 }
-
