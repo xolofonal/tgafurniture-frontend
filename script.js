@@ -1084,13 +1084,13 @@ document.addEventListener("click", function (e) {
   let rawImage = btn.dataset.image || card?.querySelector("img")?.src || "";
   let rawCategory = btn.dataset.category || card?.getAttribute("data-category") || "Furniture";
 
-  const productData = {
-    _id: btn.dataset.id || Date.now().toString(),
-    name: rawName,
-    price: rawPrice,
-    imageUrl: rawImage,
-    category: rawCategory
-  };
+const productData = {
+  name: document.getElementById('productName').value,
+  price: document.getElementById('productPrice').value,
+  category: document.getElementById('productCategory').value,
+  type: document.getElementById('productType').value.toLowerCase(), // 'chair', 'bed', etc.
+  imageUrl: imageUrl
+};
 
   addToCart(productData);
 

@@ -1330,18 +1330,17 @@ img {
     gap: 8px;
   }
 }
-/* Horizontal Scroll Wrapper */
+/* --- Horizontal Scroll Quick Categories --- */
 .horizontal-scroll-container {
   width: 100%;
   overflow-x: auto;
-  padding-bottom: 1.5rem;
-  /* smooth scrolling for mobile/touch */
-  -webkit-overflow-scrolling: touch; 
+  padding: 1rem 0 1.5rem 0;
+  -webkit-overflow-scrolling: touch;
 }
 
-/* Scrollbar Style (Smooth & Custom) */
+/* Scrollbar Style */
 .horizontal-scroll-container::-webkit-scrollbar {
-  height: 8px;
+  height: 6px;
 }
 .horizontal-scroll-container::-webkit-scrollbar-track {
   background: #f1f1f1;
@@ -1352,13 +1351,63 @@ img {
   border-radius: 10px;
 }
 
-/* 6 Blocks Horizontal Layout */
+/* Horizontal Row Grid */
 .horizontal-grid {
   display: flex;
   gap: 1.5rem;
-  min-width: max-content; /* Blocks 6 එකම පෙළට තබා ගනී */
+  width: max-content; /* සියලුම Categories 6 එකම පෙළට තබයි */
 }
 
+.horizontal-grid .room-category-block {
+  min-width: 200px;
+  max-width: 220px;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 1rem;
+  border: 1px solid var(--border-color, #e2e8f0);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-decoration: none;
+  display: block;
+}
+
+.horizontal-grid .room-category-block:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+.horizontal-grid .category-image-wrapper {
+  width: 100%;
+  height: 140px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 0.8rem;
+}
+
+.horizontal-grid .category-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.horizontal-grid .room-category-block:hover .category-img {
+  transform: scale(1.06);
+}
+
+.horizontal-grid .room-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--wood-dark, #2c1810);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0;
+}
+
+.horizontal-grid .room-title i {
+  color: var(--wood-light, #8b5a2b);
+}
 
 
 .room-category-block:hover {

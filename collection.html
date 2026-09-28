@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Furniture Collection - TGA Furniture</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-container">
+      <a href="index.html" class="logo">
+        <img src="logo.png" alt="TGA Furniture Logo" class="site-logo-img">
+      </a>
+      <h2 id="category-header-title" style="color: var(--wood-dark); font-size: 1.5rem;">Collection</h2>
+    </div>
+  </header>
+
+  <section class="section-padding">
+    <div style="margin-bottom: 1.5rem;">
+      <a href="index.html" class="btn btn-secondary"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
+    </div>
+
+    <!-- Filtered Products Grid -->
+    <div id="collection-grid" class="furniture-item-grid">
+      <!-- JavaScript හරහා items මෙතැනට load වේ -->
+    </div>
+  </section>
+
+  <script>
+    // Sample Products Data (ඔයාගේ Items මෙතැනට දාගන්න)
+    const productsData = [
+      { name: "Luxury King Bed", category: "Beds", price: "Rs. 120,000", img: "beds.jpg" },
+      { name: "Modern Queen Bed", category: "Beds", price: "Rs. 95,000", img: "beds.jpg" },
+      { name: "Wooden Dining Chair", category: "Chairs", price: "Rs. 18,000", img: "chairs.jpg" },
+      { name: "Ergonomic Armchair", category: "Chairs", price: "Rs. 25,000", img: "chairs.jpg" },
+      { name: "Teak Coffee Table", category: "Tables", price: "Rs. 32,000", img: "tables.jpg" },
+      { name: "Dining Table 6-Seater", category: "Tables", price: "Rs. 85,000", img: "tables.jpg" },
+      { name: "Wooden Wardrobe", category: "Storage", price: "Rs. 110,000", img: "storage.jpg" },
+      { name: "Bookshelf Display", category: "Storage", price: "Rs. 45,000", img: "storage.jpg" },
+      { name: "3-Seater Fabric Sofa", category: "Sofa", price: "Rs. 135,000", img: "sofa.jpg" },
+      { name: "L-Shape Luxury Sofa", category: "Sofa", price: "Rs. 180,000", img: "sofa.jpg" },
+      { name: "Wooden Wall Clock", category: "Decorations", price: "Rs. 12,000", img: "decorations.jpg" },
+      { name: "Handcrafted Mirror Frame", category: "Decorations", price: "Rs. 15,000", img: "decorations.jpg" }
+    ];
+
+    // URL එකෙන් Category Param එක ලබා ගැනීම (e.g. ?category=Beds)
+    const urlParams = new URLSearchParams(window.location.search);
+    const selectedCategory = urlParams.get('category');
+
+    const gridContainer = document.getElementById('collection-grid');
+    const headerTitle = document.getElementById('category-header-title');
+
+    if (selectedCategory) {
+      headerTitle.innerText = `${selectedCategory} Collection`;
+
+      // Selected category එකට අදාළ items පමණක් filter කිරීම
+      const filteredProducts = productsData.filter(item => item.category.toLowerCase() === selectedCategory.toLowerCase());
+
+      if (filteredProducts.length > 0) {
+        gridContainer.innerHTML = filteredProducts.map(item => `
+          <div class="furniture-card">
+            <img src="${item.img}" alt="${item.name}">
+            <div class="furniture-card-info">
+              <h4>${item.name}</h4>
+              <p>Category: ${item.category}</p>
+              <span class="price">${item.price}</span>
+            </div>
+          </div>
+        `).join('');
+      } else {
+        gridContainer.innerHTML = `<p>No items found in ${selectedCategory} category.</p>`;
+      }
+    } else {
+      headerTitle.innerText = "All Furniture Collections";
+      gridContainer.innerHTML = productsData.map(item => `
+        <div class="furniture-card">
+          <img src="${item.img}" alt="${item.name}">
+          <div class="furniture-card-info">
+            <h4>${item.name}</h4>
+            <p>Category: ${item.category}</p>
+            <span class="price">${item.price}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+  </script>
+</body>
+</html>
